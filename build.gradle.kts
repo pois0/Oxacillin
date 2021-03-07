@@ -208,6 +208,7 @@ kotlin {
     sourceSets.all {
         languageSettings.progressiveMode = true
 
+        languageSettings.enableLanguageFeature("InlineClasses")
         Libraries.ExperimentalAnnotations.forEach {
             languageSettings.useExperimentalAnnotation(it)
         }
