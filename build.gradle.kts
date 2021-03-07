@@ -197,6 +197,10 @@ kotlin {
                 languageVersion = "1.4"
                 allWarningsAsErrors = true
                 verbose = true
+
+                if (this is org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions) {
+                    useIR = true
+                }
             }
         }
     }
