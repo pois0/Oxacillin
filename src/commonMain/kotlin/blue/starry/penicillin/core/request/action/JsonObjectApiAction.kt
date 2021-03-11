@@ -24,9 +24,6 @@
 
 package blue.starry.penicillin.core.request.action
 
-import blue.starry.jsonkt.JsonObject
-import blue.starry.jsonkt.parseObjectOrNull
-import blue.starry.jsonkt.toJsonObjectOrNull
 import blue.starry.penicillin.core.exceptions.PenicillinException
 import blue.starry.penicillin.core.i18n.LocalizedString
 import blue.starry.penicillin.core.request.ApiRequest
@@ -38,18 +35,18 @@ import blue.starry.penicillin.models.PenicillinModel
 /**
  * The [ApiAction] that provides parsed json object with json model.
  */
-public class JsonObjectApiAction<M: PenicillinModel>(
+public class JsonObjectApiAction<M>(
     override val client: ApiClient,
     override val request: ApiRequest,
-    override val converter: (JsonObject) -> M
+    override val converter: (String) -> M
 ): JsonRequest<M>, ApiAction<JsonObjectResponse<M>> {
     override suspend fun execute(): JsonObjectResponse<M> {
-        val (request, response) = finalize()
+        val response = doRequest()
+        response.recei
+        val request = response.request
 
         val content = response.readTextOrNull()
-        val json = content?.toJsonObjectOrNull() ?: throw PenicillinException(
-            LocalizedString.JsonParsingFailed, null, request, response, content
-        )
+
 
         checkError(request, response, content, json)
 

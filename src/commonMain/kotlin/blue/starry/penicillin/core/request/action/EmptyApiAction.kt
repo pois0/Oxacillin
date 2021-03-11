@@ -32,7 +32,7 @@ import blue.starry.penicillin.core.session.ApiClient
  */
 public class EmptyApiAction(override val client: ApiClient, override val request: ApiRequest): ApiAction<Unit> {
     override suspend fun execute() {
-        val (request, response) = finalize()
+        val (request, response) = execute()
         val content = response.readTextOrNull()
 
         checkError(request, response, content)

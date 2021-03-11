@@ -26,12 +26,6 @@
 
 package blue.starry.penicillin.core.request.action
 
-import blue.starry.jsonkt.JsonObject
-import blue.starry.jsonkt.JsonPrimitive
-import blue.starry.jsonkt.delegation.byNullableInt
-import blue.starry.jsonkt.delegation.byNullableString
-import blue.starry.jsonkt.jsonArrayOrNull
-import blue.starry.jsonkt.string
 import blue.starry.penicillin.core.exceptions.PenicillinException
 import blue.starry.penicillin.core.exceptions.throwApiError
 import blue.starry.penicillin.core.i18n.LocalizedString
@@ -46,7 +40,7 @@ import mu.KotlinLogging
 
 private val apiActionLogger = KotlinLogging.logger("Penicillin.ApiAction")
 
-internal suspend fun ApiAction<*>.finalize(): Pair<HttpRequest, HttpResponse> {
+internal suspend fun ApiAction<*>.doRequest(): Pair<HttpRequest, HttpResponse> {
     try {
         val response = session.httpClient.request<HttpStatement>(request.builder.finalize()).execute()
 

@@ -27,7 +27,6 @@
 package blue.starry.penicillin.endpoints.timeline
 
 import blue.starry.penicillin.core.emulation.EmulationMode
-import blue.starry.penicillin.core.request.action.JsonArrayApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option

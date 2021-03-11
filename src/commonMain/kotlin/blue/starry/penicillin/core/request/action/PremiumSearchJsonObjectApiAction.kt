@@ -24,9 +24,6 @@
 
 package blue.starry.penicillin.core.request.action
 
-import blue.starry.jsonkt.JsonObject
-import blue.starry.jsonkt.parseObjectOrNull
-import blue.starry.jsonkt.toJsonObjectOrNull
 import blue.starry.penicillin.core.exceptions.PenicillinException
 import blue.starry.penicillin.core.i18n.LocalizedString
 import blue.starry.penicillin.core.request.ApiRequest
@@ -50,7 +47,7 @@ public class PremiumSearchJsonObjectApiAction<M: PremiumSearchModel>(
     public val environment: PremiumSearchEnvironment
 ): JsonRequest<M>, ApiAction<PremiumSearchJsonObjectResponse<M>> {
     override suspend fun execute(): PremiumSearchJsonObjectResponse<M> {
-        val (request, response) = finalize()
+        val (request, response) = execute()
 
         val content = response.readTextOrNull()
         val json = content?.toJsonObjectOrNull() ?: throw PenicillinException(

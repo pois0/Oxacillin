@@ -14,15 +14,14 @@ plugins {
 
 object Versions {
     const val Ktor = "1.5.2"
-    const val JsonKt = "6.0.2"
     const val uuid = "0.2.3"
     const val KotlinxDatetime = "0.1.1"
 
     const val crypto_js = "4.0.0"
 
-    const val JUnit = "5.7.0"
+    const val JUnit = "5.7.1"
     const val TwitterText = "3.1.0"
-    const val Guava = "29.0-jre"
+    const val Guava = "30.1-jre"
 
     const val KotlinLogging = "2.0.5"
     const val Logback = "1.2.3"
@@ -31,7 +30,6 @@ object Versions {
 
 object Libraries {
     const val KtorClientCore = "io.ktor:ktor-client-core:${Versions.Ktor}"
-    const val JsonKt = "blue.starry:jsonkt:${Versions.JsonKt}"
     const val uuid = "com.benasher44:uuid:${Versions.uuid}"
     const val KotlinxDatetime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.KotlinxDatetime}"
     const val KotlinLogging = "io.github.microutils:kotlin-logging:${Versions.KotlinLogging}"
@@ -67,7 +65,7 @@ object Publications {
     const val OSSRHProfileGroupId = "blue.starry.jsonkt"
     const val Description = "Full-featured Twitter API wrapper for Kotlin"
     const val GitHubUsername = "StarryBlueSky"
-    const val GitHubRepository = "Penicillin"
+    const val GitHubRepository = "Oxacillin"
 
     const val LicenseName = "The MIT Licence"
     const val LicenseUrl = "https://opensource.org/licenses/MIT"
@@ -139,7 +137,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(Libraries.KtorClientCore)
-                api(Libraries.JsonKt)
+                api("io.ktor:ktor-client-serialization:${Versions.Ktor}")
                 api(Libraries.uuid)
                 api(Libraries.KotlinxDatetime)
                 api(Libraries.KotlinLogging)

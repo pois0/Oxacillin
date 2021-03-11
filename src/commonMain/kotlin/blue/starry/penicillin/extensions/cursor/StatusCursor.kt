@@ -64,8 +64,7 @@ public fun JsonArrayApiAction<Status>.untilLast(count: Int = 200, vararg options
             break
         }
 
-        emitAll(statuses.asFlow())
-
+        yieldAll(statuses)
         maxId = statuses.last().id
 
         val rateLimit = response.rateLimit ?: continue

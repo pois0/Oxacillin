@@ -26,7 +26,6 @@
 
 package blue.starry.penicillin.endpoints.friendships
 
-import blue.starry.penicillin.core.request.action.JsonArrayApiAction
 import blue.starry.penicillin.core.request.action.JsonObjectApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get

@@ -24,13 +24,11 @@
 
 package blue.starry.penicillin.core.request
 
-import blue.starry.jsonkt.JsonObject
 import blue.starry.penicillin.core.request.action.*
 import blue.starry.penicillin.core.session.ApiClient
 import blue.starry.penicillin.core.streaming.handler.StreamHandler
 import blue.starry.penicillin.core.streaming.listener.StreamListener
 import blue.starry.penicillin.endpoints.PremiumSearchEnvironment
-import blue.starry.penicillin.models.PenicillinModel
 import blue.starry.penicillin.models.PremiumSearchModel
 import blue.starry.penicillin.models.cursor.PenicillinCursorModel
 
@@ -53,17 +51,8 @@ public class ApiRequest(
      *
      * @return New [JsonObjectApiAction] for [M].
      */
-    public fun <M: PenicillinModel> jsonObject(converter: (JsonObject) -> M): JsonObjectApiAction<M> {
+    public inline fun <M> jsonObject(noinline converter: (String) -> M): JsonObjectApiAction<M> {
         return JsonObjectApiAction(client, this, converter)
-    }
-
-    /**
-     * Creates [JsonArrayApiAction] from this request.
-     *
-     * @return New [JsonArrayApiAction] for [M].
-     */
-    public fun <M: PenicillinModel> jsonArray(converter: (JsonObject) -> M): JsonArrayApiAction<M> {
-        return JsonArrayApiAction(client, this, converter)
     }
 
     /**
@@ -71,7 +60,7 @@ public class ApiRequest(
      *
      * @return New [CursorJsonObjectApiAction] for [M].
      */
-    public fun <M: PenicillinCursorModel<T>, T: Any> cursorJsonObject(converter: (JsonObject) -> M): CursorJsonObjectApiAction<M, T> {
+    public inline fun <M: PenicillinCursorModel> cursorJsonObject(converter: (String) -> M): CursorJsonObjectApiAction<M> {
         return CursorJsonObjectApiAction(client, this, converter)
     }
 

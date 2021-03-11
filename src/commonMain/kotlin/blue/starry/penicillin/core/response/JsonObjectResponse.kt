@@ -34,7 +34,7 @@ import blue.starry.penicillin.models.PenicillinModel
 /**
  * The [ApiResponse] that provides parsed json object with json model.
  */
-public data class JsonObjectResponse<M: PenicillinModel>(
+public data class JsonObjectResponse<M>(
     override val client: ApiClient,
 
     /**
@@ -46,7 +46,4 @@ public data class JsonObjectResponse<M: PenicillinModel>(
     override val response: HttpResponse,
     override val content: String,
     override val action: ApiAction<JsonObjectResponse<M>>
-): ApiResponse<JsonObjectResponse<M>>, JsonResponse<M, JsonObject>, CompletedResponse {
-    override val json: JsonObject
-        get() = result.json
-}
+): ApiResponse<JsonObjectResponse<M>>, CompletedResponse

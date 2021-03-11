@@ -24,8 +24,6 @@
 
 package blue.starry.penicillin.extensions.models.builder
 
-import blue.starry.jsonkt.delegation.JsonModel
-
 internal typealias JsonMap = MutableMap<String, Any?>
 
 internal fun jsonMapOf(vararg pairs: Pair<String, Any?>): JsonMap {

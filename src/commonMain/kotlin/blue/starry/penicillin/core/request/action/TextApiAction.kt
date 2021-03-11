@@ -27,13 +27,14 @@ package blue.starry.penicillin.core.request.action
 import blue.starry.penicillin.core.request.ApiRequest
 import blue.starry.penicillin.core.response.TextResponse
 import blue.starry.penicillin.core.session.ApiClient
+import blue.starry.penicillin.extensions.complete
 
 /**
  * The [ApiAction] that provides text response only.
  */
 public class TextApiAction(override val client: ApiClient, override val request: ApiRequest): ApiAction<TextResponse> {
     override suspend fun execute(): TextResponse {
-        val (request, response) = finalize()
+        val (request, response) = execute()
 
         val content = response.readTextOrNull()
 
