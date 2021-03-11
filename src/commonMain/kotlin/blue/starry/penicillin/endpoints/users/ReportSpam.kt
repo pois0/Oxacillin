@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.users
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
@@ -42,13 +42,13 @@ import blue.starry.penicillin.models.User
  * @param performBlock Whether the account should be blocked by the authenticated user, as well as being reported for spam.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Users] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Users.reportSpamByScreenName(
     screenName: String,
     performBlock: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = reportSpam(screenName, null, performBlock, *options)
+): JsonGeneralApiAction<User> = reportSpam(screenName, null, performBlock, *options)
 
 /**
  * Report the specified user as a spam account to Twitter. Additionally, optionally performs the equivalent of [POST blocks/create](https://developer.twitter.com/en/docs/accounts-and-users/mute-block-report-users/api-reference/post-blocks-create) on behalf of the authenticated user.
@@ -59,13 +59,13 @@ public fun Users.reportSpamByScreenName(
  * @param performBlock Whether the account should be blocked by the authenticated user, as well as being reported for spam.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Users] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Users.reportSpamByUserId(
     userId: Long,
     performBlock: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = reportSpam(null, userId, performBlock, *options)
+): JsonGeneralApiAction<User> = reportSpam(null, userId, performBlock, *options)
 
 private fun Users.reportSpam(
     screenName: String? = null,

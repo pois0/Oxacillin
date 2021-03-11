@@ -31,35 +31,43 @@ import blue.starry.penicillin.core.response.PremiumSearchJsonObjectResponse
 import blue.starry.penicillin.core.session.ApiClient
 import blue.starry.penicillin.endpoints.PremiumSearchEnvironment
 
-import blue.starry.penicillin.models.PremiumSearchModel
+import io.ktor.client.statement.request
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.json.Json
 
 /**
  * The [ApiAction] that provides parsed json array with json model. This class supports premium search api operations.
  */
-public class PremiumSearchJsonObjectApiAction<M: PremiumSearchModel>(
+public class PremiumSearchJsonObjectApiAction<T>(
     override val client: ApiClient,
     override val request: ApiRequest,
-    override val converter: (JsonObject) -> M,
+    private val deserializer: DeserializationStrategy<T>,
 
     /**
      * [PremiumSearchEnvironment] which will be used to acquire this response.
      */
     public val environment: PremiumSearchEnvironment
-): JsonRequest<M>, ApiAction<PremiumSearchJsonObjectResponse<M>> {
-    override suspend fun execute(): PremiumSearchJsonObjectResponse<M> {
-        val (request, response) = execute()
+): ApiAction<PremiumSearchJsonObjectResponse<T>> {
+    override suspend fun execute(): PremiumSearchJsonObjectResponse<T> {
+        val response = doRequest()
+        val request = response.request
 
         val content = response.readTextOrNull()
-        val json = content?.toJsonObjectOrNull() ?: throw PenicillinException(
-            LocalizedString.JsonParsingFailed, null, request, response, content
-        )
 
-        checkError(request, response, content, json)
+        checkError(request, response, content)
 
-        val result = json.parseObjectOrNull(converter) ?: throw PenicillinException(
-            LocalizedString.JsonModelCastFailed, null, request, response, content
-        )
+        var cause: Throwable? = null
 
-        return PremiumSearchJsonObjectResponse(client, result, request, response, content, this, environment)
+        if (content != null) {
+            runCatching {
+                Json.decodeFromString(deserializer, content)
+            }.onSuccess {
+                return PremiumSearchJsonObjectResponse(client, it, request, response, content.orEmpty(), this, environment)
+            }.onFailure {
+                cause = it
+            }
+        }
+
+        throw PenicillinException(LocalizedString.JsonModelCastFailed, cause, request, response, content)
     }
 }

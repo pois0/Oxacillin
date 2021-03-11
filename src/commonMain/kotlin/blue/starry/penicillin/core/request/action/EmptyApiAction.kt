@@ -26,13 +26,16 @@ package blue.starry.penicillin.core.request.action
 
 import blue.starry.penicillin.core.request.ApiRequest
 import blue.starry.penicillin.core.session.ApiClient
+import io.ktor.client.statement.request
 
 /**
  * The [ApiAction] that does not provide parsed response. Only check errors of content string.
  */
 public class EmptyApiAction(override val client: ApiClient, override val request: ApiRequest): ApiAction<Unit> {
     override suspend fun execute() {
-        val (request, response) = execute()
+        val response = doRequest()
+        val request = response.request
+
         val content = response.readTextOrNull()
 
         checkError(request, response, content)

@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.directmessages.events
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.DirectMessageEvents
@@ -41,12 +41,12 @@ import blue.starry.penicillin.models.DirectMessageEvent
  * @param id The id of the Direct Message event that should be returned.
  * @param options Optional. Custom parameters of this request.
  * @receiver [DirectMessageEvents] endpoint instance.
- * @return [JsonObjectApiAction] for [DirectMessageEvent.Show] model.
+ * @return [JsonGeneralApiAction] for [DirectMessageEvent.Show] model.
  */
 public fun DirectMessageEvents.show(
     id: String,
     vararg options: Option
-): JsonObjectApiAction<DirectMessageEvent.Show> = client.session.get("/1.1/direct_messages/events/show.json") {
+): JsonGeneralApiAction<DirectMessageEvent.Show> = client.session.get("/1.1/direct_messages/events/show.json") {
     parameters(
         "id" to id,
         *options

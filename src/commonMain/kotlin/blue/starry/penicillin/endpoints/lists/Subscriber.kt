@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.lists
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
@@ -44,7 +44,7 @@ import blue.starry.penicillin.models.User
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Lists.subscriber(
     listId: Long,
@@ -52,7 +52,7 @@ public fun Lists.subscriber(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = subscriber(listId, null, null, null, userId, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = subscriber(listId, null, null, null, userId, null, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a subscriber of the specified list. Returns the user if they are a subscriber.
@@ -65,7 +65,7 @@ public fun Lists.subscriber(
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Lists.subscriber(
     listId: Long,
@@ -73,7 +73,7 @@ public fun Lists.subscriber(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = subscriber(listId, null, null, null, null, screenName, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = subscriber(listId, null, null, null, null, screenName, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a subscriber of the specified list. Returns the user if they are a subscriber.
@@ -87,7 +87,7 @@ public fun Lists.subscriber(
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Lists.subscriber(
     slug: String,
@@ -96,7 +96,7 @@ public fun Lists.subscriber(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = subscriber(null, slug, ownerScreenName, null, userId, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = subscriber(null, slug, ownerScreenName, null, userId, null, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a subscriber of the specified list. Returns the user if they are a subscriber.
@@ -110,7 +110,7 @@ public fun Lists.subscriber(
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Lists.subscriber(
     slug: String,
@@ -119,7 +119,7 @@ public fun Lists.subscriber(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = subscriber(null, slug, ownerScreenName, null, null, screenName, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = subscriber(null, slug, ownerScreenName, null, null, screenName, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a subscriber of the specified list. Returns the user if they are a subscriber.
@@ -133,7 +133,7 @@ public fun Lists.subscriber(
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Lists.subscriber(
     slug: String,
@@ -142,7 +142,7 @@ public fun Lists.subscriber(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = subscriber(null, slug, null, ownerId, userId, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = subscriber(null, slug, null, ownerId, userId, null, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a subscriber of the specified list. Returns the user if they are a subscriber.
@@ -156,7 +156,7 @@ public fun Lists.subscriber(
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Lists.subscriber(
     slug: String,
@@ -165,7 +165,7 @@ public fun Lists.subscriber(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = subscriber(null, slug, null, ownerId, null, screenName, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = subscriber(null, slug, null, ownerId, null, screenName, includeEntities, skipStatus, *options)
 
 private fun Lists.subscriber(
     listId: Long? = null,

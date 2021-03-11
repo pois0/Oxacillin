@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.media
 
 import blue.starry.penicillin.core.request.EndpointHost
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Media
@@ -45,7 +45,7 @@ import blue.starry.penicillin.endpoints.Option
  * @param additionalOwners A comma-separated list of user IDs to set as additional owners allowed to use the returned media_id in Tweets or Cards. Up to 100 additional owners may be specified.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Media] endpoint instance.
- * @return [JsonObjectApiAction] for [blue.starry.penicillin.models.Media] model.
+ * @return [JsonGeneralApiAction] for [blue.starry.penicillin.models.Media] model.
  */
 public fun Media.uploadInit(
     totalBytes: Int,
@@ -53,7 +53,7 @@ public fun Media.uploadInit(
     mediaCategory: MediaCategory = MediaCategory.Default,
     additionalOwners: List<Long>? = null,
     vararg options: Option
-): JsonObjectApiAction<blue.starry.penicillin.models.Media> = client.session.post("/1.1/media/upload.json", EndpointHost.MediaUpload) {
+): JsonGeneralApiAction<blue.starry.penicillin.models.Media> = client.session.post("/1.1/media/upload.json", EndpointHost.MediaUpload) {
     formBody(
         "command" to "INIT",
         "total_bytes" to totalBytes,

@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.friendships
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Friendships
@@ -41,7 +41,7 @@ import blue.starry.penicillin.models.Friendships.Lookup
  * @param screenNames A list of screen names, up to 100 are allowed in a single request.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonObjectApiAction] for [Lookup] model.
+ * @return [JsonGeneralApiAction] for [Lookup] model.
  */
 public fun Friendships.lookupByScreenNames(
     screenNames: List<String>,
@@ -56,7 +56,7 @@ public fun Friendships.lookupByScreenNames(
  * @param userIds A list of user IDs, up to 100 are allowed in a single request.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonObjectApiAction] for [Lookup] model.
+ * @return [JsonGeneralApiAction] for [Lookup] model.
  */
 public fun Friendships.lookupByUserIds(
     userIds: List<Long>,

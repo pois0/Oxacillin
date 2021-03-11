@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.accountactivity
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.AccountActivity
@@ -40,11 +40,11 @@ import blue.starry.penicillin.models.Subscription
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [AccountActivity] endpoint instance.
- * @return [JsonObjectApiAction] for [Subscription.Count] model.
+ * @return [JsonGeneralApiAction] for [Subscription.Count] model.
  */
 public fun AccountActivity.subscriptionCount(
     vararg options: Option
-): JsonObjectApiAction<Subscription.Count> = client.session.get("/1.1/account_activity/all/subscriptions/count.json") {
+): JsonGeneralApiAction<Subscription.Count> = client.session.get("/1.1/account_activity/all/subscriptions/count.json") {
     parameters(*options)
 }.jsonObject { Subscription.Count(it, client) }
 
@@ -52,5 +52,5 @@ public fun AccountActivity.subscriptionCount(
  * Shorthand property to [AccountActivity.subscriptionCount].
  * @see AccountActivity.subscriptionCount
  */
-public val AccountActivity.subscriptionCount: JsonObjectApiAction<Subscription.Count>
+public val AccountActivity.subscriptionCount: JsonGeneralApiAction<Subscription.Count>
     get() = subscriptionCount()

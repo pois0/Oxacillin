@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.lists
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
@@ -44,7 +44,7 @@ import blue.starry.penicillin.models.User
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Lists.member(
     listId: Long,
@@ -52,7 +52,7 @@ public fun Lists.member(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = member(listId, null, null, null, userId, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = member(listId, null, null, null, userId, null, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a member of the specified list.
@@ -65,7 +65,7 @@ public fun Lists.member(
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Lists.member(
     listId: Long,
@@ -73,7 +73,7 @@ public fun Lists.member(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = member(listId, null, null, null, null, screenName, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = member(listId, null, null, null, null, screenName, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a member of the specified list.
@@ -87,7 +87,7 @@ public fun Lists.member(
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Lists.member(
     slug: String,
@@ -96,7 +96,7 @@ public fun Lists.member(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = member(null, slug, ownerScreenName, null, userId, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = member(null, slug, ownerScreenName, null, userId, null, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a member of the specified list.
@@ -110,7 +110,7 @@ public fun Lists.member(
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Lists.member(
     slug: String,
@@ -119,7 +119,7 @@ public fun Lists.member(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = member(null, slug, ownerScreenName, null, null, screenName, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = member(null, slug, ownerScreenName, null, null, screenName, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a member of the specified list.
@@ -133,7 +133,7 @@ public fun Lists.member(
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Lists.member(
     slug: String,
@@ -142,7 +142,7 @@ public fun Lists.member(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = member(null, slug, null, ownerId, userId, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = member(null, slug, null, ownerId, userId, null, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a member of the specified list.
@@ -156,7 +156,7 @@ public fun Lists.member(
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Lists.member(
     slug: String,
@@ -165,7 +165,7 @@ public fun Lists.member(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = member(null, slug, null, ownerId, null, screenName, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = member(null, slug, null, ownerId, null, screenName, includeEntities, skipStatus, *options)
 
 internal fun Lists.member(
     listId: Long? = null,

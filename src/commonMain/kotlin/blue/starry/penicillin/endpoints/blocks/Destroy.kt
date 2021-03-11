@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.blocks
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Blocks
@@ -43,7 +43,7 @@ import blue.starry.penicillin.models.User
  * @param skipStatus Optional. When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Blocks] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  * @see Blocks.destroyByUserId
  */
 public fun Blocks.destroyByScreenName(
@@ -51,7 +51,7 @@ public fun Blocks.destroyByScreenName(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = destroy(screenName, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = destroy(screenName, null, includeEntities, skipStatus, *options)
 
 /**
  * Un-blocks the user specified in the ID parameter for the authenticating user. Returns the un-blocked user when successful. If relationships existed before the block was instantiated, they will not be restored.
@@ -63,7 +63,7 @@ public fun Blocks.destroyByScreenName(
  * @param skipStatus Optional. When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Blocks] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  * @see Blocks.destroyByScreenName
  */
 public fun Blocks.destroyByUserId(
@@ -71,7 +71,7 @@ public fun Blocks.destroyByUserId(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = destroy(null, userId, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = destroy(null, userId, includeEntities, skipStatus, *options)
 
 private fun Blocks.destroy(
     screenName: String? = null,

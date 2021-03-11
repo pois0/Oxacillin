@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.statuses
 
-import blue.starry.penicillin.core.request.action.CursorJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.CursorJsonApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
@@ -45,7 +45,7 @@ import blue.starry.penicillin.models.cursor.CursorIds
  * @param stringifyIds    Many programming environments will not consume Tweet ids due to their size. Provide this option to have ids returned as strings instead.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Statuses] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorIds] model.
+ * @return [CursorJsonApiAction] for [CursorIds] model.
  */
 public fun Statuses.retweeterIds(
     id: Long,
@@ -53,7 +53,7 @@ public fun Statuses.retweeterIds(
     cursor: Long? = null,
     stringifyIds: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorIds, Long> = client.session.get("/1.1/statuses/retweeters/ids.json") {
+): CursorJsonApiAction<CursorIds, Long> = client.session.get("/1.1/statuses/retweeters/ids.json") {
     parameters(
         "id" to id,
         "count" to count,

@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.mutes
 
-import blue.starry.penicillin.core.request.action.CursorJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.CursorJsonApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Mutes
@@ -44,14 +44,14 @@ import blue.starry.penicillin.models.cursor.CursorUsers
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Mutes] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorUsers] model.
+ * @return [CursorJsonApiAction] for [CursorUsers] model.
  */
 public fun Mutes.listUsers(
     cursor: Long? = null,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorUsers, User> = client.session.get("/1.1/mutes/users/list.json") {
+): CursorJsonApiAction<CursorUsers, User> = client.session.get("/1.1/mutes/users/list.json") {
     parameters(
         "cursor" to cursor,
         "include_entities" to includeEntities,
@@ -64,5 +64,5 @@ public fun Mutes.listUsers(
  * Shorthand property to [Mutes.listUsers].
  * @see Mutes.listUsers
  */
-public val Mutes.listUsers: CursorJsonObjectApiAction<CursorUsers, User>
+public val Mutes.listUsers: CursorJsonApiAction<CursorUsers, User>
     get() = listUsers()

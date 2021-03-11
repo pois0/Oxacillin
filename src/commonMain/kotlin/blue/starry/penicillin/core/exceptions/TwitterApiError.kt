@@ -181,8 +181,8 @@ public data class TwitterApiError(
     }
 }
 
-private val TwitterApiError.Companion.errors: List<TwitterApiError>
-    get() = listOf(
+private val TwitterApiError.Companion.errors: Sequence<TwitterApiError>
+    get() = sequenceOf(
         InvalidCoordinates, NoLocationAssociated, NoUserMatches, CouldNotAuthenticate, ResourceNotFound,
         CannotReportSelf, ParameterMissing, InvalidAttachmentUrl, UserNotFound, SuspendedUser, SuspendedAccount,
         OutdatedEndpoint, ListNameError, ActionNotPermitted, RateLimitExceeded, InvalidOrExpiredToken, SSLRequired,

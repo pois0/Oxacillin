@@ -30,21 +30,23 @@ import blue.starry.penicillin.core.exceptions.PenicillinException
 import blue.starry.penicillin.core.exceptions.throwApiError
 import blue.starry.penicillin.core.i18n.LocalizedString
 import blue.starry.penicillin.core.request.url
+import blue.starry.penicillin.core.util.castOrNull
+import blue.starry.penicillin.core.util.getOrNull
 import blue.starry.penicillin.extensions.session
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.util.*
 import kotlinx.coroutines.CancellationException
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.*
 import mu.KotlinLogging
 
 private val apiActionLogger = KotlinLogging.logger("Penicillin.ApiAction")
 
-internal suspend fun ApiAction<*>.doRequest(): Pair<HttpRequest, HttpResponse> {
+internal suspend fun ApiAction<*>.doRequest(): HttpResponse {
     try {
-        val response = session.httpClient.request<HttpStatement>(request.builder.finalize()).execute()
-
-        return response.request to response
+        return session.httpClient.request<HttpStatement>(request.builder.finalize()).execute()
     } catch (e: CancellationException) {
         throw e
     } catch (t: Throwable) {
@@ -52,7 +54,7 @@ internal suspend fun ApiAction<*>.doRequest(): Pair<HttpRequest, HttpResponse> {
     }
 }
 
-internal fun checkError(request: HttpRequest, response: HttpResponse, content: String? = null, json: JsonObject? = null) {
+internal fun checkError(request: HttpRequest, response: HttpResponse, content: String? = null) {
     apiActionLogger.trace {
         buildString {
             append("${response.version} ${response.status.value} ${request.method.value} ${request.url}\n")
@@ -82,16 +84,16 @@ internal fun checkError(request: HttpRequest, response: HttpResponse, content: S
         return
     }
 
-    if (json != null) {
-        when (val error = json["errors"]?.jsonArrayOrNull?.firstOrNull() ?: json["error"]) {
+    content?.let(Json::parseToJsonElement)?.let { json ->
+        when (val error = json.getOrNull("errors")?.castOrNull<JsonArray>()?.firstOrNull() ?: json.getOrNull("error")) {
             is JsonObject -> {
-                val code by error.byNullableInt
-                val message by error.byNullableString
-                
-                throwApiError(code, message.orEmpty(), content!!, request, response)
+                val code = error["errors"]?.castOrNull<JsonPrimitive>()?.intOrNull
+                val message = error["message"]?.castOrNull<JsonPrimitive>()?.toString()
+
+                throwApiError(code, message.orEmpty(), content, request, response)
             }
             is JsonPrimitive -> {
-                throwApiError(null, error.string, content!!, request, response)
+                throwApiError(null, error.toString(), content, request, response)
             }
             else -> {
                 throw PenicillinException(LocalizedString.UnknownApiErrorWithStatusCode, null, request, response, response.status.value, content)

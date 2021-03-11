@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.collections.entries
 
 import blue.starry.jsonkt.JsonObject
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.jsonBody
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.post
@@ -43,12 +43,12 @@ import blue.starry.penicillin.models.Collection
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [CollectionEntries] endpoint instance.
- * @return [JsonObjectApiAction] for [Collection.Entry.Result] model.
+ * @return [JsonGeneralApiAction] for [Collection.Entry.Result] model.
  */
 public fun CollectionEntries.curate(
     payload: JsonObject,
     vararg options: Option
-): JsonObjectApiAction<Collection.Entry.Result> = client.session.post("/1.1/collections/entries/curate.json") {
+): JsonGeneralApiAction<Collection.Entry.Result> = client.session.post("/1.1/collections/entries/curate.json") {
     parameters(*options)
     jsonBody(payload)
 }.jsonObject { Collection.Entry.Result(it, client) }

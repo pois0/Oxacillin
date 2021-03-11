@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.directmessages
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.DirectMessages
@@ -39,7 +39,7 @@ import blue.starry.penicillin.models.DirectMessage
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [DirectMessages] endpoint instance.
- * @return [JsonObjectApiAction] for [DirectMessage] model.
+ * @return [JsonGeneralApiAction] for [DirectMessage] model.
  */
 @Deprecated(directMessageDeprecatedMessage, replaceWith = ReplaceWith("directMessageEvent.create", "blue.starry.penicillin.endpoints.directMessageEvent", "blue.starry.penicillin.endpoints.directmessages.events.create"))
 public fun DirectMessages.create(
@@ -47,7 +47,7 @@ public fun DirectMessages.create(
     userId: Long? = null,
     screenName: String? = null,
     vararg options: Option
-): JsonObjectApiAction<DirectMessage> = client.session.post("/1.1/direct_messages/new.json") {
+): JsonGeneralApiAction<DirectMessage> = client.session.post("/1.1/direct_messages/new.json") {
     formBody(
         "text" to text,
         "user_id" to userId,

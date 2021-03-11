@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.geo
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Geo
@@ -46,7 +46,7 @@ import blue.starry.penicillin.models.GeoResult
  * @param maxResults A hint as to the number of results to return. This does not guarantee that the number of results returned will equal max_results, but instead informs how many "nearby" results to return. Ideally, only pass in the number of places you intend to display to the user here.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Geo] endpoint instance.
- * @return [JsonObjectApiAction] for [GeoResult] model.
+ * @return [JsonGeneralApiAction] for [GeoResult] model.
  */
 public fun Geo.reverseGeocode(
     latitude: Double,
@@ -55,7 +55,7 @@ public fun Geo.reverseGeocode(
     granularity: GeoGranularity = GeoGranularity.Default,
     maxResults: Int? = null,
     vararg options: Option
-): JsonObjectApiAction<GeoResult> = client.session.get("/1.1/geo/reverse_geocode.json") {
+): JsonGeneralApiAction<GeoResult> = client.session.get("/1.1/geo/reverse_geocode.json") {
     parameters(
         "lat" to latitude,
         "long" to longitude,

@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.account
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.append
 import blue.starry.penicillin.core.request.multiPartBody
 import blue.starry.penicillin.core.session.post
@@ -51,7 +51,7 @@ import io.ktor.utils.io.core.*
  * @param skipStatus Optional. When set to either true, t or 1 statuses will not be included in the returned user object.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Account] endpoint instance.
- * @return [JsonObjectApiAction] for [VerifyCredentials] model.
+ * @return [JsonGeneralApiAction] for [VerifyCredentials] model.
  */
 public fun Account.updateProfileImage(
     file: ByteArray,
@@ -59,7 +59,7 @@ public fun Account.updateProfileImage(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = client.session.post("/1.1/account/update_profile_image.json") {
+): JsonGeneralApiAction<User> = client.session.post("/1.1/account/update_profile_image.json") {
     multiPartBody {
         append("image", "blob", mediaType.contentType) {
             writeFully(file)

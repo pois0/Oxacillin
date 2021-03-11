@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.lists
 
-import blue.starry.penicillin.core.request.action.CursorJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.CursorJsonApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
@@ -43,13 +43,13 @@ import blue.starry.penicillin.models.cursor.CursorLists
  * @param cursor Breaks the results into pages. Provide a value of -1 to begin paging. Provide values as returned in the response body's next_cursor and previous_cursor attributes to page back and forth in the list. It is recommended to always use cursors when the method supports them. See [Cursoring](https://developer.twitter.com/en/docs/basics/cursoring) for more information.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorLists] model.
+ * @return [CursorJsonApiAction] for [CursorLists] model.
  */
 public fun Lists.ownerships(
     count: Int? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorLists, TwitterList> = ownershipsInternal(null, null, count, cursor, *options)
+): CursorJsonApiAction<CursorLists, TwitterList> = ownershipsInternal(null, null, count, cursor, *options)
 
 /**
  * Returns the lists owned by the specified Twitter user. Private lists will only be shown if the authenticated user is also the owner of the lists.
@@ -61,14 +61,14 @@ public fun Lists.ownerships(
  * @param cursor Breaks the results into pages. Provide a value of -1 to begin paging. Provide values as returned in the response body's next_cursor and previous_cursor attributes to page back and forth in the list. It is recommended to always use cursors when the method supports them. See [Cursoring](https://developer.twitter.com/en/docs/basics/cursoring) for more information.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorLists] model.
+ * @return [CursorJsonApiAction] for [CursorLists] model.
  */
 public fun Lists.ownershipsByUserId(
     userId: Long,
     count: Int? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorLists, TwitterList> = ownershipsInternal(userId, null, count, cursor, *options)
+): CursorJsonApiAction<CursorLists, TwitterList> = ownershipsInternal(userId, null, count, cursor, *options)
 
 /**
  * Returns the lists owned by the specified Twitter user. Private lists will only be shown if the authenticated user is also the owner of the lists.
@@ -80,14 +80,14 @@ public fun Lists.ownershipsByUserId(
  * @param cursor Breaks the results into pages. Provide a value of -1 to begin paging. Provide values as returned in the response body's next_cursor and previous_cursor attributes to page back and forth in the list. It is recommended to always use cursors when the method supports them. See [Cursoring](https://developer.twitter.com/en/docs/basics/cursoring) for more information.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorLists] model.
+ * @return [CursorJsonApiAction] for [CursorLists] model.
  */
 public fun Lists.ownerships(
     screenName: String,
     count: Int? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorLists, TwitterList> = ownershipsInternal(null, screenName, count, cursor, *options)
+): CursorJsonApiAction<CursorLists, TwitterList> = ownershipsInternal(null, screenName, count, cursor, *options)
 
 private fun Lists.ownershipsInternal(
     userId: Long? = null,
@@ -109,5 +109,5 @@ private fun Lists.ownershipsInternal(
  * Shorthand property to [Lists.ownerships].
  * @see Lists.ownerships
  */
-public val Lists.ownerships: CursorJsonObjectApiAction<CursorLists, TwitterList>
+public val Lists.ownerships: CursorJsonApiAction<CursorLists, TwitterList>
     get() = ownerships()

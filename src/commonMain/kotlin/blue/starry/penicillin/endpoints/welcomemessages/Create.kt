@@ -28,7 +28,7 @@ package blue.starry.penicillin.endpoints.welcomemessages
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.jsonObjectOf
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.jsonBody
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.post
@@ -47,13 +47,13 @@ import blue.starry.penicillin.models.WelcomeMessage
  * @param name A human readable name for the Welcome Message. This is not displayed to the user. Max length of 100 alpha numeric characters including hyphens, underscores, spaces, hashes and at signs.
  * @param options Optional. Custom parameters of this request.
  * @receiver [WelcomeMessages] endpoint instance.
- * @return [JsonObjectApiAction] for [WelcomeMessage.Single] model.
+ * @return [JsonGeneralApiAction] for [WelcomeMessage.Single] model.
  */
 public fun WelcomeMessages.create(
     messageData: JsonObject,
     name: String? = null,
     vararg options: Option
-): JsonObjectApiAction<WelcomeMessage.Single> = client.session.post("/1.1/direct_messages/welcome_messages/new.json") {
+): JsonGeneralApiAction<WelcomeMessage.Single> = client.session.post("/1.1/direct_messages/welcome_messages/new.json") {
     parameters(*options)
     jsonBody(
         "welcome_message" to jsonObjectOf(

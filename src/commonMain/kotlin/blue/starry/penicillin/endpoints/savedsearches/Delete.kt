@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.savedsearches
 
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
@@ -42,11 +42,11 @@ import blue.starry.penicillin.models.SavedSearch
  * @param id The ID of the saved search.
  * @param options Optional. Custom parameters of this request.
  * @receiver [SavedSearches] endpoint instance.
- * @return [JsonObjectApiAction] for [SavedSearch] model.
+ * @return [JsonGeneralApiAction] for [SavedSearch] model.
  */
 public fun SavedSearches.delete(
     id: Long,
     vararg options: Option
-): JsonObjectApiAction<SavedSearch> = client.session.post("/1.1/saved_searches/destroy/$id.json") {
+): JsonGeneralApiAction<SavedSearch> = client.session.post("/1.1/saved_searches/destroy/$id.json") {
     formBody(*options)
 }.jsonObject { SavedSearch(it, client) }

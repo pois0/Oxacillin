@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.savedsearches
 
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
@@ -41,7 +41,7 @@ import blue.starry.penicillin.models.SavedSearch
  * 
  * @param options Optional. Custom parameters of this request.
  * @receiver [SavedSearches] endpoint instance.
- * @return [JsonObjectApiAction] for [SavedSearch] model.
+ * @return [JsonGeneralApiAction] for [SavedSearch] model.
  */
 public fun SavedSearches.list(vararg options: Option): JsonArrayApiAction<SavedSearch> = client.session.get("/1.1/saved_searches/list.json") {
     parameters(*options)

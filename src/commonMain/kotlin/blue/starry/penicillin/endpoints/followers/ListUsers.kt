@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.followers
 
-import blue.starry.penicillin.core.request.action.CursorJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.CursorJsonApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Followers
@@ -46,7 +46,7 @@ import blue.starry.penicillin.models.cursor.CursorUsers
  * @param includeUserEntities The user object entities node will not be included when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Followers] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorUsers] model.
+ * @return [CursorJsonApiAction] for [CursorUsers] model.
  */
 public fun Followers.listUsers(
     cursor: Long? = null,
@@ -54,7 +54,7 @@ public fun Followers.listUsers(
     skipStatus: Boolean? = null,
     includeUserEntities: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorUsers, User> = listUsersInternal(null, null, cursor, count, skipStatus, includeUserEntities, *options)
+): CursorJsonApiAction<CursorUsers, User> = listUsersInternal(null, null, cursor, count, skipStatus, includeUserEntities, *options)
 
 /**
  * Returns a cursored collection of user objects for users following the specified user.
@@ -69,7 +69,7 @@ public fun Followers.listUsers(
  * @param includeUserEntities The user object entities node will not be included when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Followers] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorUsers] model.
+ * @return [CursorJsonApiAction] for [CursorUsers] model.
  * @see listUsersByScreenName
  * @see listUsers
  */
@@ -80,7 +80,7 @@ public fun Followers.listUsersByUserId(
     skipStatus: Boolean? = null,
     includeUserEntities: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorUsers, User> = listUsersInternal(userId, null, cursor, count, skipStatus, includeUserEntities, *options)
+): CursorJsonApiAction<CursorUsers, User> = listUsersInternal(userId, null, cursor, count, skipStatus, includeUserEntities, *options)
 
 /**
  * Returns a cursored collection of user objects for users following the specified user.
@@ -95,7 +95,7 @@ public fun Followers.listUsersByUserId(
  * @param includeUserEntities The user object entities node will not be included when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Followers] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorUsers] model.
+ * @return [CursorJsonApiAction] for [CursorUsers] model.
  * @see listUsersByUserId
  * @see listUsers
  */
@@ -106,7 +106,7 @@ public fun Followers.listUsersByScreenName(
     skipStatus: Boolean? = null,
     includeUserEntities: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorUsers, User> = listUsersInternal(null, screenName, cursor, count, skipStatus, includeUserEntities, *options)
+): CursorJsonApiAction<CursorUsers, User> = listUsersInternal(null, screenName, cursor, count, skipStatus, includeUserEntities, *options)
 
 private fun Followers.listUsersInternal(
     userId: Long? = null,
@@ -132,5 +132,5 @@ private fun Followers.listUsersInternal(
  * Shorthand property to [Followers.listUsers].
  * @see Followers.listUsers
  */
-public val Followers.listUsers: CursorJsonObjectApiAction<CursorUsers, User>
+public val Followers.listUsers: CursorJsonApiAction<CursorUsers, User>
     get() = listUsers()

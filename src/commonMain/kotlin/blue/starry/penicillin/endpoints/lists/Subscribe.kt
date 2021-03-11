@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.lists
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Lists
@@ -41,12 +41,12 @@ import blue.starry.penicillin.models.TwitterList
  * @param listId The numerical id of the list.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [TwitterList] model.
+ * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
 public fun Lists.subscribe(
     listId: Long,
     vararg options: Option
-): JsonObjectApiAction<TwitterList> = subscribe(listId, null, null, null, *options)
+): JsonGeneralApiAction<TwitterList> = subscribe(listId, null, null, null, *options)
 
 /**
  * Subscribes the authenticated user to the specified list.
@@ -57,13 +57,13 @@ public fun Lists.subscribe(
  * @param ownerScreenName The screen name of the user who owns the list being requested by a slug.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [TwitterList] model.
+ * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
 public fun Lists.subscribeByOwnerScreenName(
     slug: String,
     ownerScreenName: String,
     vararg options: Option
-): JsonObjectApiAction<TwitterList> = subscribe(null, slug, ownerScreenName, null, *options)
+): JsonGeneralApiAction<TwitterList> = subscribe(null, slug, ownerScreenName, null, *options)
 
 /**
  * Subscribes the authenticated user to the specified list.
@@ -74,13 +74,13 @@ public fun Lists.subscribeByOwnerScreenName(
  * @param ownerId The user ID of the user who owns the list being requested by a slug.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [TwitterList] model.
+ * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
 public fun Lists.subscribeByOwnerId(
     slug: String,
     ownerId: Long,
     vararg options: Option
-): JsonObjectApiAction<TwitterList> = subscribe(null, slug, null, ownerId, *options)
+): JsonGeneralApiAction<TwitterList> = subscribe(null, slug, null, ownerId, *options)
 
 private fun Lists.subscribe(
     listId: Long? = null,

@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.friendships
 
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Friendships
@@ -44,13 +44,13 @@ import blue.starry.penicillin.models.User
  * @param userId The ID of the user to unfollow.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  * @see destroyByScreenName
  */
 public fun Friendships.destroyByUserId(
     userId: Long,
     vararg options: Option
-): JsonObjectApiAction<User> = destroy(userId, null, *options)
+): JsonGeneralApiAction<User> = destroy(userId, null, *options)
 
 /**
  * Allows the authenticating user to unfollow the user specified in the ID parameter.
@@ -62,13 +62,13 @@ public fun Friendships.destroyByUserId(
  * @param screenName The screen name of the user to unfollow.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  * @see destroyByUserId
  */
 public fun Friendships.destroyByScreenName(
     screenName: String,
     vararg options: Option
-): JsonObjectApiAction<User> = destroy(null, screenName, *options)
+): JsonGeneralApiAction<User> = destroy(null, screenName, *options)
 
 private fun Friendships.destroy(
     userId: Long? = null,

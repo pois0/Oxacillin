@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.collections
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Collections
@@ -41,12 +41,12 @@ import blue.starry.penicillin.models.Collection
  * @param id The identifier of the Collection for which to return results.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Collections] endpoint instance.
- * @return [JsonObjectApiAction] for [Collection.Model] model.
+ * @return [JsonGeneralApiAction] for [Collection.Model] model.
  */
 public fun Collections.show(
     id: String,
     vararg options: Option
-): JsonObjectApiAction<Collection.Model> = client.session.get("/1.1/collections/show.json") {
+): JsonGeneralApiAction<Collection.Model> = client.session.get("/1.1/collections/show.json") {
     parameters(
         "id" to id,
         *options

@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.directmessages.events
 
 import blue.starry.jsonkt.jsonObjectOf
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.jsonBody
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.post
@@ -46,14 +46,14 @@ import blue.starry.penicillin.models.DirectMessageEvent
  * @param type The type of event you are posting. For Direct Messages, use message_create.
  * @param options Optional. Custom parameters of this request.
  * @receiver [DirectMessageEvents] endpoint instance.
- * @return [JsonObjectApiAction] for [DirectMessageEvent.Show] model.
+ * @return [JsonGeneralApiAction] for [DirectMessageEvent.Show] model.
  */
 public fun DirectMessageEvents.create(
     userId: Long,
     text: String,
     type: String = "message_create",
     vararg options: Option
-): JsonObjectApiAction<DirectMessageEvent.Show> = client.session.post("/1.1/direct_messages/events/new.json") {
+): JsonGeneralApiAction<DirectMessageEvent.Show> = client.session.post("/1.1/direct_messages/events/new.json") {
     parameters(*options)
     jsonBody(
         "event" to jsonObjectOf(

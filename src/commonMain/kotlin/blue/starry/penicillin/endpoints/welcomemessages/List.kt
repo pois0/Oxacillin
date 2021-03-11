@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.welcomemessages
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
@@ -42,13 +42,13 @@ import blue.starry.penicillin.models.WelcomeMessage
  * @param cursor For paging through result sets greater than 1 page, use the “next_cursor” property from the previous request.
  * @param options Optional. Custom parameters of this request.
  * @receiver [WelcomeMessages] endpoint instance.
- * @return [JsonObjectApiAction] for [WelcomeMessage.List] model.
+ * @return [JsonGeneralApiAction] for [WelcomeMessage.List] model.
  */
 public fun WelcomeMessages.list(
     count: Int? = null,
     cursor: String? = null,
     vararg options: Option
-): JsonObjectApiAction<WelcomeMessage.List> = client.session.get("/1.1/direct_messages/welcome_messages/list.json") {
+): JsonGeneralApiAction<WelcomeMessage.List> = client.session.get("/1.1/direct_messages/welcome_messages/list.json") {
     parameters(
         "count" to count,
         "cursor" to cursor,
@@ -60,5 +60,5 @@ public fun WelcomeMessages.list(
  * Shorthand property to [WelcomeMessages.list].
  * @see WelcomeMessages.list
  */
-public val WelcomeMessages.list: JsonObjectApiAction<WelcomeMessage.List>
+public val WelcomeMessages.list: JsonGeneralApiAction<WelcomeMessage.List>
     get() = list()

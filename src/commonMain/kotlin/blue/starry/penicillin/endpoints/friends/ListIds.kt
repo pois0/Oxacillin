@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.friends
 
-import blue.starry.penicillin.core.request.action.CursorJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.CursorJsonApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Friends
@@ -45,14 +45,14 @@ import blue.starry.penicillin.models.cursor.CursorIds
  * @param count Specifies the number of IDs attempt retrieval of, up to a maximum of 5,000 per distinct request. The value of count is best thought of as a limit to the number of results to return. When using the count parameter with this method, it is wise to use a consistent count value across all requests to the same user's collection. Usage of this parameter is encouraged in environments where all 5,000 IDs constitutes too large of a response.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friends] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorIds] model.
+ * @return [CursorJsonApiAction] for [CursorIds] model.
  */
 public fun Friends.listIds(
     cursor: Long? = null,
     stringifyIds: Boolean? = null,
     count: Int? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorIds, Long> = listIdsInternal(null, null, cursor, stringifyIds, count, *options)
+): CursorJsonApiAction<CursorIds, Long> = listIdsInternal(null, null, cursor, stringifyIds, count, *options)
 
 /**
  * Returns a cursored collection of user IDs for every user the specified user is following (otherwise known as their "friends").
@@ -67,7 +67,7 @@ public fun Friends.listIds(
  * @param count Specifies the number of IDs attempt retrieval of, up to a maximum of 5,000 per distinct request. The value of count is best thought of as a limit to the number of results to return. When using the count parameter with this method, it is wise to use a consistent count value across all requests to the same user's collection. Usage of this parameter is encouraged in environments where all 5,000 IDs constitutes too large of a response.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friends] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorIds] model.
+ * @return [CursorJsonApiAction] for [CursorIds] model.
  * @see listIdsByScreenName
  * @see listIds
  */
@@ -77,7 +77,7 @@ public fun Friends.listIdsByUserId(
     stringifyIds: Boolean? = null,
     count: Int? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorIds, Long> = listIdsInternal(userId, null, cursor, stringifyIds, count, *options)
+): CursorJsonApiAction<CursorIds, Long> = listIdsInternal(userId, null, cursor, stringifyIds, count, *options)
 
 /**
  * Returns a cursored collection of user IDs for every user the specified user is following (otherwise known as their "friends").
@@ -92,7 +92,7 @@ public fun Friends.listIdsByUserId(
  * @param count Specifies the number of IDs attempt retrieval of, up to a maximum of 5,000 per distinct request. The value of count is best thought of as a limit to the number of results to return. When using the count parameter with this method, it is wise to use a consistent count value across all requests to the same user's collection. Usage of this parameter is encouraged in environments where all 5,000 IDs constitutes too large of a response.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friends] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorIds] model.
+ * @return [CursorJsonApiAction] for [CursorIds] model.
  * @see listIdsByUserId
  * @see listIds
  */
@@ -102,7 +102,7 @@ public fun Friends.listIdsByScreenName(
     stringifyIds: Boolean? = null,
     count: Int? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorIds, Long> = listIdsInternal(null, screenName, cursor, stringifyIds, count, *options)
+): CursorJsonApiAction<CursorIds, Long> = listIdsInternal(null, screenName, cursor, stringifyIds, count, *options)
 
 private fun Friends.listIdsInternal(
     userId: Long? = null,
@@ -126,5 +126,5 @@ private fun Friends.listIdsInternal(
  * Shorthand property to [Friends.listIds].
  * @see Friends.listIds
  */
-public val Friends.listIds: CursorJsonObjectApiAction<CursorIds, Long>
+public val Friends.listIds: CursorJsonApiAction<CursorIds, Long>
     get() = listIds()

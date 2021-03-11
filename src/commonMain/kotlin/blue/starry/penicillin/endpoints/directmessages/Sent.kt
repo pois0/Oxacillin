@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.directmessages
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.DirectMessages
@@ -39,7 +39,7 @@ import blue.starry.penicillin.models.DirectMessage
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [DirectMessages] endpoint instance.
- * @return [JsonObjectApiAction] for [DirectMessage] model.
+ * @return [JsonGeneralApiAction] for [DirectMessage] model.
  */
 @Deprecated(directMessageDeprecatedMessage, replaceWith = ReplaceWith("directMessageEvent.list", "blue.starry.penicillin.endpoints.directMessageEvent", "blue.starry.penicillin.endpoints.directmessages.events.list"))
 public fun DirectMessages.sentMessages(

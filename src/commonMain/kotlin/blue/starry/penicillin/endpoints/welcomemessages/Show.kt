@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.welcomemessages
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
@@ -41,12 +41,12 @@ import blue.starry.penicillin.models.WelcomeMessage
  * @param id The id of the Welcome Message that should be returned.
  * @param options Optional. Custom parameters of this request.
  * @receiver [WelcomeMessages] endpoint instance.
- * @return [JsonObjectApiAction] for [WelcomeMessage.Single] model.
+ * @return [JsonGeneralApiAction] for [WelcomeMessage.Single] model.
  */
 public fun WelcomeMessages.show(
     id: Long,
     vararg options: Option
-): JsonObjectApiAction<WelcomeMessage.Single> = client.session.get("/1.1/direct_messages/welcome_messages/show.json") {
+): JsonGeneralApiAction<WelcomeMessage.Single> = client.session.get("/1.1/direct_messages/welcome_messages/show.json") {
     parameters(
         "id" to id,
         *options

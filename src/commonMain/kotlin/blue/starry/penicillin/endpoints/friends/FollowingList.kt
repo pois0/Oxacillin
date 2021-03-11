@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.friends
 
 import blue.starry.penicillin.core.emulation.EmulationMode
-import blue.starry.penicillin.core.request.action.CursorJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.CursorJsonApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Friends
@@ -42,14 +42,14 @@ import blue.starry.penicillin.models.cursor.CursorUsers
  * @param count The number of users to return per page, up to a maximum of 200.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friends] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorUsers] model.
+ * @return [CursorJsonApiAction] for [CursorUsers] model.
  * @see followingListByScreenName
  */
 public fun Friends.followingListByUserId(
     userId: Long,
     count: Int? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorUsers, User> = followingList(userId, null, count, *options)
+): CursorJsonApiAction<CursorUsers, User> = followingList(userId, null, count, *options)
 
 /**
  * Returns users who follows specific user.
@@ -58,14 +58,14 @@ public fun Friends.followingListByUserId(
  * @param count The number of users to return per page, up to a maximum of 200.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friends] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorUsers] model.
+ * @return [CursorJsonApiAction] for [CursorUsers] model.
  * @see followingListByUserId
  */
 public fun Friends.followingListByScreenName(
     screenName: String,
     count: Int? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorUsers, User> = followingList(null, screenName, count, *options)
+): CursorJsonApiAction<CursorUsers, User> = followingList(null, screenName, count, *options)
 
 private fun Friends.followingList(
     userId: Long? = null,

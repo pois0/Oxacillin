@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.welcomemessages.rules
 
 import blue.starry.jsonkt.jsonObjectOf
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.jsonBody
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.post
@@ -46,12 +46,12 @@ import blue.starry.penicillin.models.WelcomeMessageRule
  * @param id The ID of the Welcome Message that will be sent when this Rule is triggered.
  * @param options Optional. Custom parameters of this request.
  * @receiver [WelcomeMessageRules] endpoint instance.
- * @return [JsonObjectApiAction] for [WelcomeMessageRule.Single] model.
+ * @return [JsonGeneralApiAction] for [WelcomeMessageRule.Single] model.
  */
 public fun WelcomeMessageRules.create(
     id: String,
     vararg options: Option
-): JsonObjectApiAction<WelcomeMessageRule.Single> = client.session.post("/1.1/direct_messages/welcome_messages/rules/new.json") {
+): JsonGeneralApiAction<WelcomeMessageRule.Single> = client.session.post("/1.1/direct_messages/welcome_messages/rules/new.json") {
     parameters(*options)
 
     jsonBody(

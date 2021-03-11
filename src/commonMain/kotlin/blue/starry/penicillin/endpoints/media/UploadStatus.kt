@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.media
 
 import blue.starry.penicillin.core.request.EndpointHost
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Media
@@ -41,13 +41,13 @@ import blue.starry.penicillin.endpoints.Option
  * @param mediaId The media_id returned from the INIT command.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Media] endpoint instance.
- * @return [JsonObjectApiAction] for [blue.starry.penicillin.models.Media] model.
+ * @return [JsonGeneralApiAction] for [blue.starry.penicillin.models.Media] model.
  */
 public fun Media.uploadStatus(
     mediaId: Long,
     mediaKey: String? = null,
     vararg options: Option
-): JsonObjectApiAction<blue.starry.penicillin.models.Media> = client.session.get("/1.1/media/upload.json", EndpointHost.MediaUpload) {
+): JsonGeneralApiAction<blue.starry.penicillin.models.Media> = client.session.get("/1.1/media/upload.json", EndpointHost.MediaUpload) {
     parameters(
         "command" to "STATUS",
         "media_id" to mediaId,

@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.oauth2
 
 import blue.starry.penicillin.core.auth.AuthorizationType
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.OAuth2
@@ -46,12 +46,12 @@ import blue.starry.penicillin.models.OAuthToken
  * @param grantType Specifies the type of grant being requested by the application. At this time, only client_credentials is allowed. See [Application-Only Authentication](https://developer.twitter.com/oauth/application-only) for more information.
  * @param options Optional. Custom parameters of this request.
  * @receiver [OAuth2] endpoint instance.
- * @return [JsonObjectApiAction] for [OAuthToken] model.
+ * @return [JsonGeneralApiAction] for [OAuthToken] model.
  */
 public fun OAuth2.bearerToken(
     grantType: String = "client_credentials",
     vararg options: Option
-): JsonObjectApiAction<OAuthToken> = client.session.post("/oauth2/token") {
+): JsonGeneralApiAction<OAuthToken> = client.session.post("/oauth2/token") {
     authorizationType = AuthorizationType.OAuth2RequestToken
 
     formBody(
@@ -64,5 +64,5 @@ public fun OAuth2.bearerToken(
  * Shorthand property to [OAuth2.bearerToken].
  * @see OAuth2.bearerToken
  */
-public val OAuth2.bearerToken: JsonObjectApiAction<OAuthToken>
+public val OAuth2.bearerToken: JsonGeneralApiAction<OAuthToken>
      get() = bearerToken()

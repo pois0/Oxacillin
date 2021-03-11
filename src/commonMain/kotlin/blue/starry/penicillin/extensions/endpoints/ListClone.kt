@@ -27,7 +27,7 @@
 package blue.starry.penicillin.extensions.endpoints
 
 import blue.starry.penicillin.core.request.action.ApiAction
-import blue.starry.penicillin.core.response.JsonObjectResponse
+import blue.starry.penicillin.core.response.JsonGeneralResponse
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.lists.create
 import blue.starry.penicillin.endpoints.lists.members
@@ -45,7 +45,7 @@ import kotlinx.coroutines.flow.toList
  *
  * @return New [ApiAction] for new list response.
  */
-public fun Lists.clone(sourceId: Long): ApiAction<JsonObjectResponse<TwitterList>> = DelegatedAction {
+public fun Lists.clone(sourceId: Long): ApiAction<JsonGeneralResponse<TwitterList>> = DelegatedAction {
     val sourceList = show(sourceId).execute()
     val sourceMembers = members(sourceId).untilLast("count" to 5000)
     val newList = create(sourceList.result.name, mode = sourceList.result.mode, description = sourceList.result.description).execute().result

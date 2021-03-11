@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.users
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
@@ -43,13 +43,13 @@ import blue.starry.penicillin.models.UserSuggestion
  * @param lang Restricts the suggested categories to the requested language. The language must be specified by the appropriate two letter ISO 639-1 representation. Currently supported languages are provided by the [GET help/languages](https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-suggestions) API request. Unsupported language codes will receive English (en) results. If you use lang in this request, ensure you also include it when requesting the [GET users/suggestions/:slug](https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-suggestions) list.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Users] endpoint instance.
- * @return [JsonObjectApiAction] for [UserSuggestion] model.
+ * @return [JsonGeneralApiAction] for [UserSuggestion] model.
  */
 public fun Users.userSuggestions(
     slug: String,
     lang: String? = null,
     vararg options: Option
-): JsonObjectApiAction<UserSuggestion> = client.session.get("/1.1/users/suggestions/$slug.json") {
+): JsonGeneralApiAction<UserSuggestion> = client.session.get("/1.1/users/suggestions/$slug.json") {
     parameters(
         "lang" to lang,
         *options

@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.help
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Help
@@ -40,11 +40,11 @@ import blue.starry.penicillin.models.Help.Privacy
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [Help] endpoint instance.
- * @return [JsonObjectApiAction] for [Privacy] model.
+ * @return [JsonGeneralApiAction] for [Privacy] model.
  */
 public fun Help.privacy(
     vararg options: Option
-): JsonObjectApiAction<Privacy> = client.session.get("/1.1/help/privacy.json") {
+): JsonGeneralApiAction<Privacy> = client.session.get("/1.1/help/privacy.json") {
     parameters(*options)
 }.jsonObject { Privacy(it, client) }
 
@@ -52,5 +52,5 @@ public fun Help.privacy(
  * Shorthand property to [Help.privacy].
  * @see Help.privacy
  */
-public val Help.privacy: JsonObjectApiAction<Privacy>
+public val Help.privacy: JsonGeneralApiAction<Privacy>
     get() = privacy()

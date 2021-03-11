@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.extensions.models
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.endpoints.cards
 import blue.starry.penicillin.endpoints.cards.show
 import blue.starry.penicillin.models.CardState
@@ -41,7 +41,7 @@ public val Status.hasCard: Boolean
 /**
  * Creates new action to show card with [name].
  */
-public fun Status.showCard(name: String): JsonObjectApiAction<CardState> = client.cards.show(cardUri ?: throw IllegalStateException(), name)
+public fun Status.showCard(name: String): JsonGeneralApiAction<CardState> = client.cards.show(cardUri ?: throw IllegalStateException(), name)
 
 /**
  * A map of choices. Map size N must be 2 <= N <= 4.

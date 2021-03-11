@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.followrequests
 
-import blue.starry.penicillin.core.request.action.CursorJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.CursorJsonApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.FollowRequests
@@ -42,13 +42,13 @@ import blue.starry.penicillin.models.cursor.CursorIds
  * @param stringifyIds Many programming environments will not consume our Tweet ids due to their size. Provide this option to have ids returned as strings instead.
  * @param options Optional. Custom parameters of this request.
  * @receiver [FollowRequests] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorIds] model.
+ * @return [CursorJsonApiAction] for [CursorIds] model.
  */
 public fun FollowRequests.incoming(
     cursor: Long? = null,
     stringifyIds: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorIds, Long> = client.session.get("/1.1/friendships/incoming.json") {
+): CursorJsonApiAction<CursorIds, Long> = client.session.get("/1.1/friendships/incoming.json") {
     parameters(
         "cursor" to cursor,
         "stringify_ids" to stringifyIds,
@@ -60,5 +60,5 @@ public fun FollowRequests.incoming(
  * Shorthand property to [FollowRequests.incoming].
  * @see FollowRequests.incoming
  */
-public val FollowRequests.incoming: CursorJsonObjectApiAction<CursorIds, Long>
+public val FollowRequests.incoming: CursorJsonApiAction<CursorIds, Long>
      get() = incoming()

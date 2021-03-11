@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.trends
 
 import blue.starry.penicillin.core.emulation.EmulationMode
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
@@ -39,11 +39,11 @@ import blue.starry.penicillin.models.TrendPlus
  * 
  * @param options Optional. Custom parameters of this request.
  * @receiver [Trends] endpoint instance.
- * @return [JsonObjectApiAction] for [TrendPlus] model.
+ * @return [JsonGeneralApiAction] for [TrendPlus] model.
  */
 public fun Trends.plus(
     vararg options: Option
-): JsonObjectApiAction<TrendPlus> = client.session.get("/1.1/trends/plus.json") {
+): JsonGeneralApiAction<TrendPlus> = client.session.get("/1.1/trends/plus.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(
@@ -73,5 +73,5 @@ public fun Trends.plus(
  * Shorthand property to [Trends.plus].
  * @see Trends.plus
  */
-public val Trends.plus: JsonObjectApiAction<TrendPlus>
+public val Trends.plus: JsonGeneralApiAction<TrendPlus>
     get() = plus()

@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.collections.entries
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.CollectionEntries
@@ -43,13 +43,13 @@ import blue.starry.penicillin.models.Collection
  * @param tweetId The identifier of the Tweet to remove.
  * @param options Optional. Custom parameters of this request.
  * @receiver [CollectionEntries] endpoint instance.
- * @return [JsonObjectApiAction] for [Collection.Entry.Result] model.
+ * @return [JsonGeneralApiAction] for [Collection.Entry.Result] model.
  */
 public fun CollectionEntries.remove(
     id: String,
     tweetId: Long,
     vararg options: Option
-): JsonObjectApiAction<Collection.Entry.Result> = client.session.post("/1.1/collections/entries/remove.json") {
+): JsonGeneralApiAction<Collection.Entry.Result> = client.session.post("/1.1/collections/entries/remove.json") {
     formBody(
         "id" to id,
         "tweet_id" to tweetId,

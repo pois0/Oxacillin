@@ -24,46 +24,44 @@
 
 package blue.starry.penicillin.core.request.action
 
-import blue.starry.jsonkt.JsonObject
-import blue.starry.jsonkt.parseObjectOrNull
-import blue.starry.jsonkt.toJsonObjectOrNull
 import blue.starry.penicillin.core.exceptions.PenicillinException
 import blue.starry.penicillin.core.i18n.LocalizedString
 import blue.starry.penicillin.core.request.ApiRequest
-import blue.starry.penicillin.core.response.CursorJsonObjectResponse
+import blue.starry.penicillin.core.response.JsonGeneralResponse
 import blue.starry.penicillin.core.session.ApiClient
-import blue.starry.penicillin.extensions.cursor.untilLast
-import blue.starry.penicillin.models.cursor.PenicillinCursorModel
-import kotlinx.coroutines.flow.AbstractFlow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.emitAll
+
+import io.ktor.client.statement.request
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.json.Json
 
 /**
- * The [ApiAction] that provides parsed json object with json model. This class supports cursor api operation.
+ * The [ApiAction] that provides parsed json object with json model.
  */
-public class CursorJsonObjectApiAction<M: PenicillinCursorModel<T>, T: Any>(
+public class JsonGeneralApiAction<T>(
     override val client: ApiClient,
     override val request: ApiRequest,
-    override val converter: (JsonObject) -> M
-): JsonRequest<M>, ApiAction<CursorJsonObjectResponse<M>>, Lazy<CursorJsonObjectResponse<M>> {
-    override suspend fun execute(): CursorJsonObjectResponse<M> {
-        val (request, response) = execute()
+    private val deserializer: DeserializationStrategy<T>
+): ApiAction<JsonGeneralResponse<T>> {
+    override suspend fun execute(): JsonGeneralResponse<T> {
+        val response = doRequest()
+        val request = response.request
 
         val content = response.readTextOrNull()
-        val json = content?.toJsonObjectOrNull() ?: throw PenicillinException(
-            LocalizedString.JsonParsingFailed, null, request, response, content
-        )
 
-        checkError(request, response, content, json)
+        checkError(request, response, content)
 
-        val result = json.parseObjectOrNull(converter) ?: throw PenicillinException(
-            LocalizedString.JsonModelCastFailed, null, request, response, content
-        )
+        var cause: Throwable? = null
 
-        return CursorJsonObjectResponse(client, result, request, response, content, this)
-    }
+        if (content != null) {
+            runCatching {
+                Json.decodeFromString(deserializer, content)
+            }.onSuccess {
+                return JsonGeneralResponse(client, it, request, response, content.orEmpty(), this)
+            }.onFailure {
+                cause = it
+            }
+        }
 
-    override suspend fun collectSafely(collector: FlowCollector<T>) {
-        collector.emitAll(untilLast())
+        throw PenicillinException(LocalizedString.JsonModelCastFailed, cause, request, response, content)
     }
 }

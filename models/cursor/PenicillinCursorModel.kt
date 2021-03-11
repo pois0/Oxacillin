@@ -22,28 +22,20 @@
  * SOFTWARE.
  */
 
-package blue.starry.penicillin.core.response
+@file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-import blue.starry.jsonkt.JsonObject
-import io.ktor.client.request.HttpRequest
-import io.ktor.client.statement.HttpResponse
-import blue.starry.penicillin.core.request.action.ApiAction
+package blue.starry.penicillin.models.cursor
+
+
 import blue.starry.penicillin.core.session.ApiClient
 import blue.starry.penicillin.models.PenicillinModel
 
-/**
- * The [ApiResponse] that provides parsed json object with json model.
- */
-public data class JsonObjectResponse<M>(
-    override val client: ApiClient,
+public abstract class PenicillinCursorModel<T: Any>(final override val json: JsonObject, final override val client: ApiClient): PenicillinModel {
+    public val nextCursor: Long by long("next_cursor")
+    public val nextCursorStr: String by string("next_cursor_str")
+    public val previousCursor: Long by long("previous_cursor")
+    public val previousCursorStr: String by string("previous_cursor_str")
+    public val totalCount: Int? by nullableInt("total_count")
 
-    /**
-     * Result of response.
-     */
-    public val result: M,
-
-    override val request: HttpRequest,
-    override val response: HttpResponse,
-    override val content: String,
-    override val action: ApiAction<JsonObjectResponse<M>>
-): ApiResponse<JsonObjectResponse<M>>, CompletedResponse
+    public abstract val items: List<T>
+}

@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.statuses
 
 import blue.starry.penicillin.core.emulation.EmulationMode
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
@@ -39,12 +39,12 @@ import blue.starry.penicillin.models.PinTweet
  * 
  * @param options Optional. Custom parameters of this request.
  * @receiver [Statuses] endpoint instance.
- * @return [JsonObjectApiAction] for [PinTweet] model.
+ * @return [JsonGeneralApiAction] for [PinTweet] model.
  */
 public fun Statuses.unpin(
     id: Long,
     vararg options: Option
-): JsonObjectApiAction<PinTweet> = client.session.post("/1.1/account/unpin_tweet.json") {
+): JsonGeneralApiAction<PinTweet> = client.session.post("/1.1/account/unpin_tweet.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     formBody(

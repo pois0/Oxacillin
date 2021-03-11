@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+@file:Suppress("NOTHING_TO_INLINE")
+
 package blue.starry.penicillin.core.request
 
 import blue.starry.penicillin.core.request.action.*
@@ -29,8 +31,8 @@ import blue.starry.penicillin.core.session.ApiClient
 import blue.starry.penicillin.core.streaming.handler.StreamHandler
 import blue.starry.penicillin.core.streaming.listener.StreamListener
 import blue.starry.penicillin.endpoints.PremiumSearchEnvironment
-import blue.starry.penicillin.models.PremiumSearchModel
-import blue.starry.penicillin.models.cursor.PenicillinCursorModel
+import blue.starry.penicillin.models.cursor.CursorModel
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Represents api request methods.
@@ -47,30 +49,30 @@ public class ApiRequest(
     public val builder: ApiRequestBuilder
 ) {
     /**
-     * Creates [JsonObjectApiAction] from this request.
+     * Creates [JsonGeneralApiAction] from this request.
      *
-     * @return New [JsonObjectApiAction] for [M].
+     * @return New [JsonGeneralApiAction] for [T].
      */
-    public inline fun <M> jsonObject(noinline converter: (String) -> M): JsonObjectApiAction<M> {
-        return JsonObjectApiAction(client, this, converter)
+    public inline fun <T> jsonObject(deserializer: DeserializationStrategy<T>): JsonGeneralApiAction<T> {
+        return JsonGeneralApiAction(client, this, deserializer)
     }
 
     /**
-     * Creates [CursorJsonObjectApiAction] from this request.
+     * Creates [CursorJsonApiAction] from this request.
      *
-     * @return New [CursorJsonObjectApiAction] for [M].
+     * @return New [CursorJsonApiAction] for [T].
      */
-    public inline fun <M: PenicillinCursorModel> cursorJsonObject(converter: (String) -> M): CursorJsonObjectApiAction<M> {
-        return CursorJsonObjectApiAction(client, this, converter)
+    public inline fun <M: CursorModel<T>, T: Any> cursorJsonObject(deserializer: DeserializationStrategy<M>): CursorJsonApiAction<M, T> {
+        return CursorJsonApiAction(client, this, deserializer)
     }
 
     /**
      * Creates [PremiumSearchJsonObjectApiAction] from this request.
      *
-     * @return New [PremiumSearchJsonObjectApiAction] for [M].
+     * @return New [PremiumSearchJsonObjectApiAction] for [T].
      */
-    public fun <M: PremiumSearchModel> premiumSearchJsonObject(environment: PremiumSearchEnvironment, converter: (JsonObject) -> M): PremiumSearchJsonObjectApiAction<M> {
-        return PremiumSearchJsonObjectApiAction(client, this, converter, environment)
+    public fun <T: Any> premiumSearchJsonObject(environment: PremiumSearchEnvironment, deserializer: DeserializationStrategy<T>): PremiumSearchJsonObjectApiAction<T> {
+        return PremiumSearchJsonObjectApiAction(client, this, deserializer, environment)
     }
 
     /**
@@ -87,7 +89,7 @@ public class ApiRequest(
      *
      * @return New [EmptyApiAction].
      */
-    public fun empty(): EmptyApiAction {
+    public inline fun empty(): EmptyApiAction {
         return EmptyApiAction(client, this)
     }
 

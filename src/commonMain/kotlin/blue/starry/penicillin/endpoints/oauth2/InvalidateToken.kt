@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.oauth2
 
 import blue.starry.penicillin.core.auth.AuthorizationType
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.OAuth2
@@ -43,12 +43,12 @@ import blue.starry.penicillin.models.OAuthToken
  * @param bearerToken The value of the bearer token to revoke.
  * @param options Optional. Custom parameters of this request.
  * @receiver [OAuth2] endpoint instance.
- * @return [JsonObjectApiAction] for [OAuthToken] model.
+ * @return [JsonGeneralApiAction] for [OAuthToken] model.
  */
 public fun OAuth2.invalidateToken(
     bearerToken: String,
     vararg options: Option
-): JsonObjectApiAction<OAuthToken> = client.session.post("/oauth2/invalidate_token") {
+): JsonGeneralApiAction<OAuthToken> = client.session.post("/oauth2/invalidate_token") {
     authorizationType = AuthorizationType.OAuth2RequestToken
     
     formBody(

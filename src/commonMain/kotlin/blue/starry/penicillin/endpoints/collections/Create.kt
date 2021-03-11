@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.collections
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Collections
@@ -45,7 +45,7 @@ import blue.starry.penicillin.models.Collection
  * @param timelineOrder Order Tweets chronologically or in the order they are added to a Collection.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Collections] endpoint instance.
- * @return [JsonObjectApiAction] for [Collection.Model] model.
+ * @return [JsonGeneralApiAction] for [Collection.Model] model.
  */
 public fun Collections.create(
     name: String,
@@ -53,7 +53,7 @@ public fun Collections.create(
     url: String? = null,
     timelineOrder: CollectionTimelineOrder = CollectionTimelineOrder.Default,
     vararg options: Option
-): JsonObjectApiAction<Collection.Model> = client.session.post("/1.1/collections/create.json") {
+): JsonGeneralApiAction<Collection.Model> = client.session.post("/1.1/collections/create.json") {
     formBody(
         "name" to name,
         "description" to description,

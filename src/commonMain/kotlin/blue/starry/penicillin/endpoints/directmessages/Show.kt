@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.directmessages
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.DirectMessages
@@ -39,13 +39,13 @@ import blue.starry.penicillin.models.DirectMessage
  * 
  * @param options Optional. Custom parameters of this request.
  * @receiver [DirectMessages] endpoint instance.
- * @return [JsonObjectApiAction] for [DirectMessage] model.
+ * @return [JsonGeneralApiAction] for [DirectMessage] model.
  */
 @Deprecated(directMessageDeprecatedMessage, replaceWith = ReplaceWith("directMessageEvent.show", "blue.starry.penicillin.endpoints.directMessageEvent", "blue.starry.penicillin.endpoints.directmessages.events.show"))
 public fun DirectMessages.show(
     id: Long,
     vararg options: Option
-): JsonObjectApiAction<DirectMessage> = client.session.get("/1.1/direct_messages/show.json") {
+): JsonGeneralApiAction<DirectMessage> = client.session.get("/1.1/direct_messages/show.json") {
     parameters(
         "id" to id,
         *options

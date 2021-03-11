@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.friendships
 
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Friendships
@@ -45,14 +45,14 @@ import blue.starry.penicillin.models.User
  * @param follow Enable notifications for the target user.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  * @see createByScreenName
  */
 public fun Friendships.createByUserId(
     userId: Long,
     follow: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = create(userId, null, follow, *options)
+): JsonGeneralApiAction<User> = create(userId, null, follow, *options)
 
 /**
  * Allows the authenticating user to follow (friend) the user specified in the ID parameter.
@@ -65,14 +65,14 @@ public fun Friendships.createByUserId(
  * @param follow Enable notifications for the target user.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  * @see createByUserId
  */
 public fun Friendships.createByScreenName(
     screenName: String,
     follow: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = create(null, screenName, follow, *options)
+): JsonGeneralApiAction<User> = create(null, screenName, follow, *options)
 
 private fun Friendships.create(
     userId: Long? = null,

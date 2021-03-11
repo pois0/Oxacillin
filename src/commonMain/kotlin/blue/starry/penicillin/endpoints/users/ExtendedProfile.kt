@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.users
 
 import blue.starry.penicillin.core.emulation.EmulationMode
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
@@ -39,13 +39,13 @@ import blue.starry.penicillin.models.ExtendedProfile
  * 
  * @param options Optional. Custom parameters of this request.
  * @receiver [Users] endpoint instance.
- * @return [JsonObjectApiAction] for [ExtendedProfile] model.
+ * @return [JsonGeneralApiAction] for [ExtendedProfile] model.
  */
 public fun Users.extendedProfile(
     screenName: String,
     includeBirthdate: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<ExtendedProfile> = client.session.get("/1.1/users/extended_profile.json") {
+): JsonGeneralApiAction<ExtendedProfile> = client.session.get("/1.1/users/extended_profile.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(

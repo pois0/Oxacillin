@@ -28,7 +28,7 @@ package blue.starry.penicillin.endpoints.statuses
 
 import blue.starry.penicillin.core.auth.AuthorizationType
 import blue.starry.penicillin.core.request.EndpointHost
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
@@ -56,7 +56,7 @@ import blue.starry.penicillin.models.Embed
  * @param dnt When set to true, the Tweet and its embedded page on your site are not used for purposes that include [personalized suggestions](https://support.twitter.com/articles/20169421) and [personalized ads](https://support.twitter.com/articles/20170405).
  * @param options Optional. Custom parameters of this request.
  * @receiver [Statuses] endpoint instance.
- * @return [JsonObjectApiAction] for [Embed] model.
+ * @return [JsonGeneralApiAction] for [Embed] model.
  */
 public fun Statuses.embedFormat(
     url: String,
@@ -72,7 +72,7 @@ public fun Statuses.embedFormat(
     widgetType: EmbedWidgetType = EmbedWidgetType.Default,
     dnt: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<Embed> = client.session.get("/oembed", EndpointHost.Publish) {
+): JsonGeneralApiAction<Embed> = client.session.get("/oembed", EndpointHost.Publish) {
     authorizationType = AuthorizationType.None
 
     parameters(

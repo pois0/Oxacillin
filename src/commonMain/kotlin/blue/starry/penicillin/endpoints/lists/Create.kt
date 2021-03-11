@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.lists
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Lists
@@ -43,14 +43,14 @@ import blue.starry.penicillin.models.TwitterList
  * @param description The description to give the list.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [TwitterList] model.
+ * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
 public fun Lists.create(
     name: String,
     mode: ListVisibilityMode = ListVisibilityMode.Default,
     description: String? = null,
     vararg options: Option
-): JsonObjectApiAction<TwitterList> = client.session.post("/1.1/lists/create.json") {
+): JsonGeneralApiAction<TwitterList> = client.session.post("/1.1/lists/create.json") {
     formBody(
         "name" to name,
         "mode" to mode,

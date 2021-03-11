@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.account
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Account
@@ -43,14 +43,14 @@ import blue.starry.penicillin.models.Account.VerifyCredentials
  * @param includeEmail Optional. When set to true email will be returned in the user objects as a string. If the user does not have an email address on their account, or if the email address is not verified, null will be returned.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Account] endpoint instance.
- * @return [JsonObjectApiAction] for [VerifyCredentials] model.
+ * @return [JsonGeneralApiAction] for [VerifyCredentials] model.
  */
 public fun Account.verifyCredentials(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     includeEmail: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<VerifyCredentials> = client.session.get("/1.1/account/verify_credentials.json") {
+): JsonGeneralApiAction<VerifyCredentials> = client.session.get("/1.1/account/verify_credentials.json") {
     parameters(
         "include_entities" to includeEntities,
         "skip_status" to skipStatus,
@@ -63,5 +63,5 @@ public fun Account.verifyCredentials(
  * Shorthand property to [Account.verifyCredentials].
  * @see Account.verifyCredentials
  */
-public val Account.verifyCredentials: JsonObjectApiAction<VerifyCredentials>
+public val Account.verifyCredentials: JsonGeneralApiAction<VerifyCredentials>
     get() = verifyCredentials()

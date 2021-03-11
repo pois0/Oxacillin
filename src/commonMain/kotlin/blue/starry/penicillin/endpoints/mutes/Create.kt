@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.mutes
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Mutes
@@ -43,12 +43,12 @@ import blue.starry.penicillin.models.User
  * @param screenName The screen name of the potentially muted user. Helpful for disambiguating when a valid screen name is also a user ID.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Mutes] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Mutes.createByScreenName(
     screenName: String,
     vararg options: Option
-): JsonObjectApiAction<User> = create(screenName, null, *options)
+): JsonGeneralApiAction<User> = create(screenName, null, *options)
 
 /**
  * Mutes the user specified in the ID parameter for the authenticating user.
@@ -60,12 +60,12 @@ public fun Mutes.createByScreenName(
  * @param userId The ID of the potentially muted user. Helpful for disambiguating when a valid user ID is also a valid screen name.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Mutes] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Mutes.createByUserId(
     userId: Long,
     vararg options: Option
-): JsonObjectApiAction<User> = create(null, userId, *options)
+): JsonGeneralApiAction<User> = create(null, userId, *options)
 
 private fun Mutes.create(
     screenName: String? = null,

@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.blocks
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Blocks
@@ -45,7 +45,7 @@ import blue.starry.penicillin.models.User
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Blocks] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  * @see Blocks.createByUserId
  */
 public fun Blocks.createByScreenName(
@@ -53,7 +53,7 @@ public fun Blocks.createByScreenName(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = create(screenName, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = create(screenName, null, includeEntities, skipStatus, *options)
 
 /**
  * Blocks the specified user from following the authenticating user. In addition the blocked user will not show in the authenticating users mentions or timeline (unless retweeted by another user). If a follow or friend relationship exists it is destroyed.
@@ -67,7 +67,7 @@ public fun Blocks.createByScreenName(
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Blocks] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  * @see Blocks.createByScreenName
  */
 public fun Blocks.createByUserId(
@@ -75,7 +75,7 @@ public fun Blocks.createByUserId(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = create(null, userId, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<User> = create(null, userId, includeEntities, skipStatus, *options)
 
 private fun Blocks.create(
     screenName: String? = null,

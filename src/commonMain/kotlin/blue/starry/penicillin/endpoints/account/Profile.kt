@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.account
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Account
@@ -47,7 +47,7 @@ import blue.starry.penicillin.models.User
  * @param skipStatus When set to either true, t or 1 statuses will not be included in the returned user object.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Account] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Account.updateProfile(
     name: String? = null,
@@ -61,7 +61,7 @@ public fun Account.updateProfile(
     birthdateMonth: Int? = null,
     birthdateDay: Int? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = client.session.post("/1.1/account/update_profile.json") {
+): JsonGeneralApiAction<User> = client.session.post("/1.1/account/update_profile.json") {
     formBody(
         "name" to name,
         "url" to url,
@@ -82,5 +82,5 @@ public fun Account.updateProfile(
  * Shorthand extension property to [Account.updateProfile].
  * @see Account.updateProfile
  */
-public val Account.updateProfile: JsonObjectApiAction<User>
+public val Account.updateProfile: JsonGeneralApiAction<User>
     get() = updateProfile()

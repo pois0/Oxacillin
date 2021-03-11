@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.followrequests
 
 import blue.starry.penicillin.core.emulation.EmulationMode
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.FollowRequests
@@ -40,12 +40,12 @@ import blue.starry.penicillin.models.User
  * @param screenName The screen name of the user.
  * @param options Optional. Custom parameters of this request.
  * @receiver [FollowRequests] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun FollowRequests.acceptByScreenName(
     screenName: String,
     vararg  options: Option
-): JsonObjectApiAction<User> = accept(screenName, null, *options)
+): JsonGeneralApiAction<User> = accept(screenName, null, *options)
 
 /**
  * Accepts the follow request from specific user.
@@ -53,12 +53,12 @@ public fun FollowRequests.acceptByScreenName(
  * @param userId The numeric ID of the user.
  * @param options Optional. Custom parameters of this request.
  * @receiver [FollowRequests] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun FollowRequests.acceptByUserId(
     userId: Long,
     vararg  options: Option
-): JsonObjectApiAction<User> = accept(null, userId, *options)
+): JsonGeneralApiAction<User> = accept(null, userId, *options)
 
 private fun FollowRequests.accept(
     screenName: String? = null,

@@ -24,35 +24,30 @@
 
 package blue.starry.penicillin.core.response
 
-import blue.starry.jsonkt.JsonObject
 import io.ktor.client.request.HttpRequest
 import io.ktor.client.statement.HttpResponse
-import blue.starry.penicillin.core.request.action.ApiAction
+import blue.starry.penicillin.core.request.action.PremiumSearchJsonObjectApiAction
 import blue.starry.penicillin.core.session.ApiClient
 import blue.starry.penicillin.endpoints.PremiumSearchEnvironment
-import blue.starry.penicillin.models.PremiumSearchModel
 
 /**
  * The [ApiResponse] that provides parsed json object with json model. This class supports premium search api operations.
  */
-public data class PremiumSearchJsonObjectResponse<M: PremiumSearchModel>(
+public data class PremiumSearchJsonObjectResponse<T>(
     override val client: ApiClient,
 
     /**
      * Result of response.
      */
-    public val result: M,
+    public val result: T,
 
     override val request: HttpRequest,
     override val response: HttpResponse,
     override val content: String,
-    override val action: ApiAction<PremiumSearchJsonObjectResponse<M>>,
+    override val action: PremiumSearchJsonObjectApiAction<T>,
 
     /**
      * [PremiumSearchEnvironment] which was used to acquire this response.
      */
     public val environment: PremiumSearchEnvironment
-): ApiResponse<PremiumSearchJsonObjectResponse<M>>, JsonResponse<M, JsonObject>, CompletedResponse {
-    override val json: JsonObject
-        get() = result.json
-}
+): ApiResponse<PremiumSearchJsonObjectResponse<T>>, CompletedResponse

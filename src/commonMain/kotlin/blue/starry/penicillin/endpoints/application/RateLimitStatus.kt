@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.application
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Application
@@ -51,12 +51,12 @@ import blue.starry.penicillin.models.ApplicationRateLimitStatus
  * @param resources A comma-separated list of resource families you want to know the current rate limit disposition for. For best performance, only specify the resource families pertinent to your application. See [API Rate Limiting](https://developer.twitter.com/en/docs/basics/rate-limiting) for more information.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Application] endpoint instance.
- * @return [JsonObjectApiAction] for [ApplicationRateLimitStatus] model.
+ * @return [JsonGeneralApiAction] for [ApplicationRateLimitStatus] model.
  */
 public fun Application.rateLimitStatus(
     resources: List<String>? = null,
     vararg options: Option
-): JsonObjectApiAction<ApplicationRateLimitStatus> = client.session.get("/1.1/application/rate_limit_status.json") {
+): JsonGeneralApiAction<ApplicationRateLimitStatus> = client.session.get("/1.1/application/rate_limit_status.json") {
     parameters(
         "resources" to resources?.joinToString(","),
         *options
@@ -67,5 +67,5 @@ public fun Application.rateLimitStatus(
  * Shorthand extension property to [Application.rateLimitStatus].
  * @see Application.rateLimitStatus
  */
-public val Application.rateLimitStatus: JsonObjectApiAction<ApplicationRateLimitStatus>
+public val Application.rateLimitStatus: JsonGeneralApiAction<ApplicationRateLimitStatus>
     get() = rateLimitStatus()

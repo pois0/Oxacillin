@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.accountactivity
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.AccountActivity
@@ -42,11 +42,11 @@ import blue.starry.penicillin.models.Webhook
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [AccountActivity] endpoint instance.
- * @return [JsonObjectApiAction] for [Webhook.List] model.
+ * @return [JsonGeneralApiAction] for [Webhook.List] model.
  */
 public fun AccountActivity.listWebhooks(
     vararg options: Option
-): JsonObjectApiAction<Webhook.List> = client.session.get("/1.1/account_activity/all/webhooks.json") {
+): JsonGeneralApiAction<Webhook.List> = client.session.get("/1.1/account_activity/all/webhooks.json") {
     parameters(*options)
 }.jsonObject { Webhook.List(it, client) }
 
@@ -55,7 +55,7 @@ public fun AccountActivity.listWebhooks(
  * Shorthand property to [AccountActivity.listWebhooks].
  * @see AccountActivity.listWebhooks
  */
-public val AccountActivity.listWebhooks: JsonObjectApiAction<Webhook.List>
+public val AccountActivity.listWebhooks: JsonGeneralApiAction<Webhook.List>
     get() = listWebhooks()
 
 /**
@@ -68,7 +68,7 @@ public val AccountActivity.listWebhooks: JsonObjectApiAction<Webhook.List>
  * @param envName Environment name.
  * @param options Optional. Custom parameters of this request.
  * @receiver [AccountActivity] endpoint instance.
- * @return [JsonObjectApiAction] for [Webhook.List] model.
+ * @return [JsonGeneralApiAction] for [Webhook.List] model.
  */
 public fun AccountActivity.listWebhooksByEnvName(
     envName: String, vararg options: Option

@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.directmessages.events
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.DirectMessageEvents
@@ -42,13 +42,13 @@ import blue.starry.penicillin.models.DirectMessageEvent
  * @param cursor For paging through result sets greater than 1 page, use the “next_cursor” property from the previous request.
  * @param options Optional. Custom parameters of this request.
  * @receiver [DirectMessageEvents] endpoint instance.
- * @return [JsonObjectApiAction] for [DirectMessageEvent.List] model.
+ * @return [JsonGeneralApiAction] for [DirectMessageEvent.List] model.
  */
 public fun DirectMessageEvents.list(
     count: Int? = null,
     cursor: String? = null,
     vararg options: Option
-): JsonObjectApiAction<DirectMessageEvent.List> = client.session.get("/1.1/direct_messages/events/list.json") {
+): JsonGeneralApiAction<DirectMessageEvent.List> = client.session.get("/1.1/direct_messages/events/list.json") {
     parameters(
         "count" to count,
         "cursor" to cursor,
@@ -60,5 +60,5 @@ public fun DirectMessageEvents.list(
  * Shorthand property to [DirectMessageEvents.list].
  * @see DirectMessageEvents.list
  */
-public val DirectMessageEvents.list: JsonObjectApiAction<DirectMessageEvent.List>
+public val DirectMessageEvents.list: JsonGeneralApiAction<DirectMessageEvent.List>
      get() = list()

@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.welcomemessages
 
 import blue.starry.jsonkt.JsonObject
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.jsonBody
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.put
@@ -44,13 +44,13 @@ import blue.starry.penicillin.models.WelcomeMessage
  * @param messageData The Message Data Object defining the content of the message template. See POST [direct_messages/events/new (message_create)](https://developer.twitter.com/en/docs/direct-messages/sending-and-receiving/api-reference/new-event) for Message Data object details.
  * @param options Optional. Custom parameters of this request.
  * @receiver [WelcomeMessages] endpoint instance.
- * @return [JsonObjectApiAction] for [WelcomeMessage.Single] model.
+ * @return [JsonGeneralApiAction] for [WelcomeMessage.Single] model.
  */
 public fun WelcomeMessages.update(
     id: String,
     messageData: JsonObject,
     vararg options: Option
-): JsonObjectApiAction<WelcomeMessage.Single> = client.session.put("/1.1/direct_messages/welcome_messages/update.json") {
+): JsonGeneralApiAction<WelcomeMessage.Single> = client.session.put("/1.1/direct_messages/welcome_messages/update.json") {
     parameters(
         "id" to id,
         *options

@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.account
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
@@ -42,11 +42,11 @@ import blue.starry.penicillin.models.Account.Settings
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [Account] endpoint instance.
- * @return [JsonObjectApiAction] for [Settings] model.
+ * @return [JsonGeneralApiAction] for [Settings] model.
  */
 public fun Account.settings(
     vararg options: Option
-): JsonObjectApiAction<Settings> = client.session.get("/1.1/account/settings.json") {
+): JsonGeneralApiAction<Settings> = client.session.get("/1.1/account/settings.json") {
     parameters(
         "include_alt_text_compose" to "true",
         "include_mention_filter" to "true",
@@ -60,7 +60,7 @@ public fun Account.settings(
  * Shorthand extension property to [Account.settings].
  * @see Account.settings
  */
-public val Account.settings: JsonObjectApiAction<Settings>
+public val Account.settings: JsonGeneralApiAction<Settings>
     get() = settings()
 
 /**
@@ -76,7 +76,7 @@ public val Account.settings: JsonObjectApiAction<Settings>
  * @param lang Optional. The language which Twitter should render in for this user. The language must be specified by the appropriate two letter ISO 639-1 representation. Currently supported languages are provided by [this endpoint](https://developer.twitter.com/en/docs/developer-utilities/supported-languages/api-reference/get-help-languages).
  * @param options Optional. Custom parameters of this request.
  * @receiver [Account] endpoint instance.
- * @return [JsonObjectApiAction] for [Settings] model.
+ * @return [JsonGeneralApiAction] for [Settings] model.
  */
 public fun Account.updateSettings(
     sleepTimeEnabled: Boolean? = null,
@@ -86,7 +86,7 @@ public fun Account.updateSettings(
     trendLocationWoeid: Int? = null,
     lang: String? = null,
     vararg options: Option
-): JsonObjectApiAction<Settings> = client.session.post("/1.1/account/settings.json") {
+): JsonGeneralApiAction<Settings> = client.session.post("/1.1/account/settings.json") {
     formBody(
         "sleep_time_enabled" to sleepTimeEnabled,
         "start_sleep_time" to startSleepTime,
@@ -103,5 +103,5 @@ public fun Account.updateSettings(
  * Shorthand extension property to [Account.updateSettings].
  * @see Account.updateSettings
  */
-public val Account.updateSettings: JsonObjectApiAction<Settings>
+public val Account.updateSettings: JsonGeneralApiAction<Settings>
     get() = updateSettings()

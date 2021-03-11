@@ -28,9 +28,9 @@ package blue.starry.penicillin.extensions.cursor
 
 import blue.starry.penicillin.core.exceptions.PenicillinException
 import blue.starry.penicillin.core.i18n.LocalizedString
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
-import blue.starry.penicillin.core.response.JsonObjectResponse
+import blue.starry.penicillin.core.response.JsonGeneralResponse
 import blue.starry.penicillin.extensions.edit
 import blue.starry.penicillin.models.Search
 
@@ -41,7 +41,7 @@ import blue.starry.penicillin.models.Search
 /**
  * Whether if current search result has next page.
  */
-public val JsonObjectResponse<Search>.hasNext: Boolean
+public val JsonGeneralResponse<Search>.hasNext: Boolean
     get() = !result.searchMetadata.nextResults.isNullOrBlank()
 
 internal val NextQueryNotFound = LocalizedString("It is the last result of search.", "次の検索結果はありません。")
@@ -49,7 +49,7 @@ internal val NextQueryNotFound = LocalizedString("It is the last result of searc
 /**
  * Creates next page api action.
  */
-public val JsonObjectResponse<Search>.next: JsonObjectApiAction<Search>
+public val JsonGeneralResponse<Search>.next: JsonGeneralApiAction<Search>
     get() {
         if (!hasNext) {
             throw PenicillinException(NextQueryNotFound)
@@ -73,7 +73,7 @@ public val JsonObjectResponse<Search>.next: JsonObjectApiAction<Search>
 /**
  * Whether if current search result is refreshable.
  */
-public val JsonObjectResponse<Search>.refreshable: Boolean
+public val JsonGeneralResponse<Search>.refreshable: Boolean
     get() = !result.searchMetadata.refreshUrl.isNullOrBlank()
 
 private val RefreshUrlNotFound = LocalizedString("It is not refreshable search endpoint.", "更新できる検索結果はありません。")
@@ -81,7 +81,7 @@ private val RefreshUrlNotFound = LocalizedString("It is not refreshable search e
 /**
  * Creates refreshed page api action.
  */
-public val JsonObjectResponse<Search>.refresh: JsonObjectApiAction<Search>
+public val JsonGeneralResponse<Search>.refresh: JsonGeneralApiAction<Search>
     get() {
         if (!refreshable) {
             throw PenicillinException(RefreshUrlNotFound)

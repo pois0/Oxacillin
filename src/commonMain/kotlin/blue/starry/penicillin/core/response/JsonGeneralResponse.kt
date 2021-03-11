@@ -24,30 +24,25 @@
 
 package blue.starry.penicillin.core.response
 
-import blue.starry.jsonkt.JsonArray
-import blue.starry.jsonkt.toJsonArray
 import io.ktor.client.request.HttpRequest
 import io.ktor.client.statement.HttpResponse
 import blue.starry.penicillin.core.request.action.ApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.session.ApiClient
-import blue.starry.penicillin.models.PenicillinModel
 
 /**
- * The [ApiResponse] that provides parsed json array with json model.
+ * The [ApiResponse] that provides parsed json object with json model.
  */
-public data class JsonArrayResponse<M: PenicillinModel>(
+public data class JsonGeneralResponse<T>(
     override val client: ApiClient,
 
     /**
-     * Results of response.
+     * Result of response.
      */
-    public val results: List<M>,
+    public val result: T,
 
     override val request: HttpRequest,
     override val response: HttpResponse,
     override val content: String,
-    override val action: ApiAction<JsonArrayResponse<M>>
-): ApiResponse<JsonArrayResponse<M>>, JsonResponse<M, JsonArray>, CompletedResponse, List<M> by results {
-    override val json: JsonArray
-        get() = map { it.json }.toJsonArray()
-}
+    override val action: JsonGeneralApiAction<T>
+): ApiResponse<JsonGeneralResponse<T>>, CompletedResponse

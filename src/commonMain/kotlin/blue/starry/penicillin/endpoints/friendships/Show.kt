@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.friendships
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Friendships
@@ -42,13 +42,13 @@ import blue.starry.penicillin.models.Friendships.Show
  * @param targetId The user_id of the target user.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonObjectApiAction] for [Show] model.
+ * @return [JsonGeneralApiAction] for [Show] model.
  */
 public fun Friendships.showByUserId(
     sourceId: Long,
     targetId: Long,
     vararg options: Option
-): JsonObjectApiAction<Show> = show(sourceId, null, targetId, null, *options)
+): JsonGeneralApiAction<Show> = show(sourceId, null, targetId, null, *options)
 
 /**
  * Returns detailed information about the relationship between two arbitrary users.
@@ -58,12 +58,12 @@ public fun Friendships.showByUserId(
  * @param targetId The user_id of the target user.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonObjectApiAction] for [Show] model.
+ * @return [JsonGeneralApiAction] for [Show] model.
  */
 public fun Friendships.showByUserId(
     targetId: Long,
     vararg options: Option
-): JsonObjectApiAction<Show> = show(null, null, targetId, null, *options)
+): JsonGeneralApiAction<Show> = show(null, null, targetId, null, *options)
 
 /**
  * Returns detailed information about the relationship between two arbitrary users.
@@ -74,13 +74,13 @@ public fun Friendships.showByUserId(
  * @param targetScreenName The screen_name of the target user.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonObjectApiAction] for [Show] model.
+ * @return [JsonGeneralApiAction] for [Show] model.
  */
 public fun Friendships.showByScreenName(
     sourceScreenName: String,
     targetScreenName: String,
     vararg options: Option
-): JsonObjectApiAction<Show> = show(null, sourceScreenName, null, targetScreenName, *options)
+): JsonGeneralApiAction<Show> = show(null, sourceScreenName, null, targetScreenName, *options)
 
 /**
  * Returns detailed information about the relationship between two arbitrary users.
@@ -90,12 +90,12 @@ public fun Friendships.showByScreenName(
  * @param targetScreenName The screen_name of the target user.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonObjectApiAction] for [Show] model.
+ * @return [JsonGeneralApiAction] for [Show] model.
  */
 public fun Friendships.showByScreenName(
     targetScreenName: String,
     vararg options: Option
-): JsonObjectApiAction<Show> = show(null, null, null, targetScreenName, *options)
+): JsonGeneralApiAction<Show> = show(null, null, null, targetScreenName, *options)
 
 private fun Friendships.show(
     sourceId: Long? = null,

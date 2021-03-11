@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.blocks
 
-import blue.starry.penicillin.core.request.action.CursorJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.CursorJsonApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Blocks
@@ -46,14 +46,14 @@ import blue.starry.penicillin.models.cursor.CursorUsers
  * @param cursor Semi-Optional. Causes the list of blocked users to be broken into pages of no more than 5000 IDs at a time. The number of IDs returned is not guaranteed to be 5000 as suspended users are filtered out after connections are queried. If no cursor is provided, a value of -1 will be assumed, which is the first "page." The response from the API will include a previous_cursor and next_cursor to allow paging back and forth. See [Using cursors to navigate collections](https://developer.twitter.com/en/docs/basics/cursoring) for more information.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Blocks] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorUsers] model.
+ * @return [CursorJsonApiAction] for [CursorUsers] model.
  */
 public fun Blocks.listUsers(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorUsers, User> = client.session.get("/1.1/blocks/list.json") {
+): CursorJsonApiAction<CursorUsers, User> = client.session.get("/1.1/blocks/list.json") {
     parameters(
         "include_entities" to includeEntities,
         "skip_status" to skipStatus,
@@ -66,5 +66,5 @@ public fun Blocks.listUsers(
  * Shorthand extension property to [Blocks.listUsers].
  * @see Blocks.listUsers
  */
-public val Blocks.listUsers: CursorJsonObjectApiAction<CursorUsers, User>
+public val Blocks.listUsers: CursorJsonApiAction<CursorUsers, User>
     get() = listUsers()

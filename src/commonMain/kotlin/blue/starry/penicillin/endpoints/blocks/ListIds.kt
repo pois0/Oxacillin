@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.blocks
 
-import blue.starry.penicillin.core.request.action.CursorJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.CursorJsonApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Blocks
@@ -44,13 +44,13 @@ import blue.starry.penicillin.models.cursor.CursorIds
  * @param cursor Semi-Optional. Causes the list of blocked users to be broken into pages of no more than 5000 IDs at a time. The number of IDs returned is not guaranteed to be 5000 as suspended users are filtered out after connections are queried. If no cursor is provided, a value of -1 will be assumed, which is the first "page." The response from the API will include a previous_cursor and next_cursor to allow paging back and forth. See [Using cursors to navigate collections](https://developer.twitter.com/en/docs/basics/cursoring) for more information.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Blocks] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorIds] model.
+ * @return [CursorJsonApiAction] for [CursorIds] model.
  */
 public fun Blocks.listIds(
     stringifyIds: Boolean? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorIds, Long> = client.session.get("/1.1/blocks/ids.json") {
+): CursorJsonApiAction<CursorIds, Long> = client.session.get("/1.1/blocks/ids.json") {
     parameters(
         "stringify_ids" to stringifyIds,
         "cursor" to cursor,
@@ -62,5 +62,5 @@ public fun Blocks.listIds(
  * Shorthand extension property to [Blocks.listIds].
  * @see Blocks.listIds
  */
-public val Blocks.listIds: CursorJsonObjectApiAction<CursorIds, Long>
+public val Blocks.listIds: CursorJsonApiAction<CursorIds, Long>
     get() = listIds()

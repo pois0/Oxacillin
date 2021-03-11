@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.lists
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
@@ -41,12 +41,12 @@ import blue.starry.penicillin.models.TwitterList
  * @param listId The numerical id of the list.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [TwitterList] model.
+ * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
 public fun Lists.show(
     listId: Long,
     vararg options: Option
-): JsonObjectApiAction<TwitterList> = show(listId, null, null, null, *options)
+): JsonGeneralApiAction<TwitterList> = show(listId, null, null, null, *options)
 
 /**
  * Returns the specified list. Private lists will only be shown if the authenticated user owns the specified list.
@@ -57,13 +57,13 @@ public fun Lists.show(
  * @param ownerScreenName The screen name of the user who owns the list being requested by a slug.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [TwitterList] model.
+ * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
 public fun Lists.showByOwnerScreenName(
     slug: String,
     ownerScreenName: String,
     vararg options: Option
-): JsonObjectApiAction<TwitterList> = show(null, slug, ownerScreenName, null, *options)
+): JsonGeneralApiAction<TwitterList> = show(null, slug, ownerScreenName, null, *options)
 
 /**
  * Returns the specified list. Private lists will only be shown if the authenticated user owns the specified list.
@@ -74,13 +74,13 @@ public fun Lists.showByOwnerScreenName(
  * @param ownerId The user ID of the user who owns the list being requested by a slug.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [TwitterList] model.
+ * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
 public fun Lists.showByOwnerId(
     slug: String,
     ownerId: Long,
     vararg options: Option
-): JsonObjectApiAction<TwitterList> = show(null, slug, null, ownerId, *options)
+): JsonGeneralApiAction<TwitterList> = show(null, slug, null, ownerId, *options)
 
 private fun Lists.show(
     listId: Long? = null,

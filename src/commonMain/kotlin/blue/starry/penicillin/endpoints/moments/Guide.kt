@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.moments
 
 import blue.starry.penicillin.core.emulation.EmulationMode
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Moments
@@ -39,11 +39,11 @@ import blue.starry.penicillin.models.MomentGuide
  * 
  * @param options Optional. Custom parameters of this request.
  * @receiver [Moments] endpoint instance.
- * @return [JsonObjectApiAction] for [MomentGuide] model.
+ * @return [JsonGeneralApiAction] for [MomentGuide] model.
  */
 public fun Moments.guide(
     vararg options: Option
-): JsonObjectApiAction<MomentGuide> = client.session.get("/1.1/moments/guide.json") {
+): JsonGeneralApiAction<MomentGuide> = client.session.get("/1.1/moments/guide.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(
@@ -80,5 +80,5 @@ public fun Moments.guide(
  * Shorthand property to [Moments.guide].
  * @see Moments.guide
  */
-public val Moments.guide: JsonObjectApiAction<MomentGuide>
+public val Moments.guide: JsonGeneralApiAction<MomentGuide>
     get() = guide()

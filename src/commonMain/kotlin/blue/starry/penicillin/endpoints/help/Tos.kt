@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.help
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Help
@@ -40,11 +40,11 @@ import blue.starry.penicillin.models.Help.Tos
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [Help] endpoint instance.
- * @return [JsonObjectApiAction] for [Tos] model.
+ * @return [JsonGeneralApiAction] for [Tos] model.
  */
 public fun Help.tos(
     vararg options: Option
-): JsonObjectApiAction<Tos> = client.session.get("/1.1/help/tos.json") {
+): JsonGeneralApiAction<Tos> = client.session.get("/1.1/help/tos.json") {
     parameters(*options)
 }.jsonObject { Tos(it, client) }
 
@@ -52,5 +52,5 @@ public fun Help.tos(
  * Shorthand property to [Help.tos].
  * @see Help.tos
  */
-public val Help.tos: JsonObjectApiAction<Tos>
+public val Help.tos: JsonGeneralApiAction<Tos>
     get() = tos()

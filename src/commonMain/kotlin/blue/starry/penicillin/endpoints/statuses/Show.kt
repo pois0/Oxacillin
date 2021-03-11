@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.statuses
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
@@ -48,7 +48,7 @@ import blue.starry.penicillin.models.Status
  * @param includeCardUri When set to either true, t or 1, the retrieved Tweet will include a card_uri attribute when there is an ads card attached to the Tweet and when that card was attached using the card_uri value.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Statuses] endpoint instance.
- * @return [JsonObjectApiAction] for [Status] model.
+ * @return [JsonGeneralApiAction] for [Status] model.
  */
 public fun Statuses.show(
     id: Long,
@@ -59,7 +59,7 @@ public fun Statuses.show(
     includeCardUri: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonObjectApiAction<Status> = client.session.get("/1.1/statuses/show.json") {
+): JsonGeneralApiAction<Status> = client.session.get("/1.1/statuses/show.json") {
     parameters(
         "id" to id,
         "trim_user" to trimUser,

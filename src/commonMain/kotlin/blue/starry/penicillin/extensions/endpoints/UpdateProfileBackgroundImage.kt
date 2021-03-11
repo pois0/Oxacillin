@@ -27,7 +27,7 @@
 package blue.starry.penicillin.extensions.endpoints
 
 import blue.starry.penicillin.core.request.action.ApiAction
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.endpoints.Account
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.account.updateProfileBackgroundImage
@@ -46,7 +46,7 @@ import blue.starry.penicillin.models.User
  * @param skipStatus Optional. When set to either true, t or 1 statuses will not be included in the returned user object.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Account] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Account.updateProfileBackgroundImage(
     media: MediaComponent,
@@ -54,7 +54,7 @@ public fun Account.updateProfileBackgroundImage(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): ApiAction<JsonObjectApiAction<User>> = DelegatedAction {
+): ApiAction<JsonGeneralApiAction<User>> = DelegatedAction {
     val result = client.media.uploadMedia(media).execute()
     updateProfileBackgroundImage(result.mediaId, tile, includeEntities, skipStatus, *options)
 }

@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.users
 
 import blue.starry.penicillin.core.emulation.EmulationMode
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
@@ -45,13 +45,13 @@ import blue.starry.penicillin.models.User
  * @param includeEntities The entities node will not be included when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Users] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Users.showByScreenName(
     screenName: String,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = show(screenName, null, includeEntities, *options)
+): JsonGeneralApiAction<User> = show(screenName, null, includeEntities, *options)
 
 /**
  * Returns a [variety of information](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) about the user specified by the required user_id or screen_name parameter. The author's most recent Tweet will be returned inline when possible.
@@ -64,13 +64,13 @@ public fun Users.showByScreenName(
  * @param includeEntities The entities node will not be included when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Users] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 public fun Users.showByUserId(
     userId: Long,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = show(null, userId, includeEntities, *options)
+): JsonGeneralApiAction<User> = show(null, userId, includeEntities, *options)
 
 private fun Users.show(
     screenName: String? = null,

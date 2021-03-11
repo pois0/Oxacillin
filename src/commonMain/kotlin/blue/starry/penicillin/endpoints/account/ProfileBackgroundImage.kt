@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.account
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Account
@@ -46,7 +46,7 @@ import blue.starry.penicillin.models.User
  * @param mediaId Specify the media to use as the background image. More information on upload of media is available [here](https://developer.twitter.com/rest/reference/post/media/upload).
  * @param options Optional. Custom parameters of this request.
  * @receiver [Account] endpoint instance.
- * @return [JsonObjectApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [User] model.
  */
 @Deprecated("This endpoint is deprecated. See also https://twittercommunity.com/t/upcoming-changes-to-the-developer-platform/104603.", replaceWith = ReplaceWith("No substitute."))
 public fun Account.updateProfileBackgroundImage(
@@ -55,7 +55,7 @@ public fun Account.updateProfileBackgroundImage(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<User> = client.session.post("/1.1/account/update_profile_background_image.json") {
+): JsonGeneralApiAction<User> = client.session.post("/1.1/account/update_profile_background_image.json") {
     formBody(
         "tile" to tile,
         "include_entities" to includeEntities,

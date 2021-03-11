@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.accountactivity
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.AccountActivity
@@ -41,11 +41,11 @@ import blue.starry.penicillin.models.Subscription
  * @param envName Environment name.
  * @param options Optional. Custom parameters of this request.
  * @receiver [AccountActivity] endpoint instance.
- * @return [JsonObjectApiAction] for [Subscription.List] model.
+ * @return [JsonGeneralApiAction] for [Subscription.List] model.
  */
 public fun AccountActivity.listSubscriptions(
     envName: String,
     vararg options: Option
-): JsonObjectApiAction<Subscription.List> = client.session.get("/1.1/account_activity/all/$envName/subscriptions/list.json") {
+): JsonGeneralApiAction<Subscription.List> = client.session.get("/1.1/account_activity/all/$envName/subscriptions/list.json") {
     parameters(*options)
 }.jsonObject { Subscription.List(it, client) }

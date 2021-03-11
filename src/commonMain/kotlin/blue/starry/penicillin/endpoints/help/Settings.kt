@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.help
 
 import blue.starry.penicillin.core.emulation.EmulationMode
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Help
@@ -39,13 +39,13 @@ import blue.starry.penicillin.models.Help.Settings
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [Help] endpoint instance.
- * @return [JsonObjectApiAction] for [Settings] model.
+ * @return [JsonGeneralApiAction] for [Settings] model.
  */
 public fun Help.settings(
     includeZeroRate: Boolean? = null,
     settingsVersion: String? = null,
     vararg options: Option
-): JsonObjectApiAction<Settings> = client.session.get("/1.1/help/settings.json") {
+): JsonGeneralApiAction<Settings> = client.session.get("/1.1/help/settings.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(
@@ -59,5 +59,5 @@ public fun Help.settings(
  * Shorthand property to [Help.settings].
  * @see Help.settings
  */
-public val Help.settings: JsonObjectApiAction<Settings>
+public val Help.settings: JsonGeneralApiAction<Settings>
     get() = settings()

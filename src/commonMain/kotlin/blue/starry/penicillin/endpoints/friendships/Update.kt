@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.friendships
 
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Friendships
@@ -44,14 +44,14 @@ import blue.starry.penicillin.models.Relationship
  * @param retweets Enable/disable Retweets from the target user.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonObjectApiAction] for [Relationship] model.
+ * @return [JsonGeneralApiAction] for [Relationship] model.
  */
 public fun Friendships.updateByUserId(
     userId: Long,
     device: Boolean? = null,
     retweets: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<Relationship> = update(userId, null, device, retweets, *options)
+): JsonGeneralApiAction<Relationship> = update(userId, null, device, retweets, *options)
 
 /**
  * Enable or disable Retweets and device notifications from the specified user.
@@ -63,14 +63,14 @@ public fun Friendships.updateByUserId(
  * @param retweets Enable/disable Retweets from the target user.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonObjectApiAction] for [Relationship] model.
+ * @return [JsonGeneralApiAction] for [Relationship] model.
  */
 public fun Friendships.updateByScreenName(
     screenName: String,
     device: Boolean? = null,
     retweets: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<Relationship> = update(null, screenName, device, retweets, *options)
+): JsonGeneralApiAction<Relationship> = update(null, screenName, device, retweets, *options)
 
 private fun Friendships.update(
     userId: Long? = null,

@@ -28,7 +28,7 @@ package blue.starry.penicillin.endpoints.cards
 
 import blue.starry.penicillin.core.emulation.EmulationMode
 import blue.starry.penicillin.core.request.EndpointHost
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Cards
@@ -41,13 +41,13 @@ import blue.starry.penicillin.models.CardState
  * @param cardUri Required. The card uri. Usually starts with "card-uri://".
  * @param options Optional. Custom parameters of this request.
  * @receiver [Cards] endpoint instance.
- * @return [JsonObjectApiAction] for [CardState] model.
+ * @return [JsonGeneralApiAction] for [CardState] model.
  */
 public fun Cards.show(
     cardUri: String,
     responseCardName: String = "poll4choice_text_only",
     vararg options: Option
-): JsonObjectApiAction<CardState> = client.session.get("/v2/capi/passthrough/1", EndpointHost.Card) {
+): JsonGeneralApiAction<CardState> = client.session.get("/v2/capi/passthrough/1", EndpointHost.Card) {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(

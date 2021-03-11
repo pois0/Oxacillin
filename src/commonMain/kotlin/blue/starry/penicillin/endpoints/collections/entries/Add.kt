@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.collections.entries
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.CollectionEntries
@@ -46,7 +46,7 @@ import blue.starry.penicillin.models.Collection
  * @param above Set to false to insert the specified tweet_id below the relative_to Tweet in the collection. Default: true
  * @param options Optional. Custom parameters of this request.
  * @receiver [CollectionEntries] endpoint instance.
- * @return [JsonObjectApiAction] for [Collection.Entry.Result] model.
+ * @return [JsonGeneralApiAction] for [Collection.Entry.Result] model.
  */
 public fun CollectionEntries.add(
     id: String,
@@ -54,7 +54,7 @@ public fun CollectionEntries.add(
     relativeTo: Long? = null,
     above: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<Collection.Entry.Result> = client.session.post("/1.1/collections/entries/add.json") {
+): JsonGeneralApiAction<Collection.Entry.Result> = client.session.post("/1.1/collections/entries/add.json") {
     formBody(
         "id" to id,
         "tweet_id" to tweetId,

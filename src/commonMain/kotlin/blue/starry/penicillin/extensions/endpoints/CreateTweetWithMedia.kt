@@ -28,7 +28,7 @@ package blue.starry.penicillin.extensions.endpoints
 
 import blue.starry.penicillin.core.exceptions.PenicillinTwitterMediaProcessingFailedError
 import blue.starry.penicillin.core.request.action.ApiAction
-import blue.starry.penicillin.core.response.JsonObjectResponse
+import blue.starry.penicillin.core.response.JsonGeneralResponse
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Statuses
 import blue.starry.penicillin.endpoints.media
@@ -56,7 +56,7 @@ public fun Statuses.createWithMedia(
     status: String,
     media: List<MediaComponent>,
     vararg options: Option
-): ApiAction<JsonObjectResponse<Status>> = DelegatedAction {
+): ApiAction<JsonGeneralResponse<Status>> = DelegatedAction {
     val results = media.map {
         client.media.uploadMedia(it).execute().awaitProcessing()
     }

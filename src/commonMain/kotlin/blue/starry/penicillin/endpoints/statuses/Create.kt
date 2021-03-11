@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.statuses
 
 import blue.starry.penicillin.core.emulation.EmulationMode
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
@@ -59,7 +59,7 @@ import blue.starry.penicillin.models.Status
  * @param cardUri Associate an ads card with the Tweet using the card_uri value from any ads card response.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Statuses] endpoint instance.
- * @return [JsonObjectApiAction] for [Status] model.
+ * @return [JsonGeneralApiAction] for [Status] model.
  */
 public fun Statuses.create(
     status: String,
@@ -79,7 +79,7 @@ public fun Statuses.create(
     cardUri: String? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonObjectApiAction<Status> = client.session.post("/1.1/statuses/update.json") {
+): JsonGeneralApiAction<Status> = client.session.post("/1.1/statuses/update.json") {
     formBody(
         "auto_populate_reply_metadata" to "true",
         "batch_mode" to "off",

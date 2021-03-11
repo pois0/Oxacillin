@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.accountactivity
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.AccountActivity
@@ -42,13 +42,13 @@ import blue.starry.penicillin.models.Webhook
  * @param url Encoded URL for the callback endpoint.
  * @param options Optional. Custom parameters of this request.
  * @receiver [AccountActivity] endpoint instance.
- * @return [JsonObjectApiAction] for [Webhook.Model] model.
+ * @return [JsonGeneralApiAction] for [Webhook.Model] model.
  */
 public fun AccountActivity.registerWebhook(
     envName: String,
     url: String,
     vararg options: Option
-): JsonObjectApiAction<Webhook.Model> = client.session.post("/1.1/account_activity/all/$envName/webhooks.json") {
+): JsonGeneralApiAction<Webhook.Model> = client.session.post("/1.1/account_activity/all/$envName/webhooks.json") {
     formBody(
         "url" to url,
         *options

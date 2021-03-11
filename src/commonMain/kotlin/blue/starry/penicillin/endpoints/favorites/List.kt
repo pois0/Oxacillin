@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.favorites
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Favorites
@@ -45,7 +45,7 @@ import blue.starry.penicillin.models.Status
  * @param includeEntities The entities node will be omitted when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Favorites] endpoint instance.
- * @return [JsonObjectApiAction] for [Status] model.
+ * @return [JsonGeneralApiAction] for [Status] model.
  */
 public fun Favorites.list(
     count: Int? = null,
@@ -68,7 +68,7 @@ public fun Favorites.list(
  * @param includeEntities The entities node will be omitted when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Favorites] endpoint instance.
- * @return [JsonObjectApiAction] for [Status] model.
+ * @return [JsonGeneralApiAction] for [Status] model.
  */
 public fun Favorites.listByUserId(
     userId: Long,
@@ -92,7 +92,7 @@ public fun Favorites.listByUserId(
  * @param includeEntities The entities node will be omitted when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Favorites] endpoint instance.
- * @return [JsonObjectApiAction] for [Status] model.
+ * @return [JsonGeneralApiAction] for [Status] model.
  */
 public fun Favorites.listByScreenName(
     screenName: String,

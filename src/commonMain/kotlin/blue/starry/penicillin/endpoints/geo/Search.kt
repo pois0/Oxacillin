@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.geo
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Geo
@@ -52,7 +52,7 @@ import blue.starry.penicillin.models.GeoResult
  * @param attributeStreetAddress This parameter searches for places which have this given street address. There are other well-known, and application specific attributes available. Custom attributes are also permitted. Learn more about [Place attributes](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/geo-objects).
  * @param options Optional. Custom parameters of this request.
  * @receiver [Geo] endpoint instance.
- * @return [JsonObjectApiAction] for [GeoResult] model.
+ * @return [JsonGeneralApiAction] for [GeoResult] model.
  */
 public fun Geo.search(
     latitude: Double? = null,
@@ -66,7 +66,7 @@ public fun Geo.search(
     attributeStreetAddress: String? = null,
     callback: String? = null,
     vararg options: Option
-): JsonObjectApiAction<GeoResult> = client.session.get("/1.1/geo/search.json") {
+): JsonGeneralApiAction<GeoResult> = client.session.get("/1.1/geo/search.json") {
     parameters(
         "lat" to latitude,
         "long" to longitude,

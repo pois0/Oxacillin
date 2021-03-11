@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.lists
 
-import blue.starry.penicillin.core.request.action.CursorJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.CursorJsonApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
@@ -44,14 +44,14 @@ import blue.starry.penicillin.models.cursor.CursorLists
  * @param filterToOwnedLists When set to true , t or 1 , will return just lists the authenticating user owns, and the user represented by user_id or screen_name is a member of.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorLists] model.
+ * @return [CursorJsonApiAction] for [CursorLists] model.
  */
 public fun Lists.memberships(
     count: Int? = null,
     cursor: Long? = null,
     filterToOwnedLists: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorLists, TwitterList> = membershipsInternal(null, null, count, cursor, filterToOwnedLists, *options)
+): CursorJsonApiAction<CursorLists, TwitterList> = membershipsInternal(null, null, count, cursor, filterToOwnedLists, *options)
 
 /**
  * Returns the lists the specified user has been added to. If user_id or screen_name are not provided, the memberships for the authenticating user are returned.
@@ -64,7 +64,7 @@ public fun Lists.memberships(
  * @param filterToOwnedLists When set to true , t or 1 , will return just lists the authenticating user owns, and the user represented by user_id or screen_name is a member of.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorLists] model.
+ * @return [CursorJsonApiAction] for [CursorLists] model.
  */
 public fun Lists.membershipsByUserId(
     userId: Long,
@@ -72,7 +72,7 @@ public fun Lists.membershipsByUserId(
     cursor: Long? = null,
     filterToOwnedLists: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorLists, TwitterList> = membershipsInternal(userId, null, count, cursor, filterToOwnedLists, *options)
+): CursorJsonApiAction<CursorLists, TwitterList> = membershipsInternal(userId, null, count, cursor, filterToOwnedLists, *options)
 
 /**
  * Returns the lists the specified user has been added to. If user_id or screen_name are not provided, the memberships for the authenticating user are returned.
@@ -85,7 +85,7 @@ public fun Lists.membershipsByUserId(
  * @param filterToOwnedLists When set to true , t or 1 , will return just lists the authenticating user owns, and the user represented by user_id or screen_name is a member of.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorLists] model.
+ * @return [CursorJsonApiAction] for [CursorLists] model.
  */
 public fun Lists.membershipsByScreenName(
     screenName: String,
@@ -93,7 +93,7 @@ public fun Lists.membershipsByScreenName(
     cursor: Long? = null,
     filterToOwnedLists: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorLists, TwitterList> = membershipsInternal(null, screenName, count, cursor, filterToOwnedLists, *options)
+): CursorJsonApiAction<CursorLists, TwitterList> = membershipsInternal(null, screenName, count, cursor, filterToOwnedLists, *options)
 
 private fun Lists.membershipsInternal(
     userId: Long? = null,
@@ -117,5 +117,5 @@ private fun Lists.membershipsInternal(
  * Shorthand property to [Lists.memberships].
  * @see Lists.memberships
  */
-public val Lists.memberships: CursorJsonObjectApiAction<CursorLists, TwitterList>
+public val Lists.memberships: CursorJsonApiAction<CursorLists, TwitterList>
     get() = memberships()

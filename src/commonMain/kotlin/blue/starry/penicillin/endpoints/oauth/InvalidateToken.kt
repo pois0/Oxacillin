@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.oauth
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.OAuth
@@ -42,13 +42,13 @@ import blue.starry.penicillin.models.OAuthToken
  * @param accessTokenSecret The access_token_secret of user to be invalidated.
  * @param options Optional. Custom parameters of this request.
  * @receiver [OAuth] endpoint instance.
- * @return [JsonObjectApiAction] for [OAuthToken] model.
+ * @return [JsonGeneralApiAction] for [OAuthToken] model.
  */
 public fun OAuth.invalidateToken(
     accessToken: String,
     accessTokenSecret: String,
     vararg options: Option
-): JsonObjectApiAction<OAuthToken> = invalidateTokenInternal(accessToken, accessTokenSecret, *options)
+): JsonGeneralApiAction<OAuthToken> = invalidateTokenInternal(accessToken, accessTokenSecret, *options)
 
 /**
  * Allows a registered application to revoke an issued OAuth access_token by presenting its client credentials. Once an access_token has been invalidated, new creation attempts will yield a different Access Token and usage of the invalidated token will no longer be allowed.
@@ -57,17 +57,17 @@ public fun OAuth.invalidateToken(
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [OAuth] endpoint instance.
- * @return [JsonObjectApiAction] for [OAuthToken] model.
+ * @return [JsonGeneralApiAction] for [OAuthToken] model.
  */
 public fun OAuth.invalidateToken(
     vararg options: Option
-): JsonObjectApiAction<OAuthToken> = invalidateTokenInternal(client.session.credentials.accessToken!!, client.session.credentials.accessTokenSecret!!, *options)
+): JsonGeneralApiAction<OAuthToken> = invalidateTokenInternal(client.session.credentials.accessToken!!, client.session.credentials.accessTokenSecret!!, *options)
 
 /**
  * Shorthand property to [OAuth.invalidateToken].
  * @see OAuth.invalidateToken
  */
-public val OAuth.invalidateToken: JsonObjectApiAction<OAuthToken>
+public val OAuth.invalidateToken: JsonGeneralApiAction<OAuthToken>
     get() = invalidateToken()
 
 private fun OAuth.invalidateTokenInternal(

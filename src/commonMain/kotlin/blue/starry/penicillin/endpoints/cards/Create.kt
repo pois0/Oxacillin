@@ -28,7 +28,7 @@ package blue.starry.penicillin.endpoints.cards
 
 import blue.starry.penicillin.core.emulation.EmulationMode
 import blue.starry.penicillin.core.request.EndpointHost
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Cards
@@ -41,12 +41,12 @@ import blue.starry.penicillin.models.Card
  * @param cardData Required. The card data encoded with JSON.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Cards] endpoint instance.
- * @return [JsonObjectApiAction] for [Card] model.
+ * @return [JsonGeneralApiAction] for [Card] model.
  */
 public fun Cards.create(
     cardData: String,
     vararg options: Option
-): JsonObjectApiAction<Card> = client.session.post("/v2/cards/create.json", EndpointHost.Card) {
+): JsonGeneralApiAction<Card> = client.session.post("/v2/cards/create.json", EndpointHost.Card) {
     emulationModes += EmulationMode.TwitterForiPhone
 
     formBody(

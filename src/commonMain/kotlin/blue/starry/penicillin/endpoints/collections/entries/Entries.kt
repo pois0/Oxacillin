@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.collections.entries
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.CollectionEntries
@@ -46,7 +46,7 @@ import blue.starry.penicillin.models.Collection
  * @param minPosition    Returns results with a position greater than the specified position.
  * @param options Optional. Custom parameters of this request.
  * @receiver [CollectionEntries] endpoint instance.
- * @return [JsonObjectApiAction] for [Collection.Entry.Result] model.
+ * @return [JsonGeneralApiAction] for [Collection.Entry.Result] model.
  */
 public fun CollectionEntries.entries(
     id: String,
@@ -54,7 +54,7 @@ public fun CollectionEntries.entries(
     maxPosition: Int? = null,
     minPosition: Int? = null,
     vararg options: Option
-): JsonObjectApiAction<Collection.Entry.Result> = client.session.get("/1.1/collections/entries.json") {
+): JsonGeneralApiAction<Collection.Entry.Result> = client.session.get("/1.1/collections/entries.json") {
     parameters(
         "id" to id,
         "count" to count,

@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.search
 
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
@@ -57,7 +57,7 @@ private typealias SearchModel = blue.starry.penicillin.models.Search
  * @param includeEntities The entities node will not be included when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Search] endpoint instance.
- * @return [JsonObjectApiAction] for [SearchModel] model.
+ * @return [JsonGeneralApiAction] for [SearchModel] model.
  */
 public fun Search.search(
     query: String,
@@ -72,7 +72,7 @@ public fun Search.search(
     includeEntities: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonObjectApiAction<SearchModel /* = blue.starry.penicillin.models.Search */> = client.session.get("/1.1/search/tweets.json") {
+): JsonGeneralApiAction<SearchModel /* = blue.starry.penicillin.models.Search */> = client.session.get("/1.1/search/tweets.json") {
     parameters(
         "q" to query,
         "geocode" to geocode,

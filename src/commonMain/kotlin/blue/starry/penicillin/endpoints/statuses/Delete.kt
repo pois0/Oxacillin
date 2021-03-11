@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.statuses
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
@@ -43,14 +43,14 @@ import blue.starry.penicillin.models.Status
  * @param trimUser When set to either true , t or 1 , each tweet returned in a timeline will include a user object including only the status authors numerical ID. Omit this parameter to receive the complete user object.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Statuses] endpoint instance.
- * @return [JsonObjectApiAction] for [Status] model.
+ * @return [JsonGeneralApiAction] for [Status] model.
  */
 public fun Statuses.delete(
     id: Long,
     trimUser: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonObjectApiAction<Status> = client.session.post("/1.1/statuses/destroy/$id.json") {
+): JsonGeneralApiAction<Status> = client.session.post("/1.1/statuses/destroy/$id.json") {
     formBody(
         "trim_user" to trimUser,
         "tweet_mode" to tweetMode,

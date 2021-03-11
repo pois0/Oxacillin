@@ -27,7 +27,7 @@
 package blue.starry.penicillin.endpoints.followrequests
 
 
-import blue.starry.penicillin.core.request.action.CursorJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.CursorJsonApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.FollowRequests
@@ -43,13 +43,13 @@ import blue.starry.penicillin.models.cursor.CursorIds
  * @param stringifyIds Some programming environments will not consume Twitter IDs due to their size. Provide this option to have IDs returned as strings instead. More about [Twitter IDs](https://developer.twitter.com/en/docs/basics/twitter-ids).
  * @param options Optional. Custom parameters of this request.
  * @receiver [FollowRequests] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorIds] model.
+ * @return [CursorJsonApiAction] for [CursorIds] model.
  */
 public fun FollowRequests.outgoing(
     cursor: Long? = null,
     stringifyIds: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorIds, Long> = client.session.get("/1.1/friendships/outgoing.json") {
+): CursorJsonApiAction<CursorIds, Long> = client.session.get("/1.1/friendships/outgoing.json") {
     parameters(
         "cursor" to cursor,
         "stringify_ids" to stringifyIds,
@@ -61,5 +61,5 @@ public fun FollowRequests.outgoing(
  * Shorthand property to [FollowRequests.outgoing].
  * @see FollowRequests.outgoing
  */
-public val FollowRequests.outgoing: CursorJsonObjectApiAction<CursorIds, Long>
+public val FollowRequests.outgoing: CursorJsonApiAction<CursorIds, Long>
      get() = outgoing()

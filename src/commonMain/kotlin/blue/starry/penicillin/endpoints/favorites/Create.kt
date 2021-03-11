@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.favorites
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Favorites
@@ -44,13 +44,13 @@ import blue.starry.penicillin.models.Status
  * @param includeEntities The entities node will be omitted when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Favorites] endpoint instance.
- * @return [JsonObjectApiAction] for [Status] model.
+ * @return [JsonGeneralApiAction] for [Status] model.
  */
 public fun Favorites.create(
     id: Long,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonObjectApiAction<Status> = client.session.post("/1.1/favorites/create.json") {
+): JsonGeneralApiAction<Status> = client.session.post("/1.1/favorites/create.json") {
     formBody(
         "id" to id,
         "include_entities" to includeEntities,

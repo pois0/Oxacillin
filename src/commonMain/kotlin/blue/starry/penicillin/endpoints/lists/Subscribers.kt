@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.lists
 
-import blue.starry.penicillin.core.request.action.CursorJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.CursorJsonApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
@@ -46,7 +46,7 @@ import blue.starry.penicillin.models.cursor.CursorUsers
  * @param skipStatus When set to either true , t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorUsers] model.
+ * @return [CursorJsonApiAction] for [CursorUsers] model.
  */
 public fun Lists.subscribers(
     listId: Long,
@@ -55,7 +55,7 @@ public fun Lists.subscribers(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorUsers, User> = subscribers(listId, null, null, null, count, cursor, includeEntities, skipStatus, *options)
+): CursorJsonApiAction<CursorUsers, User> = subscribers(listId, null, null, null, count, cursor, includeEntities, skipStatus, *options)
 
 /**
  * Returns the subscribers of the specified list. Private list subscribers will only be shown if the authenticated user owns the specified list.
@@ -70,7 +70,7 @@ public fun Lists.subscribers(
  * @param skipStatus When set to either true , t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorUsers] model.
+ * @return [CursorJsonApiAction] for [CursorUsers] model.
  */
 public fun Lists.subscribersByOwnerScreenName(
     slug: String,
@@ -80,7 +80,7 @@ public fun Lists.subscribersByOwnerScreenName(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorUsers, User> = subscribers(null, slug, ownerScreenName, null, count, cursor, includeEntities, skipStatus, *options)
+): CursorJsonApiAction<CursorUsers, User> = subscribers(null, slug, ownerScreenName, null, count, cursor, includeEntities, skipStatus, *options)
 
 /**
  * Returns the subscribers of the specified list. Private list subscribers will only be shown if the authenticated user owns the specified list.
@@ -95,7 +95,7 @@ public fun Lists.subscribersByOwnerScreenName(
  * @param skipStatus When set to either true , t or 1 statuses will not be included in the returned user objects.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [CursorJsonObjectApiAction] for [CursorUsers] model.
+ * @return [CursorJsonApiAction] for [CursorUsers] model.
  */
 public fun Lists.subscribersByOwnerId(
     slug: String,
@@ -105,7 +105,7 @@ public fun Lists.subscribersByOwnerId(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): CursorJsonObjectApiAction<CursorUsers, User> = subscribers(null, slug, null, ownerId, count, cursor, includeEntities, skipStatus, *options)
+): CursorJsonApiAction<CursorUsers, User> = subscribers(null, slug, null, ownerId, count, cursor, includeEntities, skipStatus, *options)
 
 private fun Lists.subscribers(
     listId: Long? = null,

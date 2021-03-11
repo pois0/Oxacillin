@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.lists
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Lists
@@ -41,12 +41,12 @@ import blue.starry.penicillin.models.TwitterList
  * @param listId The numerical id of the list.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [TwitterList] model.
+ * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
 public fun Lists.delete(
     listId: Long,
     vararg options: Option
-): JsonObjectApiAction<TwitterList> = delete(listId, null, null, null, *options)
+): JsonGeneralApiAction<TwitterList> = delete(listId, null, null, null, *options)
 
 /**
  * Deletes the specified list. The authenticated user must own the list to be able to destroy it.
@@ -57,13 +57,13 @@ public fun Lists.delete(
  * @param ownerScreenName The screen name of the user who owns the list being requested by a slug.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [TwitterList] model.
+ * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
 public fun Lists.deleteByOwnerScreenName(
     slug: String,
     ownerScreenName: String,
     vararg options: Option
-): JsonObjectApiAction<TwitterList> = delete(null, slug, ownerScreenName, null, *options)
+): JsonGeneralApiAction<TwitterList> = delete(null, slug, ownerScreenName, null, *options)
 
 /**
  * Deletes the specified list. The authenticated user must own the list to be able to destroy it.
@@ -74,13 +74,13 @@ public fun Lists.deleteByOwnerScreenName(
  * @param ownerId The user ID of the user who owns the list being requested by a slug.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonObjectApiAction] for [TwitterList] model.
+ * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
 public fun Lists.deleteByOwnerId(
     slug: String,
     ownerId: Long,
     vararg options: Option
-): JsonObjectApiAction<TwitterList> = delete(null, slug, null, ownerId, *options)
+): JsonGeneralApiAction<TwitterList> = delete(null, slug, null, ownerId, *options)
 
 private fun Lists.delete(
     listId: Long? = null,

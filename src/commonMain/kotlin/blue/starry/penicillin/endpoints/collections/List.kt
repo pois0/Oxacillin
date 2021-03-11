@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.collections
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Collections
@@ -44,14 +44,14 @@ import blue.starry.penicillin.models.Collection
  * @param cursor A string identifying the segment of the current result set to retrieve. Values for this parameter are yielded in the cursors node attached to response objects. Usage of the count parameter affects cursoring.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Collections] endpoint instance.
- * @return [JsonObjectApiAction] for [Collection.List] model.
+ * @return [JsonGeneralApiAction] for [Collection.List] model.
  */
 public fun Collections.list(
     tweetId: Long? = null,
     count: Int? = null,
     cursor: String? = null,
     vararg options: Option
-): JsonObjectApiAction<Collection.List> = listInternal(null, null, tweetId, count, cursor, *options)
+): JsonGeneralApiAction<Collection.List> = listInternal(null, null, tweetId, count, cursor, *options)
 
 /**
  * Find Collections created by a specific user or containing a specific curated Tweet.
@@ -65,7 +65,7 @@ public fun Collections.list(
  * @param cursor A string identifying the segment of the current result set to retrieve. Values for this parameter are yielded in the cursors node attached to response objects. Usage of the count parameter affects cursoring.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Collections] endpoint instance.
- * @return [JsonObjectApiAction] for [Collection.List] model.
+ * @return [JsonGeneralApiAction] for [Collection.List] model.
  */
 public fun Collections.listByUserId(
     userId: Long,
@@ -73,7 +73,7 @@ public fun Collections.listByUserId(
     count: Int? = null,
     cursor: String? = null,
     vararg options: Option
-): JsonObjectApiAction<Collection.List> = listInternal(userId, null, tweetId, count, cursor, *options)
+): JsonGeneralApiAction<Collection.List> = listInternal(userId, null, tweetId, count, cursor, *options)
 
 /**
  * Find Collections created by a specific user or containing a specific curated Tweet.
@@ -87,7 +87,7 @@ public fun Collections.listByUserId(
  * @param cursor A string identifying the segment of the current result set to retrieve. Values for this parameter are yielded in the cursors node attached to response objects. Usage of the count parameter affects cursoring.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Collections] endpoint instance.
- * @return [JsonObjectApiAction] for [Collection.List] model.
+ * @return [JsonGeneralApiAction] for [Collection.List] model.
  */
 public fun Collections.listByScreenName(
     screenName: String,
@@ -95,7 +95,7 @@ public fun Collections.listByScreenName(
     count: Int? = null,
     cursor: String? = null,
     vararg options: Option
-): JsonObjectApiAction<Collection.List> = listInternal(null, screenName, tweetId, count, cursor, *options)
+): JsonGeneralApiAction<Collection.List> = listInternal(null, screenName, tweetId, count, cursor, *options)
 
 private fun Collections.listInternal(
     userId: Long? = null,
@@ -119,5 +119,5 @@ private fun Collections.listInternal(
  * Shorthand property to [Collections.list].
  * @see Collections.list
  */
-public val Collections.list: JsonObjectApiAction<Collection.List>
+public val Collections.list: JsonGeneralApiAction<Collection.List>
      get() = list()

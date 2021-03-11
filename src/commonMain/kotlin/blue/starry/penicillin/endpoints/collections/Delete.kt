@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.collections
 
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Collections
@@ -41,12 +41,12 @@ import blue.starry.penicillin.models.Collection
  * @param id The identifier of the Collection to destroy.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Collections] endpoint instance.
- * @return [JsonObjectApiAction] for [Collection.DestroyResult] model.
+ * @return [JsonGeneralApiAction] for [Collection.DestroyResult] model.
  */
 public fun Collections.delete(
     id: String,
     vararg options: Option
-): JsonObjectApiAction<Collection.DestroyResult> = client.session.post("/1.1/collections/destroy.json") {
+): JsonGeneralApiAction<Collection.DestroyResult> = client.session.post("/1.1/collections/destroy.json") {
     formBody(
         "id" to id,
         *options

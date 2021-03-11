@@ -28,7 +28,7 @@ package blue.starry.penicillin.endpoints.livepipeline
 
 
 import blue.starry.penicillin.core.emulation.EmulationMode
-import blue.starry.penicillin.core.request.action.JsonObjectApiAction
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.LivePipeline
@@ -41,12 +41,12 @@ import blue.starry.penicillin.models.LivePipelineSubscription
  * @param ids Array of status id to track.
  * @param options Optional. Custom parameters of this request.
  * @receiver [LivePipeline] endpoint instance.
- * @return [JsonObjectApiAction] for [LivePipelineSubscription] model.
+ * @return [JsonGeneralApiAction] for [LivePipelineSubscription] model.
  */
 public fun LivePipeline.update(
     ids: List<Long>,
     vararg options: Option
-): JsonObjectApiAction<LivePipelineSubscription> = client.session.post("/1.1/live_pipeline/update_subscriptions") {
+): JsonGeneralApiAction<LivePipelineSubscription> = client.session.post("/1.1/live_pipeline/update_subscriptions") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     formBody(
