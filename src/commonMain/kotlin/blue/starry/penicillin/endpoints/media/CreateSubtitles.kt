@@ -26,7 +26,6 @@
 
 package blue.starry.penicillin.endpoints.media
 
-import blue.starry.jsonkt.JsonObject
 import blue.starry.penicillin.core.request.ApiRequest
 import blue.starry.penicillin.core.request.EndpointHost
 import blue.starry.penicillin.core.request.action.EmptyApiAction
@@ -35,6 +34,7 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Media
 import blue.starry.penicillin.endpoints.Option
+import kotlinx.serialization.json.JsonElement
 
 /**
  * Use this endpoint to associate uploaded subtitles to an uploaded video. You can associate subtitles to video before or after Tweeting.
@@ -48,7 +48,7 @@ import blue.starry.penicillin.endpoints.Option
  * @return [EmptyApiAction].
  */
 public fun Media.createSubtitles(
-    payload: JsonObject,
+    payload: JsonElement,
     vararg options: Option
 ): ApiRequest = client.session.post("/1.1/media/subtitles/create.json", EndpointHost.MediaUpload) {
     parameters(*options)

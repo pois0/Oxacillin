@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.WelcomeMessages
-import blue.starry.penicillin.models.WelcomeMessage
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a Welcome Message by the given id.
@@ -43,12 +44,19 @@ import blue.starry.penicillin.models.WelcomeMessage
  * @receiver [WelcomeMessages] endpoint instance.
  * @return [JsonGeneralApiAction] for [WelcomeMessage.Single] model.
  */
-public fun WelcomeMessages.show(
+public fun <T> WelcomeMessages.show(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     vararg options: Option
-): JsonGeneralApiAction<WelcomeMessage.Single> = client.session.get("/1.1/direct_messages/welcome_messages/show.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/direct_messages/welcome_messages/show.json") {
     parameters(
         "id" to id,
         *options
     )
-}.jsonObject { WelcomeMessage.Single(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> WelcomeMessages.show(
+    id: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = show(deserializer(), id, *options)
+

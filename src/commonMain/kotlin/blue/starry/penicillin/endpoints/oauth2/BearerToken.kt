@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.OAuth2
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.OAuthToken
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Allows a registered application to obtain an OAuth 2 Bearer Token, which can be used to make API requests on an application's own behalf, without a user context. This is called [Application-only authentication](https://developer.twitter.com/en/docs/basics/authentication/overview/application-only).
@@ -48,21 +49,20 @@ import blue.starry.penicillin.models.OAuthToken
  * @receiver [OAuth2] endpoint instance.
  * @return [JsonGeneralApiAction] for [OAuthToken] model.
  */
-public fun OAuth2.bearerToken(
+public fun <T> OAuth2.bearerToken(
+    deserializer: DeserializationStrategy<T>,
     grantType: String = "client_credentials",
     vararg options: Option
-): JsonGeneralApiAction<OAuthToken> = client.session.post("/oauth2/token") {
+): JsonGeneralApiAction<T> = client.session.post("/oauth2/token") {
     authorizationType = AuthorizationType.OAuth2RequestToken
 
     formBody(
         "grant_type" to grantType,
         *options
     )
-}.jsonObject { OAuthToken(it, client) }
+}.json(deserializer)
 
- /**
- * Shorthand property to [OAuth2.bearerToken].
- * @see OAuth2.bearerToken
- */
-public val OAuth2.bearerToken: JsonGeneralApiAction<OAuthToken>
-     get() = bearerToken()
+public inline fun <reified T> OAuth2.bearerToken(
+    grantType: String = "client_credentials",
+    vararg options: Option
+): JsonGeneralApiAction<T> = bearerToken(deserializer(), grantType, *options)

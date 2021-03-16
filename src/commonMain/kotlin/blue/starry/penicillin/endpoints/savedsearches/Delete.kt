@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.SavedSearches
-import blue.starry.penicillin.models.SavedSearch
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Destroys a saved search for the authenticating user. The authenticating user must be the owner of saved search id being destroyed.
@@ -44,9 +45,15 @@ import blue.starry.penicillin.models.SavedSearch
  * @receiver [SavedSearches] endpoint instance.
  * @return [JsonGeneralApiAction] for [SavedSearch] model.
  */
-public fun SavedSearches.delete(
+public fun <T> SavedSearches.delete(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     vararg options: Option
-): JsonGeneralApiAction<SavedSearch> = client.session.post("/1.1/saved_searches/destroy/$id.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/saved_searches/destroy/$id.json") {
     formBody(*options)
-}.jsonObject { SavedSearch(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> SavedSearches.delete(
+    id: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = delete(deserializer(), id, *options)

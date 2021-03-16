@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Statuses
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a single [Tweet](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object), specified by the id parameter. The Tweet's author will also be embedded within the Tweet.
@@ -50,7 +51,8 @@ import blue.starry.penicillin.models.Status
  * @receiver [Statuses] endpoint instance.
  * @return [JsonGeneralApiAction] for [Status] model.
  */
-public fun Statuses.show(
+public fun <T> Statuses.show(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     trimUser: Boolean? = null,
     includeMyRetweet: Boolean? = null,
@@ -59,7 +61,7 @@ public fun Statuses.show(
     includeCardUri: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonGeneralApiAction<Status> = client.session.get("/1.1/statuses/show.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/statuses/show.json") {
     parameters(
         "id" to id,
         "trim_user" to trimUser,
@@ -70,4 +72,15 @@ public fun Statuses.show(
         "tweet_mode" to tweetMode,
         *options
     )
-}.jsonObject { Status(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Statuses.show(
+    id: Long,
+    trimUser: Boolean? = null,
+    includeMyRetweet: Boolean? = null,
+    includeEntities: Boolean? = null,
+    includeExtAltText: Boolean? = null,
+    includeCardUri: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = show(deserializer(), id, trimUser, includeMyRetweet, includeEntities, includeExtAltText, includeCardUri, tweetMode, *options)

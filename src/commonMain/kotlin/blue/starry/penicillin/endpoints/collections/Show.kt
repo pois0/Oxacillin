@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Collections
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Collection
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Retrieve information associated with a specific Collection.
@@ -43,12 +44,18 @@ import blue.starry.penicillin.models.Collection
  * @receiver [Collections] endpoint instance.
  * @return [JsonGeneralApiAction] for [Collection.Model] model.
  */
-public fun Collections.show(
+public fun <T> Collections.show(
+    deserializer: DeserializationStrategy<T>,
     id: String,
     vararg options: Option
-): JsonGeneralApiAction<Collection.Model> = client.session.get("/1.1/collections/show.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/collections/show.json") {
     parameters(
         "id" to id,
         *options
     )
-}.jsonObject { Collection.Model(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Collections.show(
+    id: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = show(deserializer(), id, *options)

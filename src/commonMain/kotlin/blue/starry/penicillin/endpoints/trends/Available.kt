@@ -26,11 +26,13 @@
 
 package blue.starry.penicillin.endpoints.trends
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Trends
-import blue.starry.penicillin.models.TrendArea
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the locations that Twitter has trending topic information for.
@@ -43,15 +45,13 @@ import blue.starry.penicillin.models.TrendArea
  * @receiver [Trends] endpoint instance.
  * @return [JsonArrayApiAction] for [TrendArea] model.
  */
-public fun Trends.availableAreas(
+public fun <T> Trends.availableAreas(
+    deserializer: DeserializationStrategy<T>,
     vararg options: Option
-): JsonArrayApiAction<TrendArea> = client.session.get("/1.1/trends/available.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/trends/available.json") {
     parameters(*options)
-}.jsonArray { TrendArea(it, client) }
+}.json(deserializer)
 
- /**
- * Shorthand property to [Trends.availableAreas].
- * @see Trends.availableAreas
- */
-public val Trends.availableAreas: JsonArrayApiAction<TrendArea>
-     get() = availableAreas()
+public inline fun <reified T> Trends.availableAreas(
+    vararg options: Option
+): JsonGeneralApiAction<T> = availableAreas(deserializer(), *options)

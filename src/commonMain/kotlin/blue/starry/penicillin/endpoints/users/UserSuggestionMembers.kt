@@ -26,11 +26,13 @@
 
 package blue.starry.penicillin.endpoints.users
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Users
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Access the users in a given category of the Twitter suggested user list and return their most recent status if they are not a protected user.
@@ -42,9 +44,15 @@ import blue.starry.penicillin.models.User
  * @receiver [Users] endpoint instance.
  * @return [JsonArrayApiAction] for [User] model.
  */
-public fun Users.userSuggestionMembers(
+public fun <T> Users.userSuggestionMembers(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     vararg options: Option
-): JsonArrayApiAction<User> = client.session.get("/1.1/users/suggestions/$slug/members.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/users/suggestions/$slug/members.json") {
     parameters(*options)
-}.jsonArray { User(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Users.userSuggestionMembers(
+    slug: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = userSuggestionMembers(deserializer(), slug, *options)

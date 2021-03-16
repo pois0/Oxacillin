@@ -26,11 +26,13 @@
 
 package blue.starry.penicillin.endpoints.users
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Users
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Provides a simple, relevance-based search interface to public user accounts on Twitter. Try querying by topical interest, full name, company name, location, or other criteria. Exact match searches are not supported.
@@ -46,13 +48,14 @@ import blue.starry.penicillin.models.User
  * @receiver [Users] endpoint instance.
  * @return [JsonArrayApiAction] for [User] model.
  */
-public fun Users.search(
+public fun <T> Users.search(
+    deserializer: DeserializationStrategy<T>,
     query: String,
     page: Int? = null,
     count: Int? = null,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<User> = client.session.get("/1.1/users/search.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/users/search.json") {
     parameters(
         "q" to query,
         "page" to page,
@@ -60,4 +63,12 @@ public fun Users.search(
         "include_entities" to includeEntities,
         *options
     )
-}.jsonArray { User(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Users.search(
+    query: String,
+    page: Int? = null,
+    count: Int? = null,
+    includeEntities: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = search(deserializer(), query, page, count, includeEntities, *options)

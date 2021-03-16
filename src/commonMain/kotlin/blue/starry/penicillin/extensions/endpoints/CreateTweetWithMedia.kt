@@ -26,7 +26,6 @@
 
 package blue.starry.penicillin.extensions.endpoints
 
-import blue.starry.penicillin.core.exceptions.PenicillinTwitterMediaProcessingFailedError
 import blue.starry.penicillin.core.request.action.ApiAction
 import blue.starry.penicillin.core.response.JsonGeneralResponse
 import blue.starry.penicillin.endpoints.Option
@@ -34,14 +33,8 @@ import blue.starry.penicillin.endpoints.Statuses
 import blue.starry.penicillin.endpoints.media
 import blue.starry.penicillin.endpoints.media.MediaComponent
 import blue.starry.penicillin.endpoints.media.uploadMedia
-import blue.starry.penicillin.endpoints.media.uploadStatus
 import blue.starry.penicillin.endpoints.statuses.create
 import blue.starry.penicillin.extensions.DelegatedAction
-import blue.starry.penicillin.models.Media
-import blue.starry.penicillin.models.Media.ProcessingInfo.State.Succeeded
-import blue.starry.penicillin.models.Status
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withTimeout
 import kotlin.time.Duration
 import kotlin.time.seconds
 
@@ -61,7 +54,7 @@ public fun Statuses.createWithMedia(
         client.media.uploadMedia(it).execute().awaitProcessing()
     }
     
-    create(status, mediaIds = results.map { it.mediaId }, options = options).execute()
+    create<Any?>(status, mediaIds = results.map { it.mediaId }, options = options).execute()
 }
 
 private val mediaProcessTimeout = 60.seconds

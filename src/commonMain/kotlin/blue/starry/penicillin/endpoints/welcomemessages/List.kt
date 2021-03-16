@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.WelcomeMessages
-import blue.starry.penicillin.models.WelcomeMessage
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a list of Welcome Messages.
@@ -44,21 +45,21 @@ import blue.starry.penicillin.models.WelcomeMessage
  * @receiver [WelcomeMessages] endpoint instance.
  * @return [JsonGeneralApiAction] for [WelcomeMessage.List] model.
  */
-public fun WelcomeMessages.list(
+public fun <T> WelcomeMessages.list(
+    deserializer: DeserializationStrategy<T>,
     count: Int? = null,
     cursor: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<WelcomeMessage.List> = client.session.get("/1.1/direct_messages/welcome_messages/list.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/direct_messages/welcome_messages/list.json") {
     parameters(
         "count" to count,
         "cursor" to cursor,
         *options
     )
-}.jsonObject { WelcomeMessage.List(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [WelcomeMessages.list].
- * @see WelcomeMessages.list
- */
-public val WelcomeMessages.list: JsonGeneralApiAction<WelcomeMessage.List>
-    get() = list()
+public inline fun <reified T> WelcomeMessages.list(
+    count: Int? = null,
+    cursor: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = list(deserializer(), count, cursor, *options)

@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Blocks
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Blocks the specified user from following the authenticating user. In addition the blocked user will not show in the authenticating users mentions or timeline (unless retweeted by another user). If a follow or friend relationship exists it is destroyed.
@@ -48,14 +49,22 @@ import blue.starry.penicillin.models.User
  * @return [JsonGeneralApiAction] for [User] model.
  * @see Blocks.createByUserId
  */
-public fun Blocks.createByScreenName(
+public fun <T> Blocks.createByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = create(screenName, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = create(deserializer, screenName, null, includeEntities, skipStatus, *options)
 
-/**
+public inline fun <reified T> Blocks.createByScreenName(
+    screenName: String,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = createByScreenName(deserializer(), screenName, includeEntities, skipStatus, *options)
+
+    /**
  * Blocks the specified user from following the authenticating user. In addition the blocked user will not show in the authenticating users mentions or timeline (unless retweeted by another user). If a follow or friend relationship exists it is destroyed.
  *
  * The URL pattern /version/block/create/:screen_name_or_user_id.format is still accepted but not recommended. As a sequence of numbers is a valid screen name we recommend using the screen_name or user_id parameter instead.
@@ -70,14 +79,23 @@ public fun Blocks.createByScreenName(
  * @return [JsonGeneralApiAction] for [User] model.
  * @see Blocks.createByScreenName
  */
-public fun Blocks.createByUserId(
+public fun <T> Blocks.createByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = create(null, userId, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = create(deserializer, null, userId, includeEntities, skipStatus, *options)
 
-private fun Blocks.create(
+public inline fun <reified T> Blocks.createByUserId(
+    userId: Long,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = createByUserId(deserializer(), userId, includeEntities, skipStatus, *options)
+
+private fun <T> Blocks.create(
+    deserializer: DeserializationStrategy<T>,
     screenName: String? = null,
     userId: Long? = null,
     includeEntities: Boolean? = null,
@@ -91,5 +109,4 @@ private fun Blocks.create(
         "skip_status" to skipStatus,
         *options
     )
-
-}.jsonObject { User(it, client) }
+}.json(deserializer)

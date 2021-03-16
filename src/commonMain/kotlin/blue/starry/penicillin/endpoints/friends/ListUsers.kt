@@ -31,8 +31,9 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Friends
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
-import blue.starry.penicillin.models.cursor.CursorUsers
+import blue.starry.penicillin.models.cursor.CursorModel
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a cursored collection of user objects for every user the specified user is following (otherwise known as their "friends").
@@ -48,15 +49,24 @@ import blue.starry.penicillin.models.cursor.CursorUsers
  * @receiver [Friends] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorUsers] model.
  */
-public fun Friends.listUsers(
+public fun <M: CursorModel<T>, T: Any> Friends.listUsers(
+    deserializer: DeserializationStrategy<M>,
     cursor: Long? = null,
     count: Int? = null,
     skipStatus: Boolean? = null,
     includeUserEntities: Boolean? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorUsers, User> = listUsersInternal(null, null, cursor, count, skipStatus, includeUserEntities, *options)
+): CursorJsonApiAction<M, T> = listUsersInternal(deserializer, null, null, cursor, count, skipStatus, includeUserEntities, *options)
 
-/**
+public inline fun <reified M: CursorModel<T>, T: Any> Friends.listUsers(
+    cursor: Long? = null,
+    count: Int? = null,
+    skipStatus: Boolean? = null,
+    includeUserEntities: Boolean? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = listUsers(deserializer(), cursor, count, skipStatus, includeUserEntities, *options)
+
+    /**
  * Returns a cursored collection of user objects for every user the specified user is following (otherwise known as their "friends").
  * At this time, results are ordered with the most recent following first — however, this ordering is subject to unannounced change and eventual consistency issues. Results are given in groups of 20 users and multiple "pages" of results can be navigated through using the next_cursor value in subsequent requests. See [Using cursors to navigate collections](https://developer.twitter.com/en/docs/basics/cursoring) for more information.
  *
@@ -73,16 +83,26 @@ public fun Friends.listUsers(
  * @see listIdsByScreenName
  * @see listIds
  */
-public fun Friends.listUsersByUserId(
+public fun <M: CursorModel<T>, T: Any> Friends.listUsersByUserId(
+    deserializer: DeserializationStrategy<M>,
     userId: Long,
     cursor: Long? = null,
     count: Int? = null,
     skipStatus: Boolean? = null,
     includeUserEntities: Boolean? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorUsers, User> = listUsersInternal(userId, null, cursor, count, skipStatus, includeUserEntities, *options)
+): CursorJsonApiAction<M, T> = listUsersInternal(deserializer, userId, null, cursor, count, skipStatus, includeUserEntities, *options)
 
-/**
+public inline fun <reified M: CursorModel<T>, T: Any> Friends.listUsersByUserId(
+    userId: Long,
+    cursor: Long? = null,
+    count: Int? = null,
+    skipStatus: Boolean? = null,
+    includeUserEntities: Boolean? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = listUsersByUserId(deserializer(), userId, cursor, count, skipStatus, includeUserEntities, *options)
+
+    /**
  * Returns a cursored collection of user objects for every user the specified user is following (otherwise known as their "friends").
  * At this time, results are ordered with the most recent following first — however, this ordering is subject to unannounced change and eventual consistency issues. Results are given in groups of 20 users and multiple "pages" of results can be navigated through using the next_cursor value in subsequent requests. See [Using cursors to navigate collections](https://developer.twitter.com/en/docs/basics/cursoring) for more information.
  *
@@ -99,16 +119,27 @@ public fun Friends.listUsersByUserId(
  * @see listIdsByUserId
  * @see listIds
  */
-public fun Friends.listUsersByScreenName(
+public fun <M: CursorModel<T>, T: Any> Friends.listUsersByScreenName(
+    deserializer: DeserializationStrategy<M>,
     screenName: String,
     cursor: Long? = null,
     count: Int? = null,
     skipStatus: Boolean? = null,
     includeUserEntities: Boolean? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorUsers, User> = listUsersInternal(null, screenName, cursor, count, skipStatus, includeUserEntities, *options)
+): CursorJsonApiAction<M, T> = listUsersInternal(deserializer, null, screenName, cursor, count, skipStatus, includeUserEntities, *options)
 
-private fun Friends.listUsersInternal(
+public inline fun <reified M: CursorModel<T>, T: Any> Friends.listUsersByScreenName(
+    screenName: String,
+    cursor: Long? = null,
+    count: Int? = null,
+    skipStatus: Boolean? = null,
+    includeUserEntities: Boolean? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = listUsersByScreenName(deserializer(), screenName, cursor, count, skipStatus, includeUserEntities, *options)
+
+private fun <M: CursorModel<T>, T: Any>Friends.listUsersInternal(
+    deserializer: DeserializationStrategy<M>,
     userId: Long? = null,
     screenName: String? = null,
     cursor: Long? = null,
@@ -126,11 +157,4 @@ private fun Friends.listUsersInternal(
         "include_user_entities" to includeUserEntities,
         *options
     )
-}.cursorJsonObject { CursorUsers(it, client) }
-
-/**
- * Shorthand property to [Friends.listUsers].
- * @see Friends.listUsers
- */
-public val Friends.listUsers: CursorJsonApiAction<CursorUsers, User>
-    get() = listUsers()
+}.cursorJson(deserializer)

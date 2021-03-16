@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.TwitterList
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Deletes the specified list. The authenticated user must own the list to be able to destroy it.
@@ -43,12 +44,18 @@ import blue.starry.penicillin.models.TwitterList
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.delete(
+public fun <T> Lists.delete(
+    deserializer: DeserializationStrategy<T>,
     listId: Long,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = delete(listId, null, null, null, *options)
+): JsonGeneralApiAction<T> = delete(deserializer, listId, null, null, null, *options)
 
-/**
+public inline fun <reified T> Lists.delete(
+    listId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = delete(deserializer(), listId, *options)
+
+    /**
  * Deletes the specified list. The authenticated user must own the list to be able to destroy it.
  *
  * [Twitter API reference](https://developer.twitter.com/en/docs/accounts-and-users/create-manage-lists/api-reference/post-lists-destroy)
@@ -59,13 +66,20 @@ public fun Lists.delete(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.deleteByOwnerScreenName(
+public fun <T> Lists.deleteByOwnerScreenName(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerScreenName: String,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = delete(null, slug, ownerScreenName, null, *options)
+): JsonGeneralApiAction<T> = delete(deserializer, null, slug, ownerScreenName, null, *options)
 
-/**
+public inline fun <reified T> Lists.deleteByOwnerScreenName(
+    slug: String,
+    ownerScreenName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = deleteByOwnerScreenName(deserializer(), slug, ownerScreenName, *options)
+
+    /**
  * Deletes the specified list. The authenticated user must own the list to be able to destroy it.
  *
  * [Twitter API reference](https://developer.twitter.com/en/docs/accounts-and-users/create-manage-lists/api-reference/post-lists-destroy)
@@ -76,13 +90,21 @@ public fun Lists.deleteByOwnerScreenName(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.deleteByOwnerId(
+public fun <T> Lists.deleteByOwnerId(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerId: Long,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = delete(null, slug, null, ownerId, *options)
+): JsonGeneralApiAction<T> = delete(deserializer, null, slug, null, ownerId, *options)
 
-private fun Lists.delete(
+public inline fun <reified T> Lists.deleteByOwnerId(
+    slug: String,
+    ownerId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = deleteByOwnerId(deserializer(), slug, ownerId, *options)
+
+private fun <T> Lists.delete(
+    deserializer: DeserializationStrategy<T>,
     listId: Long? = null,
     slug: String? = null,
     ownerScreenName: String? = null,
@@ -96,4 +118,4 @@ private fun Lists.delete(
         "owner_id" to ownerId,
         *options
     )
-}.jsonObject { TwitterList(it, client) }
+}.json(deserializer)

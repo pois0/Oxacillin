@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Friendships
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Friendships.Show
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns detailed information about the relationship between two arbitrary users.
@@ -44,11 +45,18 @@ import blue.starry.penicillin.models.Friendships.Show
  * @receiver [Friendships] endpoint instance.
  * @return [JsonGeneralApiAction] for [Show] model.
  */
-public fun Friendships.showByUserId(
+public fun <T> Friendships.showByUserId(
+    deserializer: DeserializationStrategy<T>,
     sourceId: Long,
     targetId: Long,
     vararg options: Option
-): JsonGeneralApiAction<Show> = show(sourceId, null, targetId, null, *options)
+): JsonGeneralApiAction<T> = show(deserializer, sourceId, null, targetId, null, *options)
+
+public inline fun <reified T> Friendships.showByUserId(
+    sourceId: Long,
+    targetId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = showByUserId(deserializer(), sourceId, targetId, *options)
 
 /**
  * Returns detailed information about the relationship between two arbitrary users.
@@ -60,12 +68,18 @@ public fun Friendships.showByUserId(
  * @receiver [Friendships] endpoint instance.
  * @return [JsonGeneralApiAction] for [Show] model.
  */
-public fun Friendships.showByUserId(
+public fun <T> Friendships.showByUserId(
+    deserializer: DeserializationStrategy<T>,
     targetId: Long,
     vararg options: Option
-): JsonGeneralApiAction<Show> = show(null, null, targetId, null, *options)
+): JsonGeneralApiAction<T> = show(deserializer, null, null, targetId, null, *options)
 
-/**
+public inline fun <reified T> Friendships.showByUserId(
+    targetId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = showByUserId(deserializer(), targetId, *options)
+
+    /**
  * Returns detailed information about the relationship between two arbitrary users.
  *
  * [Twitter API reference](https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-friendships-show)
@@ -76,13 +90,20 @@ public fun Friendships.showByUserId(
  * @receiver [Friendships] endpoint instance.
  * @return [JsonGeneralApiAction] for [Show] model.
  */
-public fun Friendships.showByScreenName(
+public fun <T> Friendships.showByScreenName(
+    deserializer: DeserializationStrategy<T>,
     sourceScreenName: String,
     targetScreenName: String,
     vararg options: Option
-): JsonGeneralApiAction<Show> = show(null, sourceScreenName, null, targetScreenName, *options)
+): JsonGeneralApiAction<T> = show(deserializer, null, sourceScreenName, null, targetScreenName, *options)
 
-/**
+public inline fun <reified T> Friendships.showByScreenName(
+    sourceScreenName: String,
+    targetScreenName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = showByScreenName(deserializer(), sourceScreenName, targetScreenName, *options)
+
+    /**
  * Returns detailed information about the relationship between two arbitrary users.
  *
  * [Twitter API reference](https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-friendships-show)
@@ -92,12 +113,19 @@ public fun Friendships.showByScreenName(
  * @receiver [Friendships] endpoint instance.
  * @return [JsonGeneralApiAction] for [Show] model.
  */
-public fun Friendships.showByScreenName(
+public fun <T> Friendships.showByScreenName(
+    deserializer: DeserializationStrategy<T>,
     targetScreenName: String,
     vararg options: Option
-): JsonGeneralApiAction<Show> = show(null, null, null, targetScreenName, *options)
+): JsonGeneralApiAction<T> = show(deserializer, null, null, null, targetScreenName, *options)
 
-private fun Friendships.show(
+public inline fun <reified T> Friendships.showByScreenName(
+    targetScreenName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = showByScreenName(deserializer(), targetScreenName, *options)
+
+private fun <T> Friendships.show(
+    deserializer: DeserializationStrategy<T>,
     sourceId: Long? = null,
     sourceScreenName: String? = null,
     targetId: Long? = null,
@@ -111,4 +139,4 @@ private fun Friendships.show(
         "target_screen_name" to targetScreenName,
         *options
     )
-}.jsonObject { Show(it, client) }
+}.json(deserializer)

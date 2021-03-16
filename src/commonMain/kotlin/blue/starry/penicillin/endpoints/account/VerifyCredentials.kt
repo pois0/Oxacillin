@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Account
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Account.VerifyCredentials
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns an HTTP 200 OK response code and a representation of the requesting user if authentication was successful; returns a 401 status code and an error message if not. Use this method to test if supplied user credentials are valid.
@@ -45,23 +46,24 @@ import blue.starry.penicillin.models.Account.VerifyCredentials
  * @receiver [Account] endpoint instance.
  * @return [JsonGeneralApiAction] for [VerifyCredentials] model.
  */
-public fun Account.verifyCredentials(
+public fun <T> Account.verifyCredentials(
+    deserializer: DeserializationStrategy<T>,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     includeEmail: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<VerifyCredentials> = client.session.get("/1.1/account/verify_credentials.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/account/verify_credentials.json") {
     parameters(
         "include_entities" to includeEntities,
         "skip_status" to skipStatus,
         "include_email" to includeEmail,
         *options
     )
-}.jsonObject { VerifyCredentials(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [Account.verifyCredentials].
- * @see Account.verifyCredentials
- */
-public val Account.verifyCredentials: JsonGeneralApiAction<VerifyCredentials>
-    get() = verifyCredentials()
+public inline fun <reified T> Account.verifyCredentials(
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    includeEmail: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = verifyCredentials(deserializer(), includeEntities, skipStatus, includeEmail, *options)

@@ -24,7 +24,6 @@
 
 package tests
 
-import blue.starry.penicillin.PenicillinClient
 import blue.starry.penicillin.core.auth.OAuthUtil
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature

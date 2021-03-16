@@ -27,12 +27,14 @@
 package blue.starry.penicillin.endpoints.timeline
 
 import blue.starry.penicillin.core.emulation.EmulationMode
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Timeline
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the 20 most recent mentions (Tweets containing a users's @screen_name) for the authenticating user.
@@ -54,7 +56,8 @@ import blue.starry.penicillin.models.Status
  * @receiver [Timeline] endpoint instance.
  * @return [JsonArrayApiAction] for [Status] model.
  */
-public fun Timeline.mentionsTimeline(
+public fun <T> Timeline.mentionsTimeline(
+    deserializer: DeserializationStrategy<T>,
     count: Int? = null,
     sinceId: Long? = null,
     maxId: Long? = null,
@@ -65,7 +68,7 @@ public fun Timeline.mentionsTimeline(
     tweetMode: TweetMode = TweetMode.Default,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<Status> = client.session.get("/1.1/statuses/mentions_timeline.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/statuses/mentions_timeline.json") {
     parameters(
         "cards_platform" to "iPhone-13",
         "contributor_details" to "1",
@@ -101,11 +104,17 @@ public fun Timeline.mentionsTimeline(
         "include_card_uri" to includeCardUri,
         *options
     )
-}.jsonArray { Status(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [Timeline.mentionsTimeline].
- * @see Timeline.mentionsTimeline
- */
-public val Timeline.mentionsTimeline: JsonArrayApiAction<Status>
-    get() = mentionsTimeline()
+public inline fun <reified T> Timeline.mentionsTimeline(
+    count: Int? = null,
+    sinceId: Long? = null,
+    maxId: Long? = null,
+    trimUser: Boolean? = null,
+    includeEntities: Boolean? = null,
+    includeRTs: Boolean? = null,
+    includeMyRetweet: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    includeCardUri: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = mentionsTimeline(deserializer(), count, sinceId, maxId, trimUser, includeEntities, includeRTs, includeMyRetweet, tweetMode, includeCardUri, *options)

@@ -26,11 +26,13 @@
 
 package blue.starry.penicillin.endpoints.trends
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Trends
-import blue.starry.penicillin.models.TrendArea
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the locations that Twitter has trending topic information for, closest to a specified location.
@@ -45,14 +47,21 @@ import blue.starry.penicillin.models.TrendArea
  * @receiver [Trends] endpoint instance.
  * @return [JsonArrayApiAction] for [TrendArea] model.
  */
-public fun Trends.closestAreas(
+public fun <T> Trends.closestAreas(
+    deserializer: DeserializationStrategy<T>,
     latitude: Double,
     longitude: Double,
     vararg options: Option
-): JsonArrayApiAction<TrendArea> = client.session.get("/1.1/trends/closest.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/trends/closest.json") {
     parameters(
         "lat" to latitude,
         "long" to longitude,
         *options
     )
-}.jsonArray { TrendArea(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Trends.closestAreas(
+    latitude: Double,
+    longitude: Double,
+    vararg options: Option
+): JsonGeneralApiAction<T> = closestAreas(deserializer(), latitude, longitude, *options)

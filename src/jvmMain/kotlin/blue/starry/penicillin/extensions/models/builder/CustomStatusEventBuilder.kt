@@ -28,7 +28,7 @@ package blue.starry.penicillin.extensions.models.builder
 
 import blue.starry.jsonkt.parseObject
 import blue.starry.jsonkt.toJsonObject
-import blue.starry.penicillin.core.experimental.PenicillinExperimentalApi
+import blue.starry.penicillin.core.experimental.OxacillinExperimentalApi
 import blue.starry.penicillin.core.session.NoopApiClient
 import blue.starry.penicillin.core.streaming.handler.UserStreamEvent
 
@@ -75,7 +75,7 @@ public class CustomStatusEventBuilder(type: UserStreamEvent): JsonBuilder<Stream
      */
     public var createdAt: TemporalAccessor? = null
 
-    @OptIn(PenicillinExperimentalApi::class)
+    @OptIn(OxacillinExperimentalApi::class)
     override fun build(): Stream.StatusEvent {
         val source = source.build()
         val target = target.build()

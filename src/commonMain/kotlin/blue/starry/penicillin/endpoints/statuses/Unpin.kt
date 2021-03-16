@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Statuses
-import blue.starry.penicillin.models.PinTweet
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Unpin the tweet.
@@ -41,14 +42,20 @@ import blue.starry.penicillin.models.PinTweet
  * @receiver [Statuses] endpoint instance.
  * @return [JsonGeneralApiAction] for [PinTweet] model.
  */
-public fun Statuses.unpin(
+public fun <T> Statuses.unpin(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     vararg options: Option
-): JsonGeneralApiAction<PinTweet> = client.session.post("/1.1/account/unpin_tweet.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/account/unpin_tweet.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     formBody(
         "id" to id,
         *options
     )
-}.jsonObject { PinTweet(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Statuses.unpin(
+    id: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = unpin(deserializer(), id, *options)

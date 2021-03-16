@@ -51,4 +51,4 @@ public fun DirectMessageEvents.show(
         "id" to id,
         *options
     )
-}.jsonObject { DirectMessageEvent.Show(it, client) }
+}.json { DirectMessageEvent.Show(it, client) }

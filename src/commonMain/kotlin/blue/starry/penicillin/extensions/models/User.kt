@@ -26,10 +26,12 @@
 
 package blue.starry.penicillin.extensions.models
 
-import blue.starry.penicillin.models.CommonUser
+public interface CommonUser {
+    public val profileInterstitialType: String?
+}
 
 /**
  * Whether if this account is locked.
  */
-public val CommonUser.isLockedAccount: Boolean
+public inline val CommonUser.isLockedAccount: Boolean
     get() = profileInterstitialType == "fake_account"

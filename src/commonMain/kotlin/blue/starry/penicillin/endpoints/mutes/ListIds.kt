@@ -31,7 +31,9 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Mutes
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.cursor.CursorIds
+import blue.starry.penicillin.models.cursor.CursorModel
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns an array of numeric user ids the authenticating user has muted.
@@ -44,21 +46,21 @@ import blue.starry.penicillin.models.cursor.CursorIds
  * @receiver [Mutes] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorIds] model.
  */
-public fun Mutes.listIds(
+public fun <M: CursorModel<T>, T: Any> Mutes.listIds(
+    deserializer: DeserializationStrategy<M>,
     stringifyIds: Boolean? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorIds, Long> = client.session.get("/1.1/mutes/users/ids.json") {
+): CursorJsonApiAction<M, T> = client.session.get("/1.1/mutes/users/ids.json") {
     parameters(
         "stringify_ids" to stringifyIds,
         "cursor" to cursor,
         *options
     )
-}.cursorJsonObject { CursorIds(it, client) }
+}.cursorJson(deserializer)
 
-/**
- * Shorthand property to [Mutes.listIds].
- * @see Mutes.listIds
- */
-public val Mutes.listIds: CursorJsonApiAction<CursorIds, Long>
-    get() = listIds()
+public inline fun <reified M: CursorModel<T>, T: Any> Mutes.listIds(
+    stringifyIds: Boolean? = null,
+    cursor: Long? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = listIds(deserializer(), stringifyIds, cursor, *options)

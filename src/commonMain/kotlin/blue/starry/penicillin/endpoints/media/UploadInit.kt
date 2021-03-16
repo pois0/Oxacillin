@@ -32,6 +32,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Media
 import blue.starry.penicillin.endpoints.Option
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * The INIT command request is used to initiate a file upload session. It returns a media_id which should be used to execute all subsequent requests. The next step after a successful return from INIT command is the [APPEND command](https://developer.twitter.com/en/docs/media/upload-media/api-reference/post-media-upload-append).
@@ -47,13 +49,14 @@ import blue.starry.penicillin.endpoints.Option
  * @receiver [Media] endpoint instance.
  * @return [JsonGeneralApiAction] for [blue.starry.penicillin.models.Media] model.
  */
-public fun Media.uploadInit(
+public fun <T> Media.uploadInit(
+    deserializer: DeserializationStrategy<T>,
     totalBytes: Int,
     mediaType: MediaType,
     mediaCategory: MediaCategory = MediaCategory.Default,
     additionalOwners: List<Long>? = null,
     vararg options: Option
-): JsonGeneralApiAction<blue.starry.penicillin.models.Media> = client.session.post("/1.1/media/upload.json", EndpointHost.MediaUpload) {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/media/upload.json", EndpointHost.MediaUpload) {
     formBody(
         "command" to "INIT",
         "total_bytes" to totalBytes,
@@ -62,4 +65,12 @@ public fun Media.uploadInit(
         "additional_owners" to additionalOwners?.joinToString(","),
         *options
     )
-}.jsonObject { blue.starry.penicillin.models.Media(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Media.uploadInit(
+    totalBytes: Int,
+    mediaType: MediaType,
+    mediaCategory: MediaCategory = MediaCategory.Default,
+    additionalOwners: List<Long>? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = uploadInit(deserializer(), totalBytes, mediaType, mediaCategory, additionalOwners, *options)

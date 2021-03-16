@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Statuses
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Untweets a retweeted status. Returns the original Tweet with Retweet details embedded.
@@ -51,15 +52,23 @@ import blue.starry.penicillin.models.Status
  * @receiver [Statuses] endpoint instance.
  * @return [JsonGeneralApiAction] for [Status] model.
  */
-public fun Statuses.unretweet(
+public fun <T> Statuses.unretweet(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     trimUser: Boolean? = null,
     tweetMode: TweetMode? = null,
     vararg options: Option
-): JsonGeneralApiAction<Status> = client.session.post("/1.1/statuses/unretweet/$id.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/statuses/unretweet/$id.json") {
     formBody(
         "trim_user" to trimUser,
         "tweet_mode" to tweetMode,
         *options
     )
-}.jsonObject { Status(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Statuses.unretweet(
+    id: Long,
+    trimUser: Boolean? = null,
+    tweetMode: TweetMode? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = unretweet(deserializer(), id, trimUser, tweetMode, *options)

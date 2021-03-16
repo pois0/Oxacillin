@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Friendships
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Allows the authenticating user to follow (friend) the user specified in the ID parameter.
@@ -48,13 +49,20 @@ import blue.starry.penicillin.models.User
  * @return [JsonGeneralApiAction] for [User] model.
  * @see createByScreenName
  */
-public fun Friendships.createByUserId(
+public fun <T> Friendships.createByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     follow: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = create(userId, null, follow, *options)
+): JsonGeneralApiAction<T> = create(deserializer, userId, null, follow, *options)
 
-/**
+public inline fun <reified T> Friendships.createByUserId(
+    userId: Long,
+    follow: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = createByUserId(deserializer(), userId, follow, *options)
+
+    /**
  * Allows the authenticating user to follow (friend) the user specified in the ID parameter.
  * Returns the followed user when successful. Returns a string describing the failure condition when unsuccessful. If the user is already friends with the user a HTTP 403 may be returned, though for performance reasons this method may also return a HTTP 200 OK message even if the follow relationship already exists.
  * Actions taken in this method are asynchronous. Changes will be eventually consistent.
@@ -68,13 +76,21 @@ public fun Friendships.createByUserId(
  * @return [JsonGeneralApiAction] for [User] model.
  * @see createByUserId
  */
-public fun Friendships.createByScreenName(
+public fun <T> Friendships.createByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     follow: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = create(null, screenName, follow, *options)
+): JsonGeneralApiAction<T> = create(deserializer, null, screenName, follow, *options)
 
-private fun Friendships.create(
+public inline fun <reified T> Friendships.createByScreenName(
+    screenName: String,
+    follow: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = createByScreenName(deserializer(), screenName, follow, *options)
+
+private fun <T> Friendships.create(
+    deserializer: DeserializationStrategy<T>,
     userId: Long? = null,
     screenName: String? = null,
     follow: Boolean? = null,
@@ -86,4 +102,4 @@ private fun Friendships.create(
         "follow" to follow,
         *options
     )
-}.jsonObject { User(it, client) }
+}.json(deserializer)

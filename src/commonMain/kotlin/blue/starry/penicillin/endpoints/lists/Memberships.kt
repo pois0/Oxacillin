@@ -31,8 +31,9 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.TwitterList
-import blue.starry.penicillin.models.cursor.CursorLists
+import blue.starry.penicillin.models.cursor.CursorModel
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the lists the specified user has been added to. If user_id or screen_name are not provided, the memberships for the authenticating user are returned.
@@ -46,12 +47,21 @@ import blue.starry.penicillin.models.cursor.CursorLists
  * @receiver [Lists] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorLists] model.
  */
-public fun Lists.memberships(
+public fun <M: CursorModel<T>, T: Any> Lists.memberships(
+    deserializer: DeserializationStrategy<M>,
     count: Int? = null,
     cursor: Long? = null,
     filterToOwnedLists: Boolean? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorLists, TwitterList> = membershipsInternal(null, null, count, cursor, filterToOwnedLists, *options)
+): CursorJsonApiAction<M, T> = membershipsInternal(deserializer, null, null, count, cursor, filterToOwnedLists, *options)
+
+
+public inline fun <reified M: CursorModel<T>, T: Any> Lists.memberships(
+    count: Int? = null,
+    cursor: Long? = null,
+    filterToOwnedLists: Boolean? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = memberships(deserializer(), count, cursor, filterToOwnedLists, *options)
 
 /**
  * Returns the lists the specified user has been added to. If user_id or screen_name are not provided, the memberships for the authenticating user are returned.
@@ -66,13 +76,22 @@ public fun Lists.memberships(
  * @receiver [Lists] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorLists] model.
  */
-public fun Lists.membershipsByUserId(
+public fun <M: CursorModel<T>, T: Any> Lists.membershipsByUserId(
+    deserializer: DeserializationStrategy<M>,
     userId: Long,
     count: Int? = null,
     cursor: Long? = null,
     filterToOwnedLists: Boolean? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorLists, TwitterList> = membershipsInternal(userId, null, count, cursor, filterToOwnedLists, *options)
+): CursorJsonApiAction<M, T> = membershipsInternal(deserializer, userId, null, count, cursor, filterToOwnedLists, *options)
+
+public inline fun <reified M: CursorModel<T>, T: Any> Lists.membershipsByUserId(
+    userId: Long,
+    count: Int? = null,
+    cursor: Long? = null,
+    filterToOwnedLists: Boolean? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = membershipsByUserId(deserializer(), userId, count, cursor, filterToOwnedLists, *options)
 
 /**
  * Returns the lists the specified user has been added to. If user_id or screen_name are not provided, the memberships for the authenticating user are returned.
@@ -87,15 +106,25 @@ public fun Lists.membershipsByUserId(
  * @receiver [Lists] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorLists] model.
  */
-public fun Lists.membershipsByScreenName(
+public fun <M: CursorModel<T>, T: Any> Lists.membershipsByScreenName(
+    deserializer: DeserializationStrategy<M>,
     screenName: String,
     count: Int? = null,
     cursor: Long? = null,
     filterToOwnedLists: Boolean? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorLists, TwitterList> = membershipsInternal(null, screenName, count, cursor, filterToOwnedLists, *options)
+): CursorJsonApiAction<M, T> = membershipsInternal(deserializer, null, screenName, count, cursor, filterToOwnedLists, *options)
 
-private fun Lists.membershipsInternal(
+public inline fun <reified M: CursorModel<T>, T: Any> Lists.membershipsByScreenName(
+    screenName: String,
+    count: Int? = null,
+    cursor: Long? = null,
+    filterToOwnedLists: Boolean? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = membershipsByScreenName(deserializer(), screenName, count, cursor, filterToOwnedLists, *options)
+
+private fun <M: CursorModel<T>, T: Any> Lists.membershipsInternal(
+    deserializer: DeserializationStrategy<M>,
     userId: Long? = null,
     screenName: String? = null,
     count: Int? = null,
@@ -111,11 +140,4 @@ private fun Lists.membershipsInternal(
         "filter_to_owned_lists" to filterToOwnedLists,
         *options
     )
-}.cursorJsonObject { CursorLists(it, client) }
-
-/**
- * Shorthand property to [Lists.memberships].
- * @see Lists.memberships
- */
-public val Lists.memberships: CursorJsonApiAction<CursorLists, TwitterList>
-    get() = memberships()
+}.cursorJson(deserializer)

@@ -63,7 +63,7 @@ public val JsonGeneralResponse<Search>.next: JsonGeneralApiAction<Search>
             }
         }
 
-        return action.request.jsonObject { Search(it, client) }
+        return action.request.json { Search(it, client) }
     }
 
 /*
@@ -95,5 +95,5 @@ public val JsonGeneralResponse<Search>.refresh: JsonGeneralApiAction<Search>
             }
         }
 
-        return action.request.jsonObject { Search(it, client) }
+        return action.request.json { Search(it, client) }
     }

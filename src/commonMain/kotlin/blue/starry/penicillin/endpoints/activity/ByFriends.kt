@@ -27,11 +27,13 @@
 package blue.starry.penicillin.endpoints.activity
 
 import blue.starry.penicillin.core.emulation.EmulationMode
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Activity
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.ActivityEvent
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Unknown endpoint.
@@ -40,10 +42,11 @@ import blue.starry.penicillin.models.ActivityEvent
  * @receiver [Activity] endpoint instance.
  * @return [JsonArrayApiAction] for [ActivityEvent] model.
  */
-public fun Activity.byFriends(
+public fun <T> Activity.byFriends(
+    deserializer: DeserializationStrategy<T>,
     count: Int? = null,
     vararg options: Option
-): JsonArrayApiAction<ActivityEvent> = client.session.get("/1.1/activity/by_friends.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/activity/by_friends.json") {
     emulationModes += EmulationMode.Tweetdeck
 
     parameters(
@@ -60,11 +63,9 @@ public fun Activity.byFriends(
         *options,
         mode = EmulationMode.Tweetdeck
     )
-}.jsonArray { ActivityEvent(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [Activity.byFriends].
- * @see Activity.byFriends
- */
-public val Activity.byFriends: JsonArrayApiAction<ActivityEvent>
-    get() = byFriends()
+public inline fun <reified T> Activity.byFriends(
+    count: Int? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = byFriends(deserializer(), count, *options)

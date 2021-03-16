@@ -26,15 +26,17 @@
 
 package blue.starry.penicillin.endpoints.welcomemessages
 
-import blue.starry.jsonkt.JsonObject
-import blue.starry.jsonkt.jsonObjectOf
 import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.jsonBody
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.WelcomeMessages
-import blue.starry.penicillin.models.WelcomeMessage
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonObject
 
 /**
  * Creates a new Welcome Message that will be stored and sent in the future from the authenticating user in defined circumstances. Returns the message template if successful. Supports publishing with the same elements as Direct Messages (e.g. Quick Replies, media attachments).
@@ -49,17 +51,23 @@ import blue.starry.penicillin.models.WelcomeMessage
  * @receiver [WelcomeMessages] endpoint instance.
  * @return [JsonGeneralApiAction] for [WelcomeMessage.Single] model.
  */
-public fun WelcomeMessages.create(
-    messageData: JsonObject,
+public fun <T> WelcomeMessages.create(
+    deserializer: DeserializationStrategy<T>,
+    messageData: JsonElement,
     name: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<WelcomeMessage.Single> = client.session.post("/1.1/direct_messages/welcome_messages/new.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/direct_messages/welcome_messages/new.json") {
     parameters(*options)
-    jsonBody(
-        "welcome_message" to jsonObjectOf(
-            "message_data" to messageData,
-            "name" to name
-        ),
-        *options
-    )
-}.jsonObject { WelcomeMessage.Single(it, client) }
+    jsonBody(pairs = options) {
+        putJsonObject("welcome_message") {
+            put("message_data", messageData)
+            put("name", name)
+        }
+    }
+}.json(deserializer)
+
+public inline fun <reified T> WelcomeMessages.create(
+    messageData: JsonElement,
+    name: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = create(deserializer(), messageData, name, *options)

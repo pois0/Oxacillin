@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.AccountActivity
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Subscription
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a list of the current All Activity type subscriptions. Note that the /list endpoint requires application-only OAuth, so requests should be made using a bearer token instead of user context.
@@ -43,9 +44,15 @@ import blue.starry.penicillin.models.Subscription
  * @receiver [AccountActivity] endpoint instance.
  * @return [JsonGeneralApiAction] for [Subscription.List] model.
  */
-public fun AccountActivity.listSubscriptions(
+public fun <T> AccountActivity.listSubscriptions(
+    deserializer: DeserializationStrategy<T>,
     envName: String,
     vararg options: Option
-): JsonGeneralApiAction<Subscription.List> = client.session.get("/1.1/account_activity/all/$envName/subscriptions/list.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/account_activity/all/$envName/subscriptions/list.json") {
     parameters(*options)
-}.jsonObject { Subscription.List(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> AccountActivity.listSubscriptions(
+    envName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = listSubscriptions(deserializer(), envName, *options)

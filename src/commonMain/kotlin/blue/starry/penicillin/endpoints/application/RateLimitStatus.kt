@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Application
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.ApplicationRateLimitStatus
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the current rate limits for methods belonging to the specified resource families.
@@ -53,19 +54,18 @@ import blue.starry.penicillin.models.ApplicationRateLimitStatus
  * @receiver [Application] endpoint instance.
  * @return [JsonGeneralApiAction] for [ApplicationRateLimitStatus] model.
  */
-public fun Application.rateLimitStatus(
+public fun <T> Application.rateLimitStatus(
+    deserializer: DeserializationStrategy<T>,
     resources: List<String>? = null,
     vararg options: Option
-): JsonGeneralApiAction<ApplicationRateLimitStatus> = client.session.get("/1.1/application/rate_limit_status.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/application/rate_limit_status.json") {
     parameters(
         "resources" to resources?.joinToString(","),
         *options
     )
-}.jsonObject { ApplicationRateLimitStatus(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand extension property to [Application.rateLimitStatus].
- * @see Application.rateLimitStatus
- */
-public val Application.rateLimitStatus: JsonGeneralApiAction<ApplicationRateLimitStatus>
-    get() = rateLimitStatus()
+public inline fun <reified T> Application.rateLimitStatus(
+    resources: List<String>? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = rateLimitStatus(deserializer(), resources, *options)

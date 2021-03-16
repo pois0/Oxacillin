@@ -31,7 +31,9 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Statuses
-import blue.starry.penicillin.models.cursor.CursorIds
+import blue.starry.penicillin.models.cursor.CursorModel
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a collection of up to 100 user IDs belonging to users who have retweeted the Tweet specified by the id parameter.
@@ -47,13 +49,14 @@ import blue.starry.penicillin.models.cursor.CursorIds
  * @receiver [Statuses] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorIds] model.
  */
-public fun Statuses.retweeterIds(
+public fun <M: CursorModel<T>, T: Any> Statuses.retweeterIds(
+    deserializer: DeserializationStrategy<M>,
     id: Long,
     count: Int? = null,
     cursor: Long? = null,
     stringifyIds: Boolean? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorIds, Long> = client.session.get("/1.1/statuses/retweeters/ids.json") {
+): CursorJsonApiAction<M, T> = client.session.get("/1.1/statuses/retweeters/ids.json") {
     parameters(
         "id" to id,
         "count" to count,
@@ -61,4 +64,12 @@ public fun Statuses.retweeterIds(
         "stringify_ids" to stringifyIds,
         *options
     )
-}.cursorJsonObject { CursorIds(it, client) }
+}.cursorJson(deserializer)
+
+public inline fun <reified M: CursorModel<T>, T: Any> Statuses.retweeterIds(
+    id: Long,
+    count: Int? = null,
+    cursor: Long? = null,
+    stringifyIds: Boolean? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = retweeterIds(deserializer(), id, count, cursor, stringifyIds, *options)

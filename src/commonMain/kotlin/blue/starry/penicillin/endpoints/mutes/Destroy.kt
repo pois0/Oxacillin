@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Mutes
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Un-mutes the user specified in the ID parameter for the authenticating user.
@@ -45,10 +46,16 @@ import blue.starry.penicillin.models.User
  * @receiver [Mutes] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Mutes.destroyByScreenName(
+public fun <T> Mutes.destroyByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     vararg options: Option
-): JsonGeneralApiAction<User> = destroy(screenName, null, *options)
+): JsonGeneralApiAction<T> = destroy(deserializer, screenName, null, *options)
+
+public inline fun <reified T> Mutes.destroyByScreenName(
+    screenName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = destroyByScreenName(deserializer(), screenName, *options)
 
 /**
  * Un-mutes the user specified in the ID parameter for the authenticating user.
@@ -62,12 +69,19 @@ public fun Mutes.destroyByScreenName(
  * @receiver [Mutes] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Mutes.destroyByUserId(
+public fun <T> Mutes.destroyByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     vararg options: Option
-): JsonGeneralApiAction<User> = destroy(null, userId, *options)
+): JsonGeneralApiAction<T> = destroy(deserializer, null, userId, *options)
 
-private fun Mutes.destroy(
+public inline fun <reified T> Mutes.destroyByUserId(
+    userId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = destroyByUserId(deserializer(), userId, *options)
+
+private fun <T> Mutes.destroy(
+    deserializer: DeserializationStrategy<T>,
     screenName: String? = null,
     userId: Long? = null,
     vararg options: Option
@@ -77,4 +91,4 @@ private fun Mutes.destroy(
         "user_id" to userId,
         *options
     )
-}.jsonObject { User(it, client) }
+}.json(deserializer)

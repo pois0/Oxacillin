@@ -33,4 +33,4 @@ package blue.starry.penicillin.core.experimental
 @Retention(AnnotationRetention.SOURCE)
 @RequiresOptIn(level = RequiresOptIn.Level.WARNING)
 @MustBeDocumented
-public annotation class PenicillinExperimentalApi
+public annotation class OxacillinExperimentalApi

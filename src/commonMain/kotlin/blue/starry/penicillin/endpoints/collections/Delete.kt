@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Collections
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Collection
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Permanently delete a Collection owned by the currently authenticated user.
@@ -43,13 +44,19 @@ import blue.starry.penicillin.models.Collection
  * @receiver [Collections] endpoint instance.
  * @return [JsonGeneralApiAction] for [Collection.DestroyResult] model.
  */
-public fun Collections.delete(
+public fun <T> Collections.delete(
+    deserializer: DeserializationStrategy<T>,
     id: String,
     vararg options: Option
-): JsonGeneralApiAction<Collection.DestroyResult> = client.session.post("/1.1/collections/destroy.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/collections/destroy.json") {
     formBody(
         "id" to id,
         *options
     )
 
-}.jsonObject { Collection.DestroyResult(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Collections.delete(
+    id: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = delete(deserializer(), id, *options)

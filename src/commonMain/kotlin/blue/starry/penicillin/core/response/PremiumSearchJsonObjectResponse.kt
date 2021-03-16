@@ -26,7 +26,7 @@ package blue.starry.penicillin.core.response
 
 import io.ktor.client.request.HttpRequest
 import io.ktor.client.statement.HttpResponse
-import blue.starry.penicillin.core.request.action.PremiumSearchJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.PremiumSearchJsonApiAction
 import blue.starry.penicillin.core.session.ApiClient
 import blue.starry.penicillin.endpoints.PremiumSearchEnvironment
 
@@ -44,7 +44,7 @@ public data class PremiumSearchJsonObjectResponse<T>(
     override val request: HttpRequest,
     override val response: HttpResponse,
     override val content: String,
-    override val action: PremiumSearchJsonObjectApiAction<T>,
+    override val action: PremiumSearchJsonApiAction<T>,
 
     /**
      * [PremiumSearchEnvironment] which was used to acquire this response.

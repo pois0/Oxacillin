@@ -33,7 +33,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Statuses
-import blue.starry.penicillin.models.Embed
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a single Tweet, specified by either a Tweet web URL or the Tweet ID, in an [oEmbed](http://oembed.com/)-compatible format. The returned HTML snippet will be automatically recognized as an [Embedded Tweet](https://developer.twitter.com/web/embedded-tweets) when [Twitter's widget JavaScript is included on the page](https://developer.twitter.com/web/javascript/loading).
@@ -58,7 +59,8 @@ import blue.starry.penicillin.models.Embed
  * @receiver [Statuses] endpoint instance.
  * @return [JsonGeneralApiAction] for [Embed] model.
  */
-public fun Statuses.embedFormat(
+public fun <T> Statuses.embedFormat(
+    deserializer: DeserializationStrategy<T>,
     url: String,
     maxWidth: Int? = null,
     hideMedia: Boolean? = null,
@@ -72,7 +74,7 @@ public fun Statuses.embedFormat(
     widgetType: EmbedWidgetType = EmbedWidgetType.Default,
     dnt: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<Embed> = client.session.get("/oembed", EndpointHost.Publish) {
+): JsonGeneralApiAction<T> = client.session.get("/oembed", EndpointHost.Publish) {
     authorizationType = AuthorizationType.None
 
     parameters(
@@ -90,4 +92,20 @@ public fun Statuses.embedFormat(
         "dnt" to dnt,
         *options
     )
-}.jsonObject { Embed(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Statuses.embedFormat(
+    url: String,
+    maxWidth: Int? = null,
+    hideMedia: Boolean? = null,
+    hideThread: Boolean? = null,
+    omitScript: Boolean? = null,
+    align: EmbedAlign = EmbedAlign.Default,
+    related: List<String>? = null,
+    lang: String? = null,
+    theme: EmbedTheme = EmbedTheme.Default,
+    linkColor: String? = null,
+    widgetType: EmbedWidgetType = EmbedWidgetType.Default,
+    dnt: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = embedFormat(deserializer(), url, maxWidth, hideMedia, hideThread, omitScript, align, related, lang, theme, linkColor, widgetType, dnt, *options)

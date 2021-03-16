@@ -26,9 +26,6 @@
 
 package blue.starry.penicillin.endpoints.media
 
-import blue.starry.jsonkt.JsonObject
-import blue.starry.jsonkt.jsonObjectOf
-import blue.starry.jsonkt.toJsonObject
 import blue.starry.penicillin.core.request.EndpointHost
 import blue.starry.penicillin.core.request.action.EmptyApiAction
 import blue.starry.penicillin.core.request.jsonBody
@@ -36,6 +33,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Media
 import blue.starry.penicillin.endpoints.Option
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.put
 
 /**
  * This endpoint can be used to provide additional information about the uploaded media_id. This feature is currently only supported for images and GIFs.
@@ -56,5 +55,10 @@ public fun Media.createMetadata(
     vararg options: Option
 ): EmptyApiAction = client.session.post("/1.1/media/metadata/create.json", EndpointHost.MediaUpload) {
     parameters(*options)
-    jsonBody((payload + jsonObjectOf("media_id" to mediaId.toString())).toJsonObject())
+    jsonBody {
+        payload.forEach { (k, v) ->
+            put(k, v)
+        }
+        put("media_id", mediaId.toString())
+    }
 }.empty()

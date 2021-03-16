@@ -33,7 +33,7 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.LivePipeline
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.LivePipelineSubscription
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Undocumented endpoint.
@@ -43,14 +43,15 @@ import blue.starry.penicillin.models.LivePipelineSubscription
  * @receiver [LivePipeline] endpoint instance.
  * @return [JsonGeneralApiAction] for [LivePipelineSubscription] model.
  */
-public fun LivePipeline.update(
+public fun <T> LivePipeline.update(
+    deserializer: DeserializationStrategy<T>,
     ids: List<Long>,
     vararg options: Option
-): JsonGeneralApiAction<LivePipelineSubscription> = client.session.post("/1.1/live_pipeline/update_subscriptions") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/live_pipeline/update_subscriptions") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     formBody(
         "sub_topics" to ids.joinToString(",") { "/tweet_engagement/$it" },
         *options
     )
-}.jsonObject { LivePipelineSubscription(it, client) }
+}.json(deserializer)

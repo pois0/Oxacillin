@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.SavedSearches
-import blue.starry.penicillin.models.SavedSearch
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Create a new saved search for the authenticated user. A user may only have 25 saved searches.
@@ -44,12 +45,18 @@ import blue.starry.penicillin.models.SavedSearch
  * @receiver [SavedSearches] endpoint instance.
  * @return [JsonGeneralApiAction] for [SavedSearch] model.
  */
-public fun SavedSearches.create(
+public fun <T> SavedSearches.create(
+    deserializer: DeserializationStrategy<T>,
     query: String,
     vararg options: Option
-): JsonGeneralApiAction<SavedSearch> = client.session.post("/1.1/saved_searches/create.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/saved_searches/create.json") {
     formBody(
         "query" to query,
         *options
     )
-}.jsonObject { SavedSearch(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> SavedSearches.create(
+    query: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = create(deserializer(), query, *options)

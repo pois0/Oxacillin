@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.SavedSearches
-import blue.starry.penicillin.models.SavedSearch
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Retrieve the information for the saved search represented by the given id. The authenticating user must be the owner of saved search ID being requested.
@@ -44,9 +45,15 @@ import blue.starry.penicillin.models.SavedSearch
  * @receiver [SavedSearches] endpoint instance.
  * @return [JsonGeneralApiAction] for [SavedSearch] model.
  */
-public fun SavedSearches.show(
+public fun <T> SavedSearches.show(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     vararg options: Option
-): JsonGeneralApiAction<SavedSearch> = client.session.get("/1.1/saved_searches/show/$id.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/saved_searches/show/$id.json") {
     parameters(*options)
-}.jsonObject { SavedSearch(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> SavedSearches.show(
+    id: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = show(deserializer(), id, *options)

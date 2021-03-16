@@ -33,10 +33,10 @@ import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Account
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.media.MediaType
-import blue.starry.penicillin.models.Account.VerifyCredentials
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
 import io.ktor.client.request.forms.*
 import io.ktor.utils.io.core.*
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Updates the authenticating user's profile image. Note that this method expects raw multipart data, not a URL to an image.
@@ -53,13 +53,14 @@ import io.ktor.utils.io.core.*
  * @receiver [Account] endpoint instance.
  * @return [JsonGeneralApiAction] for [VerifyCredentials] model.
  */
-public fun Account.updateProfileImage(
+public fun <T> Account.updateProfileImage(
+    deserializer: DeserializationStrategy<T>,
     file: ByteArray,
     mediaType: MediaType,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = client.session.post("/1.1/account/update_profile_image.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/account/update_profile_image.json") {
     multiPartBody {
         append("image", "blob", mediaType.contentType) {
             writeFully(file)
@@ -70,4 +71,14 @@ public fun Account.updateProfileImage(
             *options
         )
     }
-}.jsonObject { User(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Account.updateProfileImage(
+    file: ByteArray,
+    mediaType: MediaType,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = updateProfileImage(
+    deserializer(), file, mediaType, includeEntities, skipStatus, *options
+)

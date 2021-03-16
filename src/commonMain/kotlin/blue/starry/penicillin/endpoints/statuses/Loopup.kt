@@ -26,12 +26,14 @@
 
 package blue.starry.penicillin.endpoints.statuses
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Statuses
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns fully-hydrated [Tweet objects](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object) for up to 100 Tweets per request, as specified by comma-separated values passed to the id parameter.
@@ -57,7 +59,8 @@ import blue.starry.penicillin.models.Status
  * @receiver [Statuses] endpoint instance.
  * @return [JsonArrayApiAction] for [Status] model.
  */
-public fun Statuses.lookup(
+public fun <T> Statuses.lookup(
+    deserializer: DeserializationStrategy<T>,
     ids: List<Long>,
     includeEntities: Boolean? = null,
     trimUser: Boolean? = null,
@@ -66,7 +69,7 @@ public fun Statuses.lookup(
     includeCardUri: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonArrayApiAction<Status> = client.session.get("/1.1/statuses/lookup.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/statuses/lookup.json") {
     parameters(
         "id" to ids.joinToString(","),
         "include_entities" to includeEntities,
@@ -77,4 +80,15 @@ public fun Statuses.lookup(
         "tweet_mode" to tweetMode,
         *options
     )
-}.jsonArray { Status(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Statuses.lookup(
+    ids: List<Long>,
+    includeEntities: Boolean? = null,
+    trimUser: Boolean? = null,
+    map: Boolean? = null,
+    includeExtAltText: Boolean? = null,
+    includeCardUri: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = lookup(deserializer(), ids, includeEntities, trimUser, map, includeExtAltText, includeCardUri, tweetMode, *options)

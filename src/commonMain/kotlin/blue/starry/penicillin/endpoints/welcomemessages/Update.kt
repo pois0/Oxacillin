@@ -26,14 +26,15 @@
 
 package blue.starry.penicillin.endpoints.welcomemessages
 
-import blue.starry.jsonkt.JsonObject
 import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.jsonBody
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.put
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.WelcomeMessages
-import blue.starry.penicillin.models.WelcomeMessage
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.json.JsonObject
 
 /**
  * Updates a Welcome Message by the given ID. Updates to the welcome_message object are atomic. For example, if the Welcome Message currently has quick_reply defined and you only provide text, the quick_reply object will be removed from the Welcome Message.
@@ -46,15 +47,22 @@ import blue.starry.penicillin.models.WelcomeMessage
  * @receiver [WelcomeMessages] endpoint instance.
  * @return [JsonGeneralApiAction] for [WelcomeMessage.Single] model.
  */
-public fun WelcomeMessages.update(
+public fun <T> WelcomeMessages.update(
+    deserializer: DeserializationStrategy<T>,
     id: String,
     messageData: JsonObject,
     vararg options: Option
-): JsonGeneralApiAction<WelcomeMessage.Single> = client.session.put("/1.1/direct_messages/welcome_messages/update.json") {
+): JsonGeneralApiAction<T> = client.session.put("/1.1/direct_messages/welcome_messages/update.json") {
     parameters(
         "id" to id,
         *options
     )
     
     jsonBody("message_data" to messageData)
-}.jsonObject { WelcomeMessage.Single(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> WelcomeMessages.update(
+    id: String,
+    messageData: JsonObject,
+    vararg options: Option
+): JsonGeneralApiAction<T> = update(deserializer(), id, messageData, *options)

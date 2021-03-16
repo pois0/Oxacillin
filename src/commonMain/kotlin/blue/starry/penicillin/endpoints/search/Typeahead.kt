@@ -34,8 +34,8 @@ import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Search
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.SearchTypeahead
-import blue.starry.penicillin.models.SearchUniversal
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Undocumented endpoint.
@@ -44,11 +44,12 @@ import blue.starry.penicillin.models.SearchUniversal
  * @receiver [Search] endpoint instance.
  * @return [JsonGeneralApiAction] for [SearchUniversal] model.
  */
-public fun Search.typeahead(
+public fun <T> Search.typeahead(
+    deserializer: DeserializationStrategy<T>,
     query: String,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonGeneralApiAction<SearchTypeahead> = client.session.get("/1.1/search/typeahead.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/search/typeahead.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(
@@ -78,4 +79,10 @@ public fun Search.typeahead(
         "tweet_mode" to tweetMode,
         *options
     )
-}.jsonObject { SearchTypeahead(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Search.typeahead(
+    query: String,
+    tweetMode: TweetMode = TweetMode.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = typeahead(deserializer(), query, tweetMode, *options)

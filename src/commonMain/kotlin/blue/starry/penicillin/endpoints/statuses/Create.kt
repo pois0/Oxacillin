@@ -33,7 +33,8 @@ import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Statuses
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Updates the authenticating user's current status, also known as Tweeting.
@@ -61,7 +62,8 @@ import blue.starry.penicillin.models.Status
  * @receiver [Statuses] endpoint instance.
  * @return [JsonGeneralApiAction] for [Status] model.
  */
-public fun Statuses.create(
+public fun <T> Statuses.create(
+    deserializer: DeserializationStrategy<T>,
     status: String,
     inReplyToStatusId: Long? = null,
     autoPopulateReplyMetadata: Boolean? = null,
@@ -79,7 +81,7 @@ public fun Statuses.create(
     cardUri: String? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonGeneralApiAction<Status> = client.session.post("/1.1/statuses/update.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/statuses/update.json") {
     formBody(
         "auto_populate_reply_metadata" to "true",
         "batch_mode" to "off",
@@ -123,4 +125,24 @@ public fun Statuses.create(
         *options
     )
 
-}.jsonObject { Status(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Statuses.create(
+    status: String,
+    inReplyToStatusId: Long? = null,
+    autoPopulateReplyMetadata: Boolean? = null,
+    excludeReplyUserIds: Boolean? = null,
+    attachmentUrl: String? = null,
+    mediaIds: List<Long>? = null,
+    possiblySensitive: Boolean? = null,
+    latitude: Double? = null,
+    longitude: Double? = null,
+    placeId: String? = null,
+    displayCoordinates: Boolean? = null,
+    trimUser: Boolean? = null,
+    enableDMCommands: Boolean? = null,
+    failDMCommands: Boolean? = null,
+    cardUri: String? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = create(deserializer(), status, inReplyToStatusId, autoPopulateReplyMetadata, excludeReplyUserIds, attachmentUrl, mediaIds, possiblySensitive, latitude, longitude, placeId, displayCoordinates, trimUser, enableDMCommands, failDMCommands, cardUri, tweetMode, *options)

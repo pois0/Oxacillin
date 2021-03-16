@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.AccountActivity
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Webhook
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns all environments, webhook URLs and their statuses for the authenticating app. Currently, only one webhook URL can be registered to each environment.
@@ -44,19 +45,16 @@ import blue.starry.penicillin.models.Webhook
  * @receiver [AccountActivity] endpoint instance.
  * @return [JsonGeneralApiAction] for [Webhook.List] model.
  */
-public fun AccountActivity.listWebhooks(
+public fun <T> AccountActivity.listWebhooks(
+    deserializer: DeserializationStrategy<T>,
     vararg options: Option
-): JsonGeneralApiAction<Webhook.List> = client.session.get("/1.1/account_activity/all/webhooks.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/account_activity/all/webhooks.json") {
     parameters(*options)
-}.jsonObject { Webhook.List(it, client) }
+}.json(deserializer)
 
-
-/**
- * Shorthand property to [AccountActivity.listWebhooks].
- * @see AccountActivity.listWebhooks
- */
-public val AccountActivity.listWebhooks: JsonGeneralApiAction<Webhook.List>
-    get() = listWebhooks()
+public inline fun <reified T> AccountActivity.listWebhooks(
+    vararg options: Option
+): JsonGeneralApiAction<T> = listWebhooks(deserializer(), *options)
 
 /**
  * Returns all environments, webhook URLs and their statuses for the authenticating app. Currently, only one webhook URL can be registered to each environment.
@@ -70,8 +68,15 @@ public val AccountActivity.listWebhooks: JsonGeneralApiAction<Webhook.List>
  * @receiver [AccountActivity] endpoint instance.
  * @return [JsonGeneralApiAction] for [Webhook.List] model.
  */
-public fun AccountActivity.listWebhooksByEnvName(
-    envName: String, vararg options: Option
-): JsonArrayApiAction<Webhook.Model> = client.session.get("/1.1/account_activity/all/$envName/webhooks.json") {
+public fun <T> AccountActivity.listWebhooksByEnvName(
+    deserializer: DeserializationStrategy<T>,
+    envName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = client.session.get("/1.1/account_activity/all/$envName/webhooks.json") {
     parameters(*options)
-}.jsonArray { Webhook.Model(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> AccountActivity.listWebhooksByEnvName(
+    envName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = listWebhooksByEnvName(deserializer(), envName, *options)

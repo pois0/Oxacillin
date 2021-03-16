@@ -26,12 +26,14 @@
 
 package blue.starry.penicillin.endpoints.timeline
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Timeline
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a collection of the most recent [Tweets](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object) posted by the [user](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) indicated by the screen_name or user_id parameters.
@@ -56,7 +58,8 @@ import blue.starry.penicillin.models.Status
  * @receiver [Timeline] endpoint instance.
  * @return [JsonArrayApiAction] for [Status] model.
  */
-public fun Timeline.userTimeline(
+public fun <T> Timeline.userTimeline(
+    deserializer: DeserializationStrategy<T>,
     sinceId: Long? = null,
     count: Int? = null,
     maxId: Long? = null,
@@ -68,7 +71,21 @@ public fun Timeline.userTimeline(
     tweetMode: TweetMode = TweetMode.Default,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<Status> = userTimelineInternal(null, null, sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
+): JsonGeneralApiAction<T> = userTimelineInternal(deserializer, null, null, sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
+
+public inline fun <reified T> Timeline.userTimeline(
+    sinceId: Long? = null,
+    count: Int? = null,
+    maxId: Long? = null,
+    trimUser: Boolean? = null,
+    excludeReplies: Boolean? = null,
+    includeRTs: Boolean? = null,
+    includeEntities: Boolean? = null,
+    includeMyRetweet: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    includeCardUri: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = userTimeline(deserializer(), sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
 
 /**
  * Returns a collection of the most recent [Tweets](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object) posted by the [user](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) indicated by the screen_name or user_id parameters.
@@ -94,7 +111,8 @@ public fun Timeline.userTimeline(
  * @receiver [Timeline] endpoint instance.
  * @return [JsonArrayApiAction] for [Status] model.
  */
-public fun Timeline.userTimelineByUserId(
+public fun <T> Timeline.userTimelineByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     sinceId: Long? = null,
     count: Int? = null,
@@ -107,7 +125,22 @@ public fun Timeline.userTimelineByUserId(
     tweetMode: TweetMode = TweetMode.Default,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<Status> = userTimelineInternal(userId, null, sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
+): JsonGeneralApiAction<T> = userTimelineInternal(deserializer, userId, null, sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
+
+public inline fun <reified T> Timeline.userTimelineByUserId(
+    userId: Long,
+    sinceId: Long? = null,
+    count: Int? = null,
+    maxId: Long? = null,
+    trimUser: Boolean? = null,
+    excludeReplies: Boolean? = null,
+    includeRTs: Boolean? = null,
+    includeEntities: Boolean? = null,
+    includeMyRetweet: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    includeCardUri: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = userTimelineByUserId(deserializer(), userId, sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
 
 /**
  * Returns a collection of the most recent [Tweets](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object) posted by the [user](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) indicated by the screen_name or user_id parameters.
@@ -133,7 +166,8 @@ public fun Timeline.userTimelineByUserId(
  * @receiver [Timeline] endpoint instance.
  * @return [JsonArrayApiAction] for [Status] model.
  */
-public fun Timeline.userTimelineByScreenName(
+public fun <T> Timeline.userTimelineByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     sinceId: Long? = null,
     count: Int? = null,
@@ -146,9 +180,25 @@ public fun Timeline.userTimelineByScreenName(
     tweetMode: TweetMode = TweetMode.Default,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<Status> = userTimelineInternal(null, screenName, sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
+): JsonGeneralApiAction<T> = userTimelineInternal(deserializer, null, screenName, sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
 
-private fun Timeline.userTimelineInternal(
+public inline fun <reified T> Timeline.userTimelineByScreenName(
+    screenName: String,
+    sinceId: Long? = null,
+    count: Int? = null,
+    maxId: Long? = null,
+    trimUser: Boolean? = null,
+    excludeReplies: Boolean? = null,
+    includeRTs: Boolean? = null,
+    includeEntities: Boolean? = null,
+    includeMyRetweet: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    includeCardUri: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = userTimelineByScreenName(deserializer(), screenName, sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
+
+private fun <T> Timeline.userTimelineInternal(
+    deserializer: DeserializationStrategy<T>,
     userId: Long? = null,
     screenName: String? = null,
     sinceId: Long? = null,
@@ -178,11 +228,4 @@ private fun Timeline.userTimelineInternal(
         "include_card_uri" to includeCardUri,
         *options
     )
-}.jsonArray { Status(it, client) }
-
-/**
- * Shorthand property to [Timeline.userTimeline].
- * @see Timeline.userTimeline
- */
-public val Timeline.userTimeline: JsonArrayApiAction<Status>
-    get() = userTimeline()
+}.json(deserializer)

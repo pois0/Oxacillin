@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Help
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Help.Configuration
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the current configuration used by Twitter including twitter.com slugs which are not usernames, maximum photo resolutions, and t.co shortened URL length.
@@ -43,15 +44,13 @@ import blue.starry.penicillin.models.Help.Configuration
  * @receiver [Help] endpoint instance.
  * @return [JsonGeneralApiAction] for [Configuration] model.
  */
-public fun Help.configuration(
+public fun <T> Help.configuration(
+    deserializer: DeserializationStrategy<T>,
     vararg options: Option
-): JsonGeneralApiAction<Configuration> = client.session.get("/1.1/help/configuration.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/help/configuration.json") {
     parameters(*options)
-}.jsonObject { Configuration(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [Help.configuration].
- * @see Help.configuration
- */
-public val Help.configuration: JsonGeneralApiAction<Configuration>
-    get() = configuration()
+public inline fun <reified T> Help.configuration(
+    vararg options: Option
+): JsonGeneralApiAction<T> = configuration(deserializer(), *options)

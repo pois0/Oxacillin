@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.OAuth2
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.OAuthToken
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Allows a registered application to revoke an issued OAuth 2 Bearer Token by presenting its client credentials. Once a Bearer Token has been invalidated, new creation attempts will yield a different Bearer Token and usage of the invalidated token will no longer be allowed.
@@ -45,14 +46,20 @@ import blue.starry.penicillin.models.OAuthToken
  * @receiver [OAuth2] endpoint instance.
  * @return [JsonGeneralApiAction] for [OAuthToken] model.
  */
-public fun OAuth2.invalidateToken(
+public fun <T> OAuth2.invalidateToken(
+    deserializer: DeserializationStrategy<T>,
     bearerToken: String,
     vararg options: Option
-): JsonGeneralApiAction<OAuthToken> = client.session.post("/oauth2/invalidate_token") {
+): JsonGeneralApiAction<T> = client.session.post("/oauth2/invalidate_token") {
     authorizationType = AuthorizationType.OAuth2RequestToken
     
     formBody(
         "access_token" to bearerToken,
         *options
     )
-}.jsonObject { OAuthToken(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> OAuth2.invalidateToken(
+    bearerToken: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = invalidateToken(deserializer(), bearerToken, *options)

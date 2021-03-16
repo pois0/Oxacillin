@@ -26,12 +26,14 @@
 
 package blue.starry.penicillin.endpoints.timeline
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Timeline
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a collection of the most recent [Tweets](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object) and Retweets posted by the authenticating user and the users they follow. The home timeline is central to how most users interact with the Twitter service.
@@ -53,7 +55,8 @@ import blue.starry.penicillin.models.Status
  * @receiver [Timeline] endpoint instance.
  * @return [JsonArrayApiAction] for [Status] model.
  */
-public fun Timeline.homeTimeline(
+public fun <T> Timeline.homeTimeline(
+    deserializer: DeserializationStrategy<T>,
     count: Int? = null,
     sinceId: Long? = null,
     maxId: Long? = null,
@@ -65,7 +68,7 @@ public fun Timeline.homeTimeline(
     tweetMode: TweetMode = TweetMode.Default,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<Status> = client.session.get("/1.1/statuses/home_timeline.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/statuses/home_timeline.json") {
     parameters(
         "count" to count,
         "since_id" to sinceId,
@@ -79,11 +82,18 @@ public fun Timeline.homeTimeline(
         "include_card_uri" to includeCardUri,
         *options
     )
-}.jsonArray { Status(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [Timeline.homeTimeline].
- * @see Timeline.homeTimeline
- */
-public val Timeline.homeTimeline: JsonArrayApiAction<Status>
-    get() = homeTimeline()
+public inline fun <reified T> Timeline.homeTimeline(
+    count: Int? = null,
+    sinceId: Long? = null,
+    maxId: Long? = null,
+    trimUser: Boolean? = null,
+    excludeReplies: Boolean? = null,
+    includeEntities: Boolean? = null,
+    includeRTs: Boolean? = null,
+    includeMyRetweet: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    includeCardUri: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = homeTimeline(deserializer(), count, sinceId, maxId, trimUser, excludeReplies, includeEntities, includeRTs, includeMyRetweet, tweetMode, includeCardUri, *options)

@@ -26,11 +26,13 @@
 
 package blue.starry.penicillin.endpoints.users
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Users
-import blue.starry.penicillin.models.UserSuggestionCategory
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Access to Twitter's suggested user list. This returns the list of suggested user categories. The category can be used in [GET users / suggestions/:slug](https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-suggestions-slug) to get the users in that category.
@@ -42,19 +44,18 @@ import blue.starry.penicillin.models.UserSuggestionCategory
  * @receiver [Users] endpoint instance.
  * @return [JsonArrayApiAction] for [UserSuggestionCategory] model.
  */
-public fun Users.userSuggestionCategories(
+public fun <T> Users.userSuggestionCategories(
+    deserializer: DeserializationStrategy<T>,
     lang: String? = null,
     vararg options: Option
-): JsonArrayApiAction<UserSuggestionCategory> = client.session.get("/1.1/users/suggestions.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/users/suggestions.json") {
     parameters(
         "lang" to lang,
         *options
     )
-}.jsonArray { UserSuggestionCategory(it, client) }
+}.json(deserializer)
 
- /**
- * Shorthand property to [Users.userSuggestionCategories].
- * @see Users.userSuggestionCategories
- */
-public val Users.userSuggestionCategories: JsonArrayApiAction<UserSuggestionCategory>
-     get() = userSuggestionCategories()
+public inline fun <reified T> Users.userSuggestionCategories(
+    lang: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = userSuggestionCategories(deserializer(), lang, *options)

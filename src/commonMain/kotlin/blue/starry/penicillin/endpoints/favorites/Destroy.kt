@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Favorites
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Note: favorites are now known as likes.
@@ -46,14 +47,21 @@ import blue.starry.penicillin.models.Status
  * @receiver [Favorites] endpoint instance.
  * @return [JsonGeneralApiAction] for [Status] model.
  */
-public fun Favorites.destroy(
+public fun <T> Favorites.destroy(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<Status> = client.session.post("/1.1/favorites/destroy.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/favorites/destroy.json") {
     formBody(
         "id" to id,
         "include_entities" to includeEntities,
         *options
     )
-}.jsonObject { Status(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Favorites.destroy(
+    id: Long,
+    includeEntities: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = destroy(deserializer(), id, includeEntities, *options)

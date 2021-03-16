@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.CollectionEntries
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Collection
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Move a specified Tweet to a new position in a curation_reverse_chron ordered collection.
@@ -46,13 +47,14 @@ import blue.starry.penicillin.models.Collection
  * @receiver [CollectionEntries] endpoint instance.
  * @return [JsonGeneralApiAction] for [Collection.Entry.Result] model.
  */
-public fun CollectionEntries.move(
+public fun <T> CollectionEntries.move(
+    deserializer: DeserializationStrategy<T>,
     id: String,
     tweetId: Long,
     relativeTo: Long,
     above: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<Collection.Entry.Result> = client.session.post("/1.1/collections/entries/move.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/collections/entries/move.json") {
     formBody(
         "id" to id,
         "tweet_id" to tweetId,
@@ -61,4 +63,12 @@ public fun CollectionEntries.move(
         *options
     )
 
-}.jsonObject { Collection.Entry.Result(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> CollectionEntries.move(
+    id: String,
+    tweetId: Long,
+    relativeTo: Long,
+    above: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = move(deserializer(), id, tweetId, relativeTo, above, *options)

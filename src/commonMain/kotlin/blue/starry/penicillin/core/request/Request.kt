@@ -26,15 +26,15 @@
 
 package blue.starry.penicillin.core.request
 
-import blue.starry.jsonkt.JsonObject
-import blue.starry.jsonkt.asJsonElement
 import blue.starry.penicillin.core.emulation.EmulationMode
+import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.common.TweetMode
 import blue.starry.penicillin.extensions.session
+import blue.starry.penicillin.util.putAll
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import io.ktor.util.*
-import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.*
 
 /**
  * Url string.
@@ -94,7 +94,10 @@ public fun ApiRequestBuilder.jsonBody(vararg pairs: Pair<String, Any?>, mode: Em
     val json = buildJsonObject {
         for ((key, value) in pairs) {
             if (value != null) {
-                key to value.asJsonElement()
+                when (value) {
+                    is JsonElement -> put(key, value)
+                    else -> put(key, Json.encodeToJsonElement(value))
+                }
             }
         }
     }
@@ -107,7 +110,7 @@ public fun ApiRequestBuilder.jsonBody(vararg pairs: Pair<String, Any?>, mode: Em
 /**
  * Creates "application/json" content.
  */
-public fun ApiRequestBuilder.jsonBody(json: JsonObject, mode: EmulationMode? = null) {
+public fun ApiRequestBuilder.jsonBody(json: JsonElement, mode: EmulationMode? = null) {
     if (mode != null && mode != session.option.emulationMode) {
         return
     }
@@ -115,6 +118,16 @@ public fun ApiRequestBuilder.jsonBody(json: JsonObject, mode: EmulationMode? = n
     body = {
         JsonObjectContent(json)
     }
+}
+
+public inline fun ApiRequestBuilder.jsonBody(mode: EmulationMode? = null, vararg pairs: Pair<String, Any?>, block: JsonObjectBuilder.() -> Unit) {
+    jsonBody(
+        buildJsonObject {
+            block()
+            putAll(*pairs)
+        },
+        mode
+    )
 }
 
 /**

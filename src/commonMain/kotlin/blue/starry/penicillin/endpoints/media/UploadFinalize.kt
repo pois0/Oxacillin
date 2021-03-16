@@ -32,6 +32,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Media
 import blue.starry.penicillin.endpoints.Option
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * The FINALIZE command should be called after the entire media file is uploaded using APPEND commands. If and (only if) the response of the FINALIZE command contains a processing_info field, it may also be necessary to use a [STATUS command](https://developer.twitter.com/en/docs/media/upload-media/api-reference/get-media-upload-status) and wait for it to return success before proceeding to Tweet creation.
@@ -43,15 +45,22 @@ import blue.starry.penicillin.endpoints.Option
  * @receiver [Media] endpoint instance.
  * @return [JsonGeneralApiAction] for [blue.starry.penicillin.models.Media] model.
  */
-public fun Media.uploadFinalize(
+public fun <T> Media.uploadFinalize(
+    deserializer: DeserializationStrategy<T>,
     mediaId: Long,
     mediaKey: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<blue.starry.penicillin.models.Media> = client.session.post("/1.1/media/upload.json", EndpointHost.MediaUpload) {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/media/upload.json", EndpointHost.MediaUpload) {
     formBody(
         "command" to "FINALIZE",
         "media_id" to mediaId,
         "media_key" to mediaKey,
         *options
     )
-}.jsonObject { blue.starry.penicillin.models.Media(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Media.uploadFinalize(
+    mediaId: Long,
+    mediaKey: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = uploadFinalize(deserializer(), mediaId, mediaKey, *options)

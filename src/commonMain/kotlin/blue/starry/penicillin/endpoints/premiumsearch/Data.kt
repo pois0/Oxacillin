@@ -27,7 +27,7 @@
 
 package blue.starry.penicillin.endpoints.premiumsearch
 
-import blue.starry.penicillin.core.request.action.PremiumSearchJsonObjectApiAction
+import blue.starry.penicillin.core.request.action.PremiumSearchJsonApiAction
 import blue.starry.penicillin.core.request.jsonBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
@@ -36,9 +36,10 @@ import blue.starry.penicillin.endpoints.PremiumSearchEnvironment
 import blue.starry.penicillin.endpoints.environment
 import blue.starry.penicillin.endpoints.search.SearchProduct
 import blue.starry.penicillin.extensions.toYYYYMMddHHmmss
-import blue.starry.penicillin.models.PremiumSearchData
-import blue.starry.penicillin.models.Status.MatchingRule
+import blue.starry.penicillin.util.deserializer
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.json.put
 
 
 /**
@@ -54,9 +55,10 @@ import kotlinx.datetime.LocalDateTime
  * @param next Returns the next page of results.
  * @param options Optional. Custom parameters of this request.
  * @receiver [PremiumSearch] endpoint instance.
- * @return [PremiumSearchJsonObjectApiAction] for [PremiumSearchData] model.
+ * @return [PremiumSearchJsonApiAction] for [PremiumSearchData] model.
  */
-public fun PremiumSearch.data(
+public fun <T> PremiumSearch.data(
+    deserializer: DeserializationStrategy<T>,
     product: SearchProduct,
     label: String,
     query: String,
@@ -66,7 +68,19 @@ public fun PremiumSearch.data(
     maxResults: Int? = null,
     next: String? = null,
     vararg options: Option
-): PremiumSearchJsonObjectApiAction<PremiumSearchData> = environment(product, label).data(query, tag, fromDate, toDate, maxResults, next, *options)
+): PremiumSearchJsonApiAction<T> = environment(product, label).data(deserializer, query, tag, fromDate, toDate, maxResults, next, *options)
+
+public inline fun <reified T> PremiumSearch.data(
+    product: SearchProduct,
+    label: String,
+    query: String,
+    tag: String? = null,
+    fromDate: LocalDateTime? = null,
+    toDate: LocalDateTime? = null,
+    maxResults: Int? = null,
+    next: String? = null,
+    vararg options: Option
+): PremiumSearchJsonApiAction<T> = data(deserializer(), product, label, query, tag, fromDate, toDate, maxResults, next, *options)
 
 /**
  * Returns a collection of relevant [Tweets](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object) matching a specified query.
@@ -79,9 +93,10 @@ public fun PremiumSearch.data(
  * @param next Returns the next page of results.
  * @param options Optional. Custom parameters of this request.
  * @receiver [PremiumSearchEnvironment] endpoint instance.
- * @return [PremiumSearchJsonObjectApiAction] for [PremiumSearchData] model.
+ * @return [PremiumSearchJsonApiAction] for [PremiumSearchData] model.
  */
-public fun PremiumSearchEnvironment.data(
+public fun <T> PremiumSearchEnvironment.data(
+    deserializer: DeserializationStrategy<T>,
     query: String,
     tag: String? = null,
     fromDate: LocalDateTime? = null,
@@ -89,14 +104,23 @@ public fun PremiumSearchEnvironment.data(
     maxResults: Int? = null,
     next: String? = null,
     vararg options: Option
-): PremiumSearchJsonObjectApiAction<PremiumSearchData> = client.session.post("$endpoint.json") {
-    jsonBody(
-        "query" to query,
-        "tag" to tag,
-        "fromDate" to fromDate?.toYYYYMMddHHmmss(),
-        "toDate" to toDate?.toYYYYMMddHHmmss(),
-        "maxResults" to maxResults,
-        "next" to next,
-        *options
-    )
-}.premiumSearchJsonObject(this) { PremiumSearchData(it, client) }
+): PremiumSearchJsonApiAction<T> = client.session.post("$endpoint.json") {
+    jsonBody(pairs = options) {
+        put("query", query)
+        put("tag", tag)
+        put("fromDate", fromDate?.toYYYYMMddHHmmss())
+        put("toDate", toDate?.toYYYYMMddHHmmss())
+        put("maxResults", maxResults)
+        put("next", next)
+    }
+}.premiumSearchJsonObject(this, deserializer)
+
+public inline fun <reified T> PremiumSearchEnvironment.data(
+    query: String,
+    tag: String? = null,
+    fromDate: LocalDateTime? = null,
+    toDate: LocalDateTime? = null,
+    maxResults: Int? = null,
+    next: String? = null,
+    vararg options: Option
+): PremiumSearchJsonApiAction<T> = data(deserializer(), query, tag, fromDate, toDate, maxResults, next, *options)

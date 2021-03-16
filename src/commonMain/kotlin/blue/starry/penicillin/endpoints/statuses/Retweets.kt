@@ -26,12 +26,14 @@
 
 package blue.starry.penicillin.endpoints.statuses
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Statuses
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a collection of the 100 most recent retweets of the Tweet specified by the id parameter.
@@ -45,17 +47,26 @@ import blue.starry.penicillin.models.Status
  * @receiver [Statuses] endpoint instance.
  * @return [JsonArrayApiAction] for [Status] model.
  */
-public fun Statuses.retweets(
+public fun <T> Statuses.retweets(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     count: Int? = null,
     trimUser: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonArrayApiAction<Status> = client.session.get("/1.1/statuses/retweets/$id.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/statuses/retweets/$id.json") {
     parameters(
         "count" to count,
         "trim_user" to trimUser,
         "tweet_mode" to tweetMode,
         *options
     )
-}.jsonArray { Status(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Statuses.retweets(
+    id: Long,
+    count: Int? = null,
+    trimUser: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = retweets(deserializer(), id, count, trimUser, tweetMode, *options)

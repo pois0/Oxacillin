@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Users
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Report the specified user as a spam account to Twitter. Additionally, optionally performs the equivalent of [POST blocks/create](https://developer.twitter.com/en/docs/accounts-and-users/mute-block-report-users/api-reference/post-blocks-create) on behalf of the authenticated user.
@@ -44,11 +45,18 @@ import blue.starry.penicillin.models.User
  * @receiver [Users] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Users.reportSpamByScreenName(
+public fun <T> Users.reportSpamByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     performBlock: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = reportSpam(screenName, null, performBlock, *options)
+): JsonGeneralApiAction<T> = reportSpam(deserializer, screenName, null, performBlock, *options)
+
+public inline fun <reified T> Users.reportSpamByScreenName(
+    screenName: String,
+    performBlock: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = reportSpamByScreenName(deserializer(), screenName, performBlock, *options)
 
 /**
  * Report the specified user as a spam account to Twitter. Additionally, optionally performs the equivalent of [POST blocks/create](https://developer.twitter.com/en/docs/accounts-and-users/mute-block-report-users/api-reference/post-blocks-create) on behalf of the authenticated user.
@@ -61,13 +69,21 @@ public fun Users.reportSpamByScreenName(
  * @receiver [Users] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Users.reportSpamByUserId(
+public fun <T> Users.reportSpamByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     performBlock: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = reportSpam(null, userId, performBlock, *options)
+): JsonGeneralApiAction<T> = reportSpam(deserializer, null, userId, performBlock, *options)
 
-private fun Users.reportSpam(
+public inline fun <reified T> Users.reportSpamByUserId(
+    userId: Long,
+    performBlock: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = reportSpamByUserId(deserializer(), userId, performBlock, *options)
+
+private fun <T> Users.reportSpam(
+    deserializer: DeserializationStrategy<T>,
     screenName: String? = null,
     userId: Long? = null,
     performBlock: Boolean? = null,
@@ -79,4 +95,4 @@ private fun Users.reportSpam(
         "perform_block" to performBlock,
         *options
     )
-}.jsonObject { User(it, client) }
+}.json(deserializer)

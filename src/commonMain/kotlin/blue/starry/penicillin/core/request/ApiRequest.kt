@@ -53,7 +53,7 @@ public class ApiRequest(
      *
      * @return New [JsonGeneralApiAction] for [T].
      */
-    public inline fun <T> jsonObject(deserializer: DeserializationStrategy<T>): JsonGeneralApiAction<T> {
+    public inline fun <T> json(deserializer: DeserializationStrategy<T>): JsonGeneralApiAction<T> {
         return JsonGeneralApiAction(client, this, deserializer)
     }
 
@@ -62,17 +62,17 @@ public class ApiRequest(
      *
      * @return New [CursorJsonApiAction] for [T].
      */
-    public inline fun <M: CursorModel<T>, T: Any> cursorJsonObject(deserializer: DeserializationStrategy<M>): CursorJsonApiAction<M, T> {
+    public inline fun <M: CursorModel<T>, T: Any> cursorJson(deserializer: DeserializationStrategy<M>): CursorJsonApiAction<M, T> {
         return CursorJsonApiAction(client, this, deserializer)
     }
 
     /**
-     * Creates [PremiumSearchJsonObjectApiAction] from this request.
+     * Creates [PremiumSearchJsonApiAction] from this request.
      *
-     * @return New [PremiumSearchJsonObjectApiAction] for [T].
+     * @return New [PremiumSearchJsonApiAction] for [T].
      */
-    public fun <T: Any> premiumSearchJsonObject(environment: PremiumSearchEnvironment, deserializer: DeserializationStrategy<T>): PremiumSearchJsonObjectApiAction<T> {
-        return PremiumSearchJsonObjectApiAction(client, this, deserializer, environment)
+    public fun <T> premiumSearchJsonObject(environment: PremiumSearchEnvironment, deserializer: DeserializationStrategy<T>): PremiumSearchJsonApiAction<T> {
+        return PremiumSearchJsonApiAction(client, this, deserializer, environment)
     }
 
     /**

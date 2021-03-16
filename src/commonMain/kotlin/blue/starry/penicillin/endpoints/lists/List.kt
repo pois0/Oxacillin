@@ -26,11 +26,13 @@
 
 package blue.starry.penicillin.endpoints.lists
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.TwitterList
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns all lists the authenticating or specified user subscribes to, including their own. The user is specified using the user_id or screen_name parameters. If no user is given, the authenticating user is used.
@@ -43,12 +45,18 @@ import blue.starry.penicillin.models.TwitterList
  * @receiver [Lists] endpoint instance.
  * @return [JsonArrayApiAction] for [TwitterList] model.
  */
-public fun Lists.list(
+public fun <T> Lists.list(
+    deserializer: DeserializationStrategy<T>,
     reverse: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<TwitterList> = listInternal(null, null, reverse, *options)
+): JsonGeneralApiAction<T> = listInternal(deserializer, null, null, reverse, *options)
 
-/**
+public inline fun <reified T> Lists.list(
+    reverse: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = list(deserializer(), reverse, *options)
+
+    /**
  * Returns all lists the authenticating or specified user subscribes to, including their own. The user is specified using the user_id or screen_name parameters. If no user is given, the authenticating user is used.
  * A maximum of 100 results will be returned by this call. Subscribed lists are returned first, followed by owned lists. This means that if a user subscribes to 90 lists and owns 20 lists, this method returns 90 subscriptions and 10 owned lists. The reverse method returns owned lists first, so with reverse=true, 20 owned lists and 80 subscriptions would be returned. If your goal is to obtain every list a user owns or subscribes to, use [GET lists/ownerships](https://developer.twitter.com/rest/reference/get/lists/ownerships) and/or [GET lists/subscriptions](https://developer.twitter.com/rest/reference/get/lists/subscriptions) instead.
  *
@@ -60,13 +68,20 @@ public fun Lists.list(
  * @receiver [Lists] endpoint instance.
  * @return [JsonArrayApiAction] for [TwitterList] model.
  */
-public fun Lists.list(
+public fun <T> Lists.list(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     reverse: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<TwitterList> = listInternal(userId, null, reverse, *options)
+): JsonGeneralApiAction<T> = listInternal(deserializer, userId, null, reverse, *options)
 
-/**
+public inline fun <reified T> Lists.list(
+    userId: Long,
+    reverse: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = list(deserializer(), userId, reverse, *options)
+
+    /**
  * Returns all lists the authenticating or specified user subscribes to, including their own. The user is specified using the user_id or screen_name parameters. If no user is given, the authenticating user is used.
  * A maximum of 100 results will be returned by this call. Subscribed lists are returned first, followed by owned lists. This means that if a user subscribes to 90 lists and owns 20 lists, this method returns 90 subscriptions and 10 owned lists. The reverse method returns owned lists first, so with reverse=true, 20 owned lists and 80 subscriptions would be returned. If your goal is to obtain every list a user owns or subscribes to, use [GET lists/ownerships](https://developer.twitter.com/rest/reference/get/lists/ownerships) and/or [GET lists/subscriptions](https://developer.twitter.com/rest/reference/get/lists/subscriptions) instead.
  *
@@ -78,13 +93,21 @@ public fun Lists.list(
  * @receiver [Lists] endpoint instance.
  * @return [JsonArrayApiAction] for [TwitterList] model.
  */
-public fun Lists.list(
+public fun <T> Lists.list(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     reverse: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<TwitterList> = listInternal(null, screenName, reverse, *options)
+): JsonGeneralApiAction<T> = listInternal(deserializer , null, screenName, reverse, *options)
 
-private fun Lists.listInternal(
+public inline fun <reified T> Lists.list(
+    screenName: String,
+    reverse: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = list(deserializer(), screenName, reverse, *options)
+
+private fun <T> Lists.listInternal(
+    deserializer: DeserializationStrategy<T>,
     userId: Long? = null,
     screenName: String? = null,
     reverse: Boolean? = null,
@@ -96,11 +119,4 @@ private fun Lists.listInternal(
         "reverse" to reverse,
         *options
     )
-}.jsonArray { TwitterList(it, client) }
-
- /**
- * Shorthand property to [Lists.list].
- * @see Lists.list
- */
-public val Lists.list: JsonArrayApiAction<TwitterList>
-     get() = list()
+}.json(deserializer)

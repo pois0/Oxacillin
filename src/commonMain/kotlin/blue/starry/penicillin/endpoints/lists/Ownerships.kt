@@ -31,8 +31,9 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.TwitterList
-import blue.starry.penicillin.models.cursor.CursorLists
+import blue.starry.penicillin.models.cursor.CursorModel
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the lists owned by the specified Twitter user. Private lists will only be shown if the authenticated user is also the owner of the lists.
@@ -45,11 +46,18 @@ import blue.starry.penicillin.models.cursor.CursorLists
  * @receiver [Lists] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorLists] model.
  */
-public fun Lists.ownerships(
+public fun <M: CursorModel<T>, T: Any> Lists.ownerships(
+    deserializer: DeserializationStrategy<M>,
     count: Int? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorLists, TwitterList> = ownershipsInternal(null, null, count, cursor, *options)
+): CursorJsonApiAction<M, T> = ownershipsInternal(deserializer, null, null, count, cursor, *options)
+
+public inline fun <reified M: CursorModel<T>, T: Any> Lists.ownerships(
+    count: Int? = null,
+    cursor: Long? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = ownerships(deserializer(), count, cursor, *options)
 
 /**
  * Returns the lists owned by the specified Twitter user. Private lists will only be shown if the authenticated user is also the owner of the lists.
@@ -63,12 +71,20 @@ public fun Lists.ownerships(
  * @receiver [Lists] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorLists] model.
  */
-public fun Lists.ownershipsByUserId(
+public fun <M: CursorModel<T>, T: Any> Lists.ownershipsByUserId(
+    deserializer: DeserializationStrategy<M>,
     userId: Long,
     count: Int? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorLists, TwitterList> = ownershipsInternal(userId, null, count, cursor, *options)
+): CursorJsonApiAction<M, T> = ownershipsInternal(deserializer, userId, null, count, cursor, *options)
+
+public inline fun <reified M: CursorModel<T>, T: Any> Lists.ownershipsByUserId(
+    userId: Long,
+    count: Int? = null,
+    cursor: Long? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = ownershipsByUserId(deserializer(), userId, count, cursor, *options)
 
 /**
  * Returns the lists owned by the specified Twitter user. Private lists will only be shown if the authenticated user is also the owner of the lists.
@@ -82,14 +98,23 @@ public fun Lists.ownershipsByUserId(
  * @receiver [Lists] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorLists] model.
  */
-public fun Lists.ownerships(
+public fun <M: CursorModel<T>, T: Any> Lists.ownerships(
+    deserializer: DeserializationStrategy<M>,
     screenName: String,
     count: Int? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorLists, TwitterList> = ownershipsInternal(null, screenName, count, cursor, *options)
+): CursorJsonApiAction<M, T> = ownershipsInternal(deserializer, null, screenName, count, cursor, *options)
 
-private fun Lists.ownershipsInternal(
+public inline fun <reified M: CursorModel<T>, T: Any> Lists.ownerships(
+    screenName: String,
+    count: Int? = null,
+    cursor: Long? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = ownerships(deserializer(), screenName, count, cursor, *options)
+
+private fun <M: CursorModel<T>, T: Any> Lists.ownershipsInternal(
+    deserializer: DeserializationStrategy<M>,
     userId: Long? = null,
     screenName: String? = null,
     count: Int? = null,
@@ -103,11 +128,4 @@ private fun Lists.ownershipsInternal(
         "cursor" to cursor,
         *options
     )
-}.cursorJsonObject { CursorLists(it, client) }
-
-/**
- * Shorthand property to [Lists.ownerships].
- * @see Lists.ownerships
- */
-public val Lists.ownerships: CursorJsonApiAction<CursorLists, TwitterList>
-    get() = ownerships()
+}.cursorJson(deserializer)

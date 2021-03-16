@@ -55,7 +55,7 @@ public fun Statuses.createPollTweet(
     minutes: Int = 1440,
     vararg options: Option
 ): ApiAction<Status> = DelegatedAction {
-    val card = client.cards.create(
+    val card = client.cards.create<Any?>(
         cardData = linkedMapOf<String, Any>().apply {
             choices.forEachIndexed { i, choice ->
                 put("twitter:string:choice${i + 1}_label", choice)
@@ -66,5 +66,5 @@ public fun Statuses.createPollTweet(
         }.toJsonObject().encodeToString()
     ).execute()
     
-    create(status, cardUri = card.result.cardUri, options = options).execute().result
+    create<Any?>(status, cardUri = card.result.cardUri, options = options).execute().result
 }

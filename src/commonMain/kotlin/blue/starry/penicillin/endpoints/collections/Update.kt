@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Collections
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Collection
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Update information concerning a Collection owned by the currently authenticated user.
@@ -47,13 +48,14 @@ import blue.starry.penicillin.models.Collection
  * @receiver [Collections] endpoint instance.
  * @return [JsonGeneralApiAction] for [Collection.Model] model.
  */
-public fun Collections.update(
+public fun <T> Collections.update(
+    deserializer: DeserializationStrategy<T>,
     id: String,
     name: String? = null,
     description: String? = null,
     url: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<Collection.Model> = client.session.post("/1.1/collections/update.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/collections/update.json") {
     formBody(
         "id" to id,
         "name" to name,
@@ -61,5 +63,12 @@ public fun Collections.update(
         "url" to url,
         *options
     )
+}.json(deserializer)
 
-}.jsonObject { Collection.Model(it, client) }
+public inline fun <reified T> Collections.update(
+    id: String,
+    name: String? = null,
+    description: String? = null,
+    url: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = update(deserializer(), id, name, description, url, *options)

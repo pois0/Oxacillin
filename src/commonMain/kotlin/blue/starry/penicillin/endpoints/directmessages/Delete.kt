@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.DirectMessages
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.directMessageDeprecatedMessage
-import blue.starry.penicillin.models.DirectMessage
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Abolished endpoint.
@@ -42,14 +43,22 @@ import blue.starry.penicillin.models.DirectMessage
  * @return [JsonGeneralApiAction] for [DirectMessage] model.
  */
 @Deprecated(directMessageDeprecatedMessage, replaceWith = ReplaceWith("directMessageEvent.delete", "blue.starry.penicillin.endpoints.directMessageEvent", "blue.starry.penicillin.endpoints.directmessages.events.delete"))
-public fun DirectMessages.delete(
+public fun <T> DirectMessages.delete(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<DirectMessage> = client.session.post("/1.1/direct_messages/destroy.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/direct_messages/destroy.json") {
     formBody(
         "id" to id,
         "include_entities" to includeEntities,
         *options
     )
-}.jsonObject { DirectMessage(it, client) }
+}.json(deserializer)
+
+@Deprecated(directMessageDeprecatedMessage, replaceWith = ReplaceWith("directMessageEvent.delete", "blue.starry.penicillin.endpoints.directMessageEvent", "blue.starry.penicillin.endpoints.directmessages.events.delete"))
+public inline fun <reified T> DirectMessages.delete(
+    id: Long,
+    includeEntities: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = delete(deserializer(), id, includeEntities, *options)

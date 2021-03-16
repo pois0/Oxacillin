@@ -26,7 +26,7 @@
 
 package blue.starry.penicillin.endpoints.oauth
 
-import blue.starry.penicillin.PenicillinClient
+import blue.starry.penicillin.OxacillinClient
 import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.config.account
 import blue.starry.penicillin.core.session.config.application
@@ -80,7 +80,7 @@ public suspend fun OAuth.accessToken(
     verifier: String,
     vararg options: Option
 ): AccessTokenResponse {
-    val response = PenicillinClient {
+    val response = OxacillinClient {
         account {
             application(consumerKey, consumerSecret)
             token(requestToken, requestTokenSecret)

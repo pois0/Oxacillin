@@ -26,12 +26,14 @@
 
 package blue.starry.penicillin.endpoints.statuses
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Statuses
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the most recent Tweets authored by the authenticating user that have been retweeted by others. This timeline is a subset of the user's [GET statuses/user_timeline](https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline).
@@ -48,7 +50,8 @@ import blue.starry.penicillin.models.Status
  * @receiver [Statuses] endpoint instance.
  * @return [JsonArrayApiAction] for [Status] model.
  */
-public fun Statuses.retweetsOfMe(
+public fun <T> Statuses.retweetsOfMe(
+    deserializer: DeserializationStrategy<T>,
     count: Int? = null,
     sinceId: Long? = null,
     maxId: Long? = null,
@@ -57,7 +60,7 @@ public fun Statuses.retweetsOfMe(
     includeUserEntities: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonArrayApiAction<Status> = client.session.get("/1.1/statuses/retweets_of_me.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/statuses/retweets_of_me.json") {
     parameters(
         "count" to count,
         "since_id" to sinceId,
@@ -68,11 +71,15 @@ public fun Statuses.retweetsOfMe(
         "tweet_mode" to tweetMode,
         *options
     )
-}.jsonArray { Status(it, client) }
+}.json(deserializer)
 
- /**
- * Shorthand property to [Statuses.retweetsOfMe].
- * @see Statuses.retweetsOfMe
- */
-public val Statuses.retweetsOfMe: JsonArrayApiAction<Status>
-     get() = retweetsOfMe()
+public inline fun <reified T> Statuses.retweetsOfMe(
+    count: Int? = null,
+    sinceId: Long? = null,
+    maxId: Long? = null,
+    trimUser: Boolean? = null,
+    includeEntities: Boolean? = null,
+    includeUserEntities: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = retweetsOfMe(deserializer(), count, sinceId, maxId, trimUser, includeEntities, includeUserEntities, tweetMode, *options)

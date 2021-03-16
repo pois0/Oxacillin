@@ -33,7 +33,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Cards
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.CardState
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns card data.
@@ -43,11 +44,12 @@ import blue.starry.penicillin.models.CardState
  * @receiver [Cards] endpoint instance.
  * @return [JsonGeneralApiAction] for [CardState] model.
  */
-public fun Cards.show(
+public fun <T> Cards.show(
+    deserializer: DeserializationStrategy<T>,
     cardUri: String,
     responseCardName: String = "poll4choice_text_only",
     vararg options: Option
-): JsonGeneralApiAction<CardState> = client.session.get("/v2/capi/passthrough/1", EndpointHost.Card) {
+): JsonGeneralApiAction<T> = client.session.get("/v2/capi/passthrough/1", EndpointHost.Card) {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(
@@ -58,4 +60,10 @@ public fun Cards.show(
         "twitter:string:response_card_name" to responseCardName,
         *options
     )
-}.jsonObject { CardState(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Cards.show(
+    cardUri: String,
+    responseCardName: String = "poll4choice_text_only",
+    vararg options: Option
+): JsonGeneralApiAction<T> = show(deserializer(), cardUri, responseCardName, *options)

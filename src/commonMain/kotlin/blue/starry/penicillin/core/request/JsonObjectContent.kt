@@ -24,16 +24,15 @@
 
 package blue.starry.penicillin.core.request
 
-import blue.starry.jsonkt.JsonObject
-import blue.starry.jsonkt.encodeToString
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.utils.io.charsets.*
+import kotlinx.serialization.json.JsonElement
 
 /**
  * The [OutgoingContent.WriteChannelContent] which provides "application/json".
  */
 @Suppress("FunctionName")
-public fun JsonObjectContent(json: JsonObject): TextContent {
-    return TextContent(json.encodeToString(), ContentType.Application.Json.withCharset(Charsets.UTF_8))
+public fun JsonObjectContent(json: JsonElement): TextContent {
+    return TextContent(json.toString(), ContentType.Application.Json.withCharset(Charsets.UTF_8))
 }

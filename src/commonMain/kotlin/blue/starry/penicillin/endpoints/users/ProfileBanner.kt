@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Users
-import blue.starry.penicillin.models.UserProfileBanner
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a map of the available size variations of the specified user's profile banner. If the user has not uploaded a profile banner, a HTTP 404 will be served instead. This method can be used instead of string manipulation on the profile_banner_url returned in user objects as described in [Profile Images and Banners](https://developer.twitter.com/en/docs/accounts-and-users/user-profile-images-and-banners).
@@ -43,10 +44,16 @@ import blue.starry.penicillin.models.UserProfileBanner
  * @receiver [Users] endpoint instance.
  * @return [JsonGeneralApiAction] for [UserProfileBanner] model.
  */
-public fun Users.profileBannerByUserId(
+public fun <T> Users.profileBannerByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     vararg options: Option
-): JsonGeneralApiAction<UserProfileBanner> = profileBanner(userId, null, *options)
+): JsonGeneralApiAction<T> = profileBanner(deserializer, userId, null, *options)
+
+public inline fun <reified T> Users.profileBannerByUserId(
+    userId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = profileBannerByUserId(deserializer(), userId, *options)
 
 /**
  * Returns a map of the available size variations of the specified user's profile banner. If the user has not uploaded a profile banner, a HTTP 404 will be served instead. This method can be used instead of string manipulation on the profile_banner_url returned in user objects as described in [Profile Images and Banners](https://developer.twitter.com/en/docs/accounts-and-users/user-profile-images-and-banners).
@@ -58,12 +65,19 @@ public fun Users.profileBannerByUserId(
  * @receiver [Users] endpoint instance.
  * @return [JsonGeneralApiAction] for [UserProfileBanner] model.
  */
-public fun Users.profileBannerByScreenName(
+public fun <T> Users.profileBannerByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     vararg options: Option
-): JsonGeneralApiAction<UserProfileBanner> = profileBanner(null, screenName, *options)
+): JsonGeneralApiAction<T> = profileBanner(deserializer, null, screenName, *options)
 
-private fun Users.profileBanner(
+public inline fun <reified T> Users.profileBannerByScreenName(
+    screenName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = profileBannerByScreenName(deserializer(), screenName, *options)
+
+private fun <T> Users.profileBanner(
+    deserializer: DeserializationStrategy<T>,
     userId: Long? = null,
     screenName: String? = null,
     vararg options: Option
@@ -73,4 +87,4 @@ private fun Users.profileBanner(
         "screen_name" to screenName,
         *options
     )
-}.jsonObject { UserProfileBanner(it, client) }
+}.json(deserializer)

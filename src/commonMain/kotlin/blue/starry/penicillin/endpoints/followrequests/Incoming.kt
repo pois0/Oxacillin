@@ -31,7 +31,9 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.FollowRequests
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.cursor.CursorIds
+import blue.starry.penicillin.models.cursor.CursorModel
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a collection of numeric IDs for every user who has a pending request to follow the authenticating user.
@@ -44,21 +46,21 @@ import blue.starry.penicillin.models.cursor.CursorIds
  * @receiver [FollowRequests] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorIds] model.
  */
-public fun FollowRequests.incoming(
+public fun <M: CursorModel<T>, T: Any> FollowRequests.incoming(
+    deserializer: DeserializationStrategy<M>,
     cursor: Long? = null,
     stringifyIds: Boolean? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorIds, Long> = client.session.get("/1.1/friendships/incoming.json") {
+): CursorJsonApiAction<M, T> = client.session.get("/1.1/friendships/incoming.json") {
     parameters(
         "cursor" to cursor,
         "stringify_ids" to stringifyIds,
         *options
     )
-}.cursorJsonObject { CursorIds(it, client) }
+}.cursorJson(deserializer)
 
- /**
- * Shorthand property to [FollowRequests.incoming].
- * @see FollowRequests.incoming
- */
-public val FollowRequests.incoming: CursorJsonApiAction<CursorIds, Long>
-     get() = incoming()
+public inline fun <reified M: CursorModel<T>, T: Any> FollowRequests.incoming(
+    cursor: Long? = null,
+    stringifyIds: Boolean? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = incoming(deserializer(), cursor, stringifyIds, *options)

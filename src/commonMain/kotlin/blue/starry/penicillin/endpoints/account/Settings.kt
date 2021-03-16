@@ -33,7 +33,8 @@ import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Account
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Account.Settings
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns settings (including current trend, geo and sleep time information) for the authenticating user.
@@ -44,9 +45,10 @@ import blue.starry.penicillin.models.Account.Settings
  * @receiver [Account] endpoint instance.
  * @return [JsonGeneralApiAction] for [Settings] model.
  */
-public fun Account.settings(
+public fun <T> Account.settings(
+    deserializer: DeserializationStrategy<T>,
     vararg options: Option
-): JsonGeneralApiAction<Settings> = client.session.get("/1.1/account/settings.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/account/settings.json") {
     parameters(
         "include_alt_text_compose" to "true",
         "include_mention_filter" to "true",
@@ -54,16 +56,13 @@ public fun Account.settings(
         "include_universal_quality_filtering" to "true",
         *options
     )
-}.jsonObject { Settings(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand extension property to [Account.settings].
- * @see Account.settings
- */
-public val Account.settings: JsonGeneralApiAction<Settings>
-    get() = settings()
+public inline fun <reified T> Account.settings(
+    vararg options: Option
+): JsonGeneralApiAction<T> = settings(deserializer(), *options)
 
-/**
+    /**
  * Updates the authenticating user's settings.
  * 
  * [Twitter API reference](https://developer.twitter.com/en/docs/accounts-and-users/manage-account-settings/api-reference/post-account-settings)
@@ -78,7 +77,8 @@ public val Account.settings: JsonGeneralApiAction<Settings>
  * @receiver [Account] endpoint instance.
  * @return [JsonGeneralApiAction] for [Settings] model.
  */
-public fun Account.updateSettings(
+public fun <T> Account.updateSettings(
+    deserializer: DeserializationStrategy<T>,
     sleepTimeEnabled: Boolean? = null,
     startSleepTime: Int? = null,
     endSleepTime: Int? = null,
@@ -86,7 +86,7 @@ public fun Account.updateSettings(
     trendLocationWoeid: Int? = null,
     lang: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<Settings> = client.session.post("/1.1/account/settings.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/account/settings.json") {
     formBody(
         "sleep_time_enabled" to sleepTimeEnabled,
         "start_sleep_time" to startSleepTime,
@@ -96,12 +96,14 @@ public fun Account.updateSettings(
         "lang" to lang,
         *options
     )
+}.json(deserializer)
 
-}.jsonObject { Settings(it, client) }
-
-/**
- * Shorthand extension property to [Account.updateSettings].
- * @see Account.updateSettings
- */
-public val Account.updateSettings: JsonGeneralApiAction<Settings>
-    get() = updateSettings()
+public inline fun <reified T> Account.updateSettings(
+    sleepTimeEnabled: Boolean? = null,
+    startSleepTime: Int? = null,
+    endSleepTime: Int? = null,
+    timeZone: String? = null,
+    trendLocationWoeid: Int? = null,
+    lang: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = updateSettings(deserializer(), sleepTimeEnabled, startSleepTime, endSleepTime, timeZone, trendLocationWoeid, lang, *options)

@@ -26,14 +26,16 @@
 
 package blue.starry.penicillin.endpoints.directmessages.events
 
-import blue.starry.jsonkt.jsonObjectOf
 import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.jsonBody
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.DirectMessageEvents
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.DirectMessageEvent
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonObject
 
 /**
  * Publishes a new message_create event resulting in a Direct Message sent to a specified user from the authenticating user. Returns an event if successful. Supports publishing Direct Messages with optional Quick Reply and media attachment. Replaces behavior currently provided by [POST direct_messages/new](https://developer.twitter.com/en/docs/direct-messages/sending-and-receiving/api-reference/new-event).
@@ -48,25 +50,33 @@ import blue.starry.penicillin.models.DirectMessageEvent
  * @receiver [DirectMessageEvents] endpoint instance.
  * @return [JsonGeneralApiAction] for [DirectMessageEvent.Show] model.
  */
-public fun DirectMessageEvents.create(
+public fun <T> DirectMessageEvents.create(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     text: String,
     type: String = "message_create",
     vararg options: Option
-): JsonGeneralApiAction<DirectMessageEvent.Show> = client.session.post("/1.1/direct_messages/events/new.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/direct_messages/events/new.json") {
     parameters(*options)
-    jsonBody(
-        "event" to jsonObjectOf(
-            "type" to type,
-            "message_create" to jsonObjectOf(
-                "target" to jsonObjectOf(
-                    "recipient_id" to userId.toString()
-                ),
-                "message_data" to jsonObjectOf(
-                    "text" to text
-                )
-            )
-        ),
-        *options
-    )
-}.jsonObject { DirectMessageEvent.Show(it, client) }
+    jsonBody(options = options) {
+        putJsonObject("event") {
+            put("type", type)
+            putJsonObject("message_create") {
+                putJsonObject("target") {
+                    put("recipient_id", userId.toString())
+                }
+
+                putJsonObject("message_data") {
+                    put("text", text)
+                }
+            }
+        }
+    }
+}.json(deserializer)
+
+public inline fun <reified T> DirectMessageEvents.create(
+    userId: Long,
+    text: String,
+    type: String = "message_create",
+    vararg options: Option
+): JsonGeneralApiAction<T> = create(deserializer(), userId, text, type, *options)

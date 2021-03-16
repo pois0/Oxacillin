@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Check if the specified user is a subscriber of the specified list. Returns the user if they are a subscriber.
@@ -46,13 +47,22 @@ import blue.starry.penicillin.models.User
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Lists.subscriber(
+public fun <T> Lists.subscriber(
+    deserializer: DeserializationStrategy<T>,
     listId: Long,
     userId: Long,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = subscriber(listId, null, null, null, userId, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = subscriber(deserializer, listId, null, null, null, userId, null, includeEntities, skipStatus, *options)
+
+public inline fun <reified T> Lists.subscriber(
+    listId: Long,
+    userId: Long,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = subscriber(deserializer(), listId, userId, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a subscriber of the specified list. Returns the user if they are a subscriber.
@@ -67,13 +77,22 @@ public fun Lists.subscriber(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Lists.subscriber(
+public fun <T> Lists.subscriber(
+    deserializer: DeserializationStrategy<T>,
     listId: Long,
     screenName: String,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = subscriber(listId, null, null, null, null, screenName, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = subscriber(deserializer, listId, null, null, null, null, screenName, includeEntities, skipStatus, *options)
+
+public inline fun <reified T> Lists.subscriber(
+    listId: Long,
+    screenName: String,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = subscriber(deserializer(), listId, screenName, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a subscriber of the specified list. Returns the user if they are a subscriber.
@@ -89,14 +108,24 @@ public fun Lists.subscriber(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Lists.subscriber(
+public fun <T> Lists.subscriber(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerScreenName: String,
     userId: Long,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = subscriber(null, slug, ownerScreenName, null, userId, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = subscriber(deserializer, null, slug, ownerScreenName, null, userId, null, includeEntities, skipStatus, *options)
+
+public inline fun <reified T> Lists.subscriber(
+    slug: String,
+    ownerScreenName: String,
+    userId: Long,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = subscriber(deserializer(), slug, ownerScreenName, userId, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a subscriber of the specified list. Returns the user if they are a subscriber.
@@ -112,14 +141,24 @@ public fun Lists.subscriber(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Lists.subscriber(
+public fun <T> Lists.subscriber(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerScreenName: String,
     screenName: String,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = subscriber(null, slug, ownerScreenName, null, null, screenName, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = subscriber(deserializer, null, slug, ownerScreenName, null, null, screenName, includeEntities, skipStatus, *options)
+
+public inline fun <reified T> Lists.subscriber(
+    slug: String,
+    ownerScreenName: String,
+    screenName: String,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = subscriber(deserializer(), slug, ownerScreenName, screenName, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a subscriber of the specified list. Returns the user if they are a subscriber.
@@ -135,14 +174,24 @@ public fun Lists.subscriber(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Lists.subscriber(
+public fun <T> Lists.subscriber(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerId: Long,
     userId: Long,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = subscriber(null, slug, null, ownerId, userId, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = subscriber(deserializer, null, slug, null, ownerId, userId, null, includeEntities, skipStatus, *options)
+
+public inline fun <reified T> Lists.subscriber(
+    slug: String,
+    ownerId: Long,
+    userId: Long,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = subscriber(deserializer(), slug, ownerId, userId, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a subscriber of the specified list. Returns the user if they are a subscriber.
@@ -158,16 +207,27 @@ public fun Lists.subscriber(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Lists.subscriber(
+public fun <T> Lists.subscriber(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerId: Long,
     screenName: String,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = subscriber(null, slug, null, ownerId, null, screenName, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = subscriber(deserializer, null, slug, null, ownerId, null, screenName, includeEntities, skipStatus, *options)
 
-private fun Lists.subscriber(
+public inline fun <reified T> Lists.subscriber(
+    slug: String,
+    ownerId: Long,
+    screenName: String,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = subscriber(deserializer(), slug, ownerId, screenName, includeEntities, skipStatus, *options)
+
+private fun <T> Lists.subscriber(
+    deserializer: DeserializationStrategy<T>,
     listId: Long? = null,
     slug: String? = null,
     ownerScreenName: String? = null,
@@ -189,4 +249,4 @@ private fun Lists.subscriber(
         "skip_status" to skipStatus,
         *options
     )
-}.jsonObject { User(it, client) }
+}.json(deserializer)

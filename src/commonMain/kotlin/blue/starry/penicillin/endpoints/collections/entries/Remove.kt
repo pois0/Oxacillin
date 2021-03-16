@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.CollectionEntries
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Collection
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Remove the specified Tweet from a Collection.
@@ -45,15 +46,21 @@ import blue.starry.penicillin.models.Collection
  * @receiver [CollectionEntries] endpoint instance.
  * @return [JsonGeneralApiAction] for [Collection.Entry.Result] model.
  */
-public fun CollectionEntries.remove(
+public fun <T> CollectionEntries.remove(
+    deserializer: DeserializationStrategy<T>,
     id: String,
     tweetId: Long,
     vararg options: Option
-): JsonGeneralApiAction<Collection.Entry.Result> = client.session.post("/1.1/collections/entries/remove.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/collections/entries/remove.json") {
     formBody(
         "id" to id,
         "tweet_id" to tweetId,
         *options
     )
+}.json(deserializer)
 
-}.jsonObject { Collection.Entry.Result(it, client) }
+public inline fun <reified T> CollectionEntries.remove(
+    id: String,
+    tweetId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = remove(deserializer(), id, tweetId, *options)

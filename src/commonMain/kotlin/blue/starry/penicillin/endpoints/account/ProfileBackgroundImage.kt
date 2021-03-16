@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Account
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.serializer
 
 /**
  * Updates the authenticating user's profile background image. This method can also be used to enable or disable the profile background image.
@@ -49,13 +50,14 @@ import blue.starry.penicillin.models.User
  * @return [JsonGeneralApiAction] for [User] model.
  */
 @Deprecated("This endpoint is deprecated. See also https://twittercommunity.com/t/upcoming-changes-to-the-developer-platform/104603.", replaceWith = ReplaceWith("No substitute."))
-public fun Account.updateProfileBackgroundImage(
+public fun <T> Account.updateProfileBackgroundImage(
+    deserializer: DeserializationStrategy<T>,
     mediaId: Long,
     tile: Boolean? = null,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = client.session.post("/1.1/account/update_profile_background_image.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/account/update_profile_background_image.json") {
     formBody(
         "tile" to tile,
         "include_entities" to includeEntities,
@@ -63,5 +65,15 @@ public fun Account.updateProfileBackgroundImage(
         "media_id" to mediaId,
         *options
     )
+}.json(deserializer)
 
-}.jsonObject { User(it, client) }
+@Deprecated("This endpoint is deprecated. See also https://twittercommunity.com/t/upcoming-changes-to-the-developer-platform/104603.", replaceWith = ReplaceWith("No substitute."))
+public inline fun <reified T> Account.updateProfileBackgroundImage(
+    mediaId: Long,
+    tile: Boolean? = null,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = updateProfileBackgroundImage(
+    serializer(), mediaId, tile, includeEntities, skipStatus, *options
+)

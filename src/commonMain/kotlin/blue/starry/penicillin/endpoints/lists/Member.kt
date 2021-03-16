@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Check if the specified user is a member of the specified list.
@@ -46,13 +47,22 @@ import blue.starry.penicillin.models.User
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Lists.member(
+public fun <T> Lists.member(
+    deserializer: DeserializationStrategy<T>,
     listId: Long,
     userId: Long,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = member(listId, null, null, null, userId, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = member(deserializer, listId, null, null, null, userId, null, includeEntities, skipStatus, *options)
+
+public inline fun <reified T> Lists.member(
+    listId: Long,
+    userId: Long,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = member(deserializer(), listId, userId, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a member of the specified list.
@@ -67,13 +77,22 @@ public fun Lists.member(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Lists.member(
+public fun <T> Lists.member(
+    deserializer: DeserializationStrategy<T>,
     listId: Long,
     screenName: String,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = member(listId, null, null, null, null, screenName, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = member(deserializer, listId, null, null, null, null, screenName, includeEntities, skipStatus, *options)
+
+public inline fun <reified T> Lists.member(
+    listId: Long,
+    screenName: String,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = member(deserializer(), listId, screenName, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a member of the specified list.
@@ -89,14 +108,24 @@ public fun Lists.member(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Lists.member(
+public fun <T> Lists.member(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerScreenName: String,
     userId: Long,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = member(null, slug, ownerScreenName, null, userId, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = member(deserializer, null, slug, ownerScreenName, null, userId, null, includeEntities, skipStatus, *options)
+
+public inline fun <reified T> Lists.member(
+    slug: String,
+    ownerScreenName: String,
+    userId: Long,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = member(deserializer(), slug, ownerScreenName, userId, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a member of the specified list.
@@ -112,14 +141,24 @@ public fun Lists.member(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Lists.member(
+public fun <T> Lists.member(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerScreenName: String,
     screenName: String,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = member(null, slug, ownerScreenName, null, null, screenName, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = member(deserializer, null, slug, ownerScreenName, null, null, screenName, includeEntities, skipStatus, *options)
+
+public inline fun <reified T> Lists.member(
+    slug: String,
+    ownerScreenName: String,
+    screenName: String,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = member(deserializer(), slug, ownerScreenName, screenName, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a member of the specified list.
@@ -135,14 +174,24 @@ public fun Lists.member(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Lists.member(
+public fun <T> Lists.member(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerId: Long,
     userId: Long,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = member(null, slug, null, ownerId, userId, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = member(deserializer, null, slug, null, ownerId, userId, null, includeEntities, skipStatus, *options)
+
+public inline fun <reified T> Lists.member(
+    slug: String,
+    ownerId: Long,
+    userId: Long,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = member(deserializer(), slug, ownerId, userId, includeEntities, skipStatus, *options)
 
 /**
  * Check if the specified user is a member of the specified list.
@@ -158,16 +207,27 @@ public fun Lists.member(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Lists.member(
+public fun <T> Lists.member(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerId: Long,
     screenName: String,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = member(null, slug, null, ownerId, null, screenName, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = member(deserializer, null, slug, null, ownerId, null, screenName, includeEntities, skipStatus, *options)
 
-internal fun Lists.member(
+public inline fun <reified T> Lists.member(
+    slug: String,
+    ownerId: Long,
+    screenName: String,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = member(deserializer(), slug, ownerId, screenName, includeEntities, skipStatus, *options)
+
+internal fun <T> Lists.member(
+    deserializer: DeserializationStrategy<T>,
     listId: Long? = null,
     slug: String? = null,
     ownerScreenName: String? = null,
@@ -189,4 +249,4 @@ internal fun Lists.member(
         "skip_status" to skipStatus,
         *options
     )
-}.jsonObject { User(it, client) }
+}.json(deserializer)

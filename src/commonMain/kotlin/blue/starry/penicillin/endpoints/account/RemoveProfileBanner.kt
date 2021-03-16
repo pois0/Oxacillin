@@ -45,7 +45,6 @@ public fun Account.removeProfileBanner(
     vararg options: Option
 ): EmptyApiAction = client.session.post("/1.1/account/remove_profile_banner.json") {
     formBody(*options)
-
 }.empty()
 
 /**

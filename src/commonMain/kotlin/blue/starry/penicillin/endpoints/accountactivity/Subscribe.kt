@@ -48,5 +48,4 @@ public fun AccountActivity.subscribe(
     vararg options: Option
 ): EmptyApiAction = client.session.post("/1.1/account_activity/all/$envName/subscriptions.json") {
     formBody(*options)
-
 }.empty()

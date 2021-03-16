@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.DirectMessages
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.directMessageDeprecatedMessage
-import blue.starry.penicillin.models.DirectMessage
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Abolished endpoint.
@@ -42,14 +43,15 @@ import blue.starry.penicillin.models.DirectMessage
  * @return [JsonGeneralApiAction] for [DirectMessage] model.
  */
 @Deprecated(directMessageDeprecatedMessage, replaceWith = ReplaceWith("directMessageEvent.list", "blue.starry.penicillin.endpoints.directMessageEvent", "blue.starry.penicillin.endpoints.directmessages.events.list"))
-public fun DirectMessages.sentMessages(
+public fun <T> DirectMessages.sentMessages(
+    deserializer: DeserializationStrategy<T>,
     sinceId: Long? = null,
     maxId: Long? = null,
     count: Int? = null,
     page: Int? = null,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<DirectMessage> = client.session.get("/1.1/direct_messages/sent.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/direct_messages/sent.json") {
     parameters(
         "since_id" to sinceId,
         "max_id" to maxId,
@@ -58,4 +60,14 @@ public fun DirectMessages.sentMessages(
         "page" to page,
         *options
     )
-}.jsonArray { DirectMessage(it, client) }
+}.json(deserializer)
+
+@Deprecated(directMessageDeprecatedMessage, replaceWith = ReplaceWith("directMessageEvent.list", "blue.starry.penicillin.endpoints.directMessageEvent", "blue.starry.penicillin.endpoints.directmessages.events.list"))
+public inline fun <reified T> DirectMessages.sentMessages(
+    sinceId: Long? = null,
+    maxId: Long? = null,
+    count: Int? = null,
+    page: Int? = null,
+    includeEntities: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = sentMessages(deserializer(), sinceId, maxId, count, page, includeEntities, *options)

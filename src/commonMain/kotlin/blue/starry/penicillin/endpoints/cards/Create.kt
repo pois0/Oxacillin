@@ -33,7 +33,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Cards
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Card
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Creates new "card" object. This is what we call polls.
@@ -43,14 +44,20 @@ import blue.starry.penicillin.models.Card
  * @receiver [Cards] endpoint instance.
  * @return [JsonGeneralApiAction] for [Card] model.
  */
-public fun Cards.create(
+public fun <T> Cards.create(
+    deserializer: DeserializationStrategy<T>,
     cardData: String,
     vararg options: Option
-): JsonGeneralApiAction<Card> = client.session.post("/v2/cards/create.json", EndpointHost.Card) {
+): JsonGeneralApiAction<T> = client.session.post("/v2/cards/create.json", EndpointHost.Card) {
     emulationModes += EmulationMode.TwitterForiPhone
 
     formBody(
         "card_data" to cardData,
         *options
     )
-}.jsonObject { Card(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Cards.create(
+    cardData: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = create(deserializer(), cardData, *options)

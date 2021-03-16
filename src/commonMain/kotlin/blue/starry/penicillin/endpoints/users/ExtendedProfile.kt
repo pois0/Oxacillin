@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Users
-import blue.starry.penicillin.models.ExtendedProfile
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Undocumented endpoint.
@@ -41,11 +42,12 @@ import blue.starry.penicillin.models.ExtendedProfile
  * @receiver [Users] endpoint instance.
  * @return [JsonGeneralApiAction] for [ExtendedProfile] model.
  */
-public fun Users.extendedProfile(
+public fun <T> Users.extendedProfile(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     includeBirthdate: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<ExtendedProfile> = client.session.get("/1.1/users/extended_profile.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/users/extended_profile.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(
@@ -53,4 +55,10 @@ public fun Users.extendedProfile(
         "include_birthdate" to includeBirthdate,
         *options
     )
-}.jsonObject { ExtendedProfile(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Users.extendedProfile(
+    screenName: String,
+    includeBirthdate: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = extendedProfile(deserializer(), screenName, includeBirthdate, *options)

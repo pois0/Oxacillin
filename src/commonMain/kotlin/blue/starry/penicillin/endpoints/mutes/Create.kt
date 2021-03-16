@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Mutes
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Mutes the user specified in the ID parameter for the authenticating user.
@@ -45,10 +46,16 @@ import blue.starry.penicillin.models.User
  * @receiver [Mutes] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Mutes.createByScreenName(
+public fun <T> Mutes.createByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     vararg options: Option
-): JsonGeneralApiAction<User> = create(screenName, null, *options)
+): JsonGeneralApiAction<T> = create(deserializer, screenName, null, *options)
+
+public inline fun <reified T> Mutes.createByScreenName(
+    screenName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = createByScreenName(deserializer(), screenName, *options)
 
 /**
  * Mutes the user specified in the ID parameter for the authenticating user.
@@ -62,12 +69,19 @@ public fun Mutes.createByScreenName(
  * @receiver [Mutes] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Mutes.createByUserId(
+public fun <T> Mutes.createByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     vararg options: Option
-): JsonGeneralApiAction<User> = create(null, userId, *options)
+): JsonGeneralApiAction<T> = create(deserializer, null, userId, *options)
 
-private fun Mutes.create(
+public inline fun <reified T> Mutes.createByUserId(
+    userId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = createByUserId(deserializer(), userId, *options)
+
+private fun <T> Mutes.create(
+    deserializer: DeserializationStrategy<T>,
     screenName: String? = null,
     userId: Long? = null,
     vararg options: Option
@@ -77,4 +91,4 @@ private fun Mutes.create(
         "user_id" to userId,
         *options
     )
-}.jsonObject { User(it, client) }
+}.json(deserializer)

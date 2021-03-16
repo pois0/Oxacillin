@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Help
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Help.Settings
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Unknown endpoint.
@@ -41,11 +42,12 @@ import blue.starry.penicillin.models.Help.Settings
  * @receiver [Help] endpoint instance.
  * @return [JsonGeneralApiAction] for [Settings] model.
  */
-public fun Help.settings(
+public fun <T> Help.settings(
+    deserializer: DeserializationStrategy<T>,
     includeZeroRate: Boolean? = null,
     settingsVersion: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<Settings> = client.session.get("/1.1/help/settings.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/help/settings.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(
@@ -53,11 +55,10 @@ public fun Help.settings(
         "settings_version" to settingsVersion,
         *options
     )
-}.jsonObject { Settings(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [Help.settings].
- * @see Help.settings
- */
-public val Help.settings: JsonGeneralApiAction<Settings>
-    get() = settings()
+public inline fun <reified T> Help.settings(
+    includeZeroRate: Boolean? = null,
+    settingsVersion: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = settings(deserializer(), includeZeroRate, settingsVersion, *options)

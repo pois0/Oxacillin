@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Friendships
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Relationship
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Enable or disable Retweets and device notifications from the specified user.
@@ -46,14 +47,22 @@ import blue.starry.penicillin.models.Relationship
  * @receiver [Friendships] endpoint instance.
  * @return [JsonGeneralApiAction] for [Relationship] model.
  */
-public fun Friendships.updateByUserId(
+public fun <T> Friendships.updateByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     device: Boolean? = null,
     retweets: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<Relationship> = update(userId, null, device, retweets, *options)
+): JsonGeneralApiAction<T> = update(deserializer, userId, null, device, retweets, *options)
 
-/**
+public inline fun <reified T> Friendships.updateByUserId(
+    userId: Long,
+    device: Boolean? = null,
+    retweets: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = updateByUserId(deserializer(), userId, device, retweets, *options)
+
+    /**
  * Enable or disable Retweets and device notifications from the specified user.
  *
  * [Twitter API reference](https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/post-friendships-update)
@@ -65,14 +74,23 @@ public fun Friendships.updateByUserId(
  * @receiver [Friendships] endpoint instance.
  * @return [JsonGeneralApiAction] for [Relationship] model.
  */
-public fun Friendships.updateByScreenName(
+public fun <T> Friendships.updateByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     device: Boolean? = null,
     retweets: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<Relationship> = update(null, screenName, device, retweets, *options)
+): JsonGeneralApiAction<T> = update(deserializer, null, screenName, device, retweets, *options)
 
-private fun Friendships.update(
+public inline fun <reified T> Friendships.updateByScreenName(
+    screenName: String,
+    device: Boolean? = null,
+    retweets: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = updateByScreenName(deserializer(), screenName, device, retweets, *options)
+
+private fun <T> Friendships.update(
+    deserializer: DeserializationStrategy<T>,
     userId: Long? = null,
     screenName: String? = null,
     device: Boolean? = null,
@@ -86,5 +104,4 @@ private fun Friendships.update(
         "retweets" to retweets,
         *options
     )
-
-}.jsonObject { Relationship(it, client) }
+}.json(deserializer)

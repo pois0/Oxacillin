@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Users
-import blue.starry.penicillin.models.UserSuggestion
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Access the users in a given category of the Twitter suggested user list.
@@ -45,13 +46,20 @@ import blue.starry.penicillin.models.UserSuggestion
  * @receiver [Users] endpoint instance.
  * @return [JsonGeneralApiAction] for [UserSuggestion] model.
  */
-public fun Users.userSuggestions(
+public fun <T> Users.userSuggestions(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     lang: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<UserSuggestion> = client.session.get("/1.1/users/suggestions/$slug.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/users/suggestions/$slug.json") {
     parameters(
         "lang" to lang,
         *options
     )
-}.jsonObject { UserSuggestion(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Users.userSuggestions(
+    slug: String,
+    lang: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = userSuggestions(deserializer(), slug, lang, *options)

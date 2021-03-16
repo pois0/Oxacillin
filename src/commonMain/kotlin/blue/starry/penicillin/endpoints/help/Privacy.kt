@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Help
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Help.Privacy
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns [Twitter's Privacy Policy](http://twitter.com/privacy).
@@ -42,15 +43,13 @@ import blue.starry.penicillin.models.Help.Privacy
  * @receiver [Help] endpoint instance.
  * @return [JsonGeneralApiAction] for [Privacy] model.
  */
-public fun Help.privacy(
+public fun <T> Help.privacy(
+    deserializer: DeserializationStrategy<T>,
     vararg options: Option
-): JsonGeneralApiAction<Privacy> = client.session.get("/1.1/help/privacy.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/help/privacy.json") {
     parameters(*options)
-}.jsonObject { Privacy(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [Help.privacy].
- * @see Help.privacy
- */
-public val Help.privacy: JsonGeneralApiAction<Privacy>
-    get() = privacy()
+public inline fun <reified T> Help.privacy(
+    vararg options: Option
+): JsonGeneralApiAction<T> = privacy(deserializer(), *options)

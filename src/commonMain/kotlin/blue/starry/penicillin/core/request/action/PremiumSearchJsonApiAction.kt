@@ -38,7 +38,7 @@ import kotlinx.serialization.json.Json
 /**
  * The [ApiAction] that provides parsed json array with json model. This class supports premium search api operations.
  */
-public class PremiumSearchJsonObjectApiAction<T>(
+public class PremiumSearchJsonApiAction<T>(
     override val client: ApiClient,
     override val request: ApiRequest,
     private val deserializer: DeserializationStrategy<T>,

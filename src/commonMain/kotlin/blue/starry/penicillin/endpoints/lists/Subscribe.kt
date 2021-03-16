@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.TwitterList
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Subscribes the authenticated user to the specified list.
@@ -43,10 +44,16 @@ import blue.starry.penicillin.models.TwitterList
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.subscribe(
+public fun <T> Lists.subscribe(
+    deserializer: DeserializationStrategy<T>,
     listId: Long,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = subscribe(listId, null, null, null, *options)
+): JsonGeneralApiAction<T> = subscribe(deserializer, listId, null, null, null, *options)
+
+public inline fun <reified T> Lists.subscribe(
+    listId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = subscribe(deserializer(), listId, *options)
 
 /**
  * Subscribes the authenticated user to the specified list.
@@ -59,11 +66,18 @@ public fun Lists.subscribe(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.subscribeByOwnerScreenName(
+public fun <T> Lists.subscribeByOwnerScreenName(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerScreenName: String,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = subscribe(null, slug, ownerScreenName, null, *options)
+): JsonGeneralApiAction<T> = subscribe(deserializer, null, slug, ownerScreenName, null, *options)
+
+public inline fun <reified T> Lists.subscribeByOwnerScreenName(
+    slug: String,
+    ownerScreenName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = subscribeByOwnerScreenName(deserializer(), slug, ownerScreenName, *options)
 
 /**
  * Subscribes the authenticated user to the specified list.
@@ -76,13 +90,21 @@ public fun Lists.subscribeByOwnerScreenName(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.subscribeByOwnerId(
+public fun <T> Lists.subscribeByOwnerId(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerId: Long,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = subscribe(null, slug, null, ownerId, *options)
+): JsonGeneralApiAction<T> = subscribe(deserializer, null, slug, null, ownerId, *options)
 
-private fun Lists.subscribe(
+public inline fun <reified T> Lists.subscribeByOwnerId(
+    slug: String,
+    ownerId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = subscribeByOwnerId(deserializer(), slug, ownerId, *options)
+
+private fun <T> Lists.subscribe(
+    deserializer: DeserializationStrategy<T>,
     listId: Long? = null,
     slug: String? = null,
     ownerScreenName: String? = null,
@@ -96,4 +118,4 @@ private fun Lists.subscribe(
         "owner_id" to ownerId,
         *options
     )
-}.jsonObject { TwitterList(it, client) }
+}.json(deserializer)

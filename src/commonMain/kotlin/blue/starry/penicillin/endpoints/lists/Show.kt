@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.TwitterList
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the specified list. Private lists will only be shown if the authenticated user owns the specified list.
@@ -43,10 +44,16 @@ import blue.starry.penicillin.models.TwitterList
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.show(
+public fun <T> Lists.show(
+    deserializer: DeserializationStrategy<T>,
     listId: Long,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = show(listId, null, null, null, *options)
+): JsonGeneralApiAction<T> = show(deserializer, listId, null, null, null, *options)
+
+public inline fun <reified T> Lists.show(
+    listId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = show(deserializer(), listId, *options)
 
 /**
  * Returns the specified list. Private lists will only be shown if the authenticated user owns the specified list.
@@ -59,11 +66,18 @@ public fun Lists.show(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.showByOwnerScreenName(
+public fun <T> Lists.showByOwnerScreenName(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerScreenName: String,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = show(null, slug, ownerScreenName, null, *options)
+): JsonGeneralApiAction<T> = show(deserializer, null, slug, ownerScreenName, null, *options)
+
+public inline fun <reified T> Lists.showByOwnerScreenName(
+    slug: String,
+    ownerScreenName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = showByOwnerScreenName(deserializer(), slug, ownerScreenName, *options)
 
 /**
  * Returns the specified list. Private lists will only be shown if the authenticated user owns the specified list.
@@ -76,13 +90,21 @@ public fun Lists.showByOwnerScreenName(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.showByOwnerId(
+public fun <T> Lists.showByOwnerId(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerId: Long,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = show(null, slug, null, ownerId, *options)
+): JsonGeneralApiAction<T> = show(deserializer, null, slug, null, ownerId, *options)
 
-private fun Lists.show(
+public inline fun <reified T> Lists.showByOwnerId(
+    slug: String,
+    ownerId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = showByOwnerId(deserializer(), slug, ownerId, *options)
+
+private fun <T> Lists.show(
+    deserializer: DeserializationStrategy<T>,
     listId: Long? = null,
     slug: String? = null,
     ownerScreenName: String? = null,
@@ -96,4 +118,4 @@ private fun Lists.show(
         "owner_id" to ownerId,
         *options
     )
-}.jsonObject { TwitterList(it, client) }
+}.json(deserializer)

@@ -27,8 +27,6 @@
 package blue.starry.penicillin.endpoints.friendships
 
 
-import blue.starry.jsonkt.longList
-import blue.starry.jsonkt.toJsonArray
 import blue.starry.penicillin.core.request.action.ApiAction
 import blue.starry.penicillin.core.request.action.DelegatedAction
 import blue.starry.penicillin.core.request.parameters
@@ -60,10 +58,3 @@ public fun Friendships.noRetweetsIds(
     
     result.content.toJsonArray().longList
 }
-
- /**
- * Shorthand property to [Friendships.noRetweetsIds].
- * @see Friendships.noRetweetsIds
- */
-public val Friendships.noRetweetsIds: ApiAction<List<Long>>
-     get() = noRetweetsIds()

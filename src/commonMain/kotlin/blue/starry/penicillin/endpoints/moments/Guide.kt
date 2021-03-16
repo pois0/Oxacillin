@@ -32,7 +32,7 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Moments
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.MomentGuide
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Undocumented endpoint.
@@ -41,9 +41,10 @@ import blue.starry.penicillin.models.MomentGuide
  * @receiver [Moments] endpoint instance.
  * @return [JsonGeneralApiAction] for [MomentGuide] model.
  */
-public fun Moments.guide(
+public fun <T> Moments.guide(
+    deserializer: DeserializationStrategy<T>,
     vararg options: Option
-): JsonGeneralApiAction<MomentGuide> = client.session.get("/1.1/moments/guide.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/moments/guide.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(
@@ -74,11 +75,4 @@ public fun Moments.guide(
         "v" to "1473704494",
         *options
     )
-}.jsonObject { MomentGuide(it, client) }
-
-/**
- * Shorthand property to [Moments.guide].
- * @see Moments.guide
- */
-public val Moments.guide: JsonGeneralApiAction<MomentGuide>
-    get() = guide()
+}.json(deserializer)

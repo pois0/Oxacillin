@@ -27,12 +27,14 @@
 package blue.starry.penicillin.endpoints.users
 
 import blue.starry.penicillin.core.emulation.EmulationMode
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Users
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns fully-hydrated user objects for up to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
@@ -53,12 +55,20 @@ import blue.starry.penicillin.models.User
  * @receiver [Users] endpoint instance.
  * @return [JsonArrayApiAction] for [User] model.
  */
-public fun Users.lookupByScreenNames(
+public fun <T> Users.lookupByScreenNames(
+    deserializer: DeserializationStrategy<T>,
     screenNames: List<String>,
     includeEntities: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonArrayApiAction<User> = lookup(screenNames, null, includeEntities, tweetMode, *options)
+): JsonGeneralApiAction<T> = lookup(deserializer, screenNames, null, includeEntities, tweetMode, *options)
+
+public inline fun <reified T> Users.lookupByScreenNames(
+    screenNames: List<String>,
+    includeEntities: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = lookupByScreenNames(deserializer(), screenNames, includeEntities, tweetMode, *options)
 
 /**
  * Returns fully-hydrated user objects for up to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
@@ -79,14 +89,23 @@ public fun Users.lookupByScreenNames(
  * @receiver [Users] endpoint instance.
  * @return [JsonArrayApiAction] for [User] model.
  */
-public fun Users.lookupByIds(
+public fun <T> Users.lookupByIds(
+    deserializer: DeserializationStrategy<T>,
     userIds: List<Long>,
     includeEntities: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonArrayApiAction<User> = lookup(null, userIds, includeEntities, tweetMode, *options)
+): JsonGeneralApiAction<T> = lookup(deserializer, null, userIds, includeEntities, tweetMode, *options)
 
-private fun Users.lookup(
+public inline fun <reified T> Users.lookupByIds(
+    userIds: List<Long>,
+    includeEntities: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = lookupByIds(deserializer(), userIds, includeEntities, tweetMode, *options)
+
+private fun <T> Users.lookup(
+    deserializer: DeserializationStrategy<T>,
     screenNames: List<String>? = null,
     userIds: List<Long>? = null,
     includeEntities: Boolean? = null,
@@ -111,4 +130,4 @@ private fun Users.lookup(
         "tweet_mode" to tweetMode,
         *options
     )
-}.jsonArray { User(it, client) }
+}.json(deserializer)

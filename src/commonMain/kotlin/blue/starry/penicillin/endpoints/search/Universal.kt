@@ -34,7 +34,8 @@ import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Search
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.SearchUniversal
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Undocumented endpoint.
@@ -43,13 +44,14 @@ import blue.starry.penicillin.models.SearchUniversal
  * @receiver [Search] endpoint instance.
  * @return [JsonGeneralApiAction] for [SearchUniversal] model.
  */
-public fun Search.universal(
+public fun <T> Search.universal(
+    deserializer: DeserializationStrategy<T>,
     query: String,
     modules: String? = null,
     resultType: SearchResultType = SearchResultType.Default,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonGeneralApiAction<SearchUniversal> = client.session.get("/1.1/search/universal.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/search/universal.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(
@@ -59,4 +61,12 @@ public fun Search.universal(
         "tweet_mode" to tweetMode,
         *options
     )
-}.jsonObject { SearchUniversal(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Search.universal(
+    query: String,
+    modules: String? = null,
+    resultType: SearchResultType = SearchResultType.Default,
+    tweetMode: TweetMode = TweetMode.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = universal(deserializer(), query, modules, resultType, tweetMode, *options)

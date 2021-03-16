@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.FollowRequests
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Accepts the follow request from specific user.
@@ -42,12 +43,18 @@ import blue.starry.penicillin.models.User
  * @receiver [FollowRequests] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun FollowRequests.acceptByScreenName(
+public fun <T> FollowRequests.acceptByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     vararg  options: Option
-): JsonGeneralApiAction<User> = accept(screenName, null, *options)
+): JsonGeneralApiAction<T> = accept(deserializer, screenName, null, *options)
 
-/**
+public inline fun <reified T> FollowRequests.acceptByScreenName(
+    screenName: String,
+    vararg  options: Option
+): JsonGeneralApiAction<T> = acceptByScreenName(deserializer(), screenName, *options)
+
+    /**
  * Accepts the follow request from specific user.
  *
  * @param userId The numeric ID of the user.
@@ -55,12 +62,19 @@ public fun FollowRequests.acceptByScreenName(
  * @receiver [FollowRequests] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun FollowRequests.acceptByUserId(
+public fun <T> FollowRequests.acceptByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     vararg  options: Option
-): JsonGeneralApiAction<User> = accept(null, userId, *options)
+): JsonGeneralApiAction<T> = accept(deserializer, null, userId, *options)
 
-private fun FollowRequests.accept(
+public inline fun <reified T> FollowRequests.acceptByUserId(
+    userId: Long,
+    vararg  options: Option
+): JsonGeneralApiAction<T> = acceptByUserId(deserializer(), userId, *options)
+
+    private fun <T> FollowRequests.accept(
+    deserializer: DeserializationStrategy<T>,
     screenName: String? = null,
     userId: Long? = null,
     vararg options: Option
@@ -80,4 +94,4 @@ private fun FollowRequests.accept(
         "user_id" to userId,
         *options
     )
-}.jsonObject { User(it, client) }
+}.json(deserializer)

@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.TwitterList
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Unsubscribes the authenticated user from the specified list.
@@ -43,10 +44,16 @@ import blue.starry.penicillin.models.TwitterList
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.unsubscribe(
+public fun <T> Lists.unsubscribe(
+    deserializer: DeserializationStrategy<T>,
     listId: Long,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = unsubscribe(listId, null, null, null, *options)
+): JsonGeneralApiAction<T> = unsubscribe(deserializer, listId, null, null, null, *options)
+
+public inline fun <reified T> Lists.unsubscribe(
+    listId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = unsubscribe(deserializer(), listId, *options)
 
 /**
  * Unsubscribes the authenticated user from the specified list.
@@ -59,11 +66,18 @@ public fun Lists.unsubscribe(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.unsubscribeByOwnerScreenName(
+public fun <T> Lists.unsubscribeByOwnerScreenName(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerScreenName: String,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = unsubscribe(null, slug, ownerScreenName, null, *options)
+): JsonGeneralApiAction<T> = unsubscribe(deserializer, null, slug, ownerScreenName, null, *options)
+
+public inline fun <reified T> Lists.unsubscribeByOwnerScreenName(
+    slug: String,
+    ownerScreenName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = unsubscribeByOwnerScreenName(deserializer(), slug, ownerScreenName, *options)
 
 /**
  * Unsubscribes the authenticated user from the specified list.
@@ -76,13 +90,21 @@ public fun Lists.unsubscribeByOwnerScreenName(
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.unsubscribeByOwnerId(
+public fun <T> Lists.unsubscribeByOwnerId(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerId: Long,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = unsubscribe(null, slug, null, ownerId, *options)
+): JsonGeneralApiAction<T> = unsubscribe(deserializer, null, slug, null, ownerId, *options)
 
-private fun Lists.unsubscribe(
+public inline fun <reified T> Lists.unsubscribeByOwnerId(
+    slug: String,
+    ownerId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = unsubscribeByOwnerId(deserializer(), slug, ownerId, *options)
+
+private fun <T> Lists.unsubscribe(
+    deserializer: DeserializationStrategy<T>,
     listId: Long? = null,
     slug: String? = null,
     ownerScreenName: String? = null,
@@ -96,4 +118,4 @@ private fun Lists.unsubscribe(
         "owner_id" to ownerId,
         *options
     )
-}.jsonObject { TwitterList(it, client) }
+}.json(deserializer)

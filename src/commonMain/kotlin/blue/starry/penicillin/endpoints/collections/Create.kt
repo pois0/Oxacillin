@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Collections
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Collection
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Create a Collection owned by the currently authenticated user.
@@ -47,13 +48,14 @@ import blue.starry.penicillin.models.Collection
  * @receiver [Collections] endpoint instance.
  * @return [JsonGeneralApiAction] for [Collection.Model] model.
  */
-public fun Collections.create(
+public fun <T> Collections.create(
+    deserializer: DeserializationStrategy<T>,
     name: String,
     description: String? = null,
     url: String? = null,
     timelineOrder: CollectionTimelineOrder = CollectionTimelineOrder.Default,
     vararg options: Option
-): JsonGeneralApiAction<Collection.Model> = client.session.post("/1.1/collections/create.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/collections/create.json") {
     formBody(
         "name" to name,
         "description" to description,
@@ -62,4 +64,12 @@ public fun Collections.create(
         *options
     )
 
-}.jsonObject { Collection.Model(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Collections.create(
+    name: String,
+    description: String? = null,
+    url: String? = null,
+    timelineOrder: CollectionTimelineOrder = CollectionTimelineOrder.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = create(deserializer(), name, description, url, timelineOrder, *options)

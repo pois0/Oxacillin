@@ -27,11 +27,15 @@
 package blue.starry.penicillin.endpoints.activity
 
 import blue.starry.penicillin.core.emulation.EmulationMode
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Activity
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.ActivityEvent
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 
 /**
  * Unknown endpoint.
@@ -40,10 +44,11 @@ import blue.starry.penicillin.models.ActivityEvent
  * @receiver [Activity] endpoint instance.
  * @return [JsonArrayApiAction] for [ActivityEvent] model.
  */
-public fun Activity.aboutMe(
+public fun <T> Activity.aboutMe(
+    deserializer: DeserializationStrategy<T>,
     count: Int? = null,
     vararg options: Option
-): JsonArrayApiAction<ActivityEvent> = client.session.get("/1.1/activity/about_me.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/activity/about_me.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(
@@ -71,11 +76,9 @@ public fun Activity.aboutMe(
         *options,
         mode = EmulationMode.TwitterForiPhone
     )
-}.jsonArray { ActivityEvent(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [Activity.aboutMe].
- * @see Activity.aboutMe
- */
-public val Activity.aboutMe: JsonArrayApiAction<ActivityEvent>
-    get() = aboutMe()
+public inline fun <reified T> Activity.aboutMe(
+    count: Int? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = aboutMe(deserializer(), count, *options)

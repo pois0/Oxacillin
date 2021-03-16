@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.AccountActivity
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Webhook
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Registers a webhook URL for all event types. The URL will be validated via CRC request before saving. In case the validation failed, returns comprehensive error message to the requester.
@@ -44,14 +45,20 @@ import blue.starry.penicillin.models.Webhook
  * @receiver [AccountActivity] endpoint instance.
  * @return [JsonGeneralApiAction] for [Webhook.Model] model.
  */
-public fun AccountActivity.registerWebhook(
+public fun <T> AccountActivity.registerWebhook(
+    deserializer: DeserializationStrategy<T>,
     envName: String,
     url: String,
     vararg options: Option
-): JsonGeneralApiAction<Webhook.Model> = client.session.post("/1.1/account_activity/all/$envName/webhooks.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/account_activity/all/$envName/webhooks.json") {
     formBody(
         "url" to url,
         *options
     )
+}.json(deserializer)
 
-}.jsonObject { Webhook.Model(it, client) }
+public inline fun <reified T> AccountActivity.registerWebhook(
+    envName: String,
+    url: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = registerWebhook(deserializer(), envName, url, *options)

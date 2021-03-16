@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Blocks
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Un-blocks the user specified in the ID parameter for the authenticating user. Returns the un-blocked user when successful. If relationships existed before the block was instantiated, they will not be restored.
@@ -46,14 +47,22 @@ import blue.starry.penicillin.models.User
  * @return [JsonGeneralApiAction] for [User] model.
  * @see Blocks.destroyByUserId
  */
-public fun Blocks.destroyByScreenName(
+public fun <T> Blocks.destroyByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = destroy(screenName, null, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = destroy(deserializer, screenName, null, includeEntities, skipStatus, *options)
 
-/**
+public inline fun <reified T> Blocks.destroyByScreenName(
+    screenName: String,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = destroyByScreenName(deserializer(), screenName, includeEntities, skipStatus, *options)
+
+    /**
  * Un-blocks the user specified in the ID parameter for the authenticating user. Returns the un-blocked user when successful. If relationships existed before the block was instantiated, they will not be restored.
  *
  * [Twitter API reference](https://developer.twitter.com/en/docs/accounts-and-users/mute-block-report-users/api-reference/post-blocks-destroy)
@@ -66,14 +75,23 @@ public fun Blocks.destroyByScreenName(
  * @return [JsonGeneralApiAction] for [User] model.
  * @see Blocks.destroyByScreenName
  */
-public fun Blocks.destroyByUserId(
+public fun <T> Blocks.destroyByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = destroy(null, userId, includeEntities, skipStatus, *options)
+): JsonGeneralApiAction<T> = destroy(deserializer, null, userId, includeEntities, skipStatus, *options)
 
-private fun Blocks.destroy(
+public inline fun <reified T> Blocks.destroyByUserId(
+    userId: Long,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = destroyByUserId(deserializer(), userId, includeEntities, skipStatus, *options)
+
+private fun <T> Blocks.destroy(
+    deserializer: DeserializationStrategy<T>,
     screenName: String? = null,
     userId: Long? = null,
     includeEntities: Boolean? = null,
@@ -88,4 +106,4 @@ private fun Blocks.destroy(
         *options
     )
 
-}.jsonObject { User(it, client) }
+}.json(deserializer)

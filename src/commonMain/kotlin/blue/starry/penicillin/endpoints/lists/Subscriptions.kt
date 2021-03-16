@@ -31,8 +31,9 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.TwitterList
-import blue.starry.penicillin.models.cursor.CursorLists
+import blue.starry.penicillin.models.cursor.CursorModel
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Obtain a collection of the lists the specified user is subscribed to, 20 lists per page by default. Does not include the user's own lists.
@@ -45,11 +46,18 @@ import blue.starry.penicillin.models.cursor.CursorLists
  * @receiver [Lists] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorLists] model.
  */
-public fun Lists.subscriptions(
+public fun <M: CursorModel<T>, T: Any> Lists.subscriptions(
+    deserializer: DeserializationStrategy<M>,
     count: Int? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorLists, TwitterList> = subscriptionsInternal(null, null, count, cursor, *options)
+): CursorJsonApiAction<M, T> = subscriptionsInternal(deserializer, null, null, count, cursor, *options)
+
+public inline fun <reified M: CursorModel<T>, T: Any> Lists.subscriptions(
+    count: Int? = null,
+    cursor: Long? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = subscriptions(deserializer(), count, cursor, *options)
 
 /**
  * Obtain a collection of the lists the specified user is subscribed to, 20 lists per page by default. Does not include the user's own lists.
@@ -63,12 +71,20 @@ public fun Lists.subscriptions(
  * @receiver [Lists] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorLists] model.
  */
-public fun Lists.subscriptionsByUserId(
+public fun <M: CursorModel<T>, T: Any> Lists.subscriptionsByUserId(
+    deserializer: DeserializationStrategy<M>,
     userId: Long,
     count: Int? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorLists, TwitterList> = subscriptionsInternal(userId, null, count, cursor, *options)
+): CursorJsonApiAction<M, T> = subscriptionsInternal(deserializer, userId, null, count, cursor, *options)
+
+public inline fun <reified M: CursorModel<T>, T: Any> Lists.subscriptionsByUserId(
+    userId: Long,
+    count: Int? = null,
+    cursor: Long? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = subscriptionsByUserId(deserializer(), userId, count, cursor, *options)
 
 /**
  * Obtain a collection of the lists the specified user is subscribed to, 20 lists per page by default. Does not include the user's own lists.
@@ -82,14 +98,23 @@ public fun Lists.subscriptionsByUserId(
  * @receiver [Lists] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorLists] model.
  */
-public fun Lists.subscriptionsByScreenName(
+public fun <M: CursorModel<T>, T: Any> Lists.subscriptionsByScreenName(
+    deserializer: DeserializationStrategy<M>,
     screenName: String,
     count: Int? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorLists, TwitterList> = subscriptionsInternal(null, screenName, count, cursor, *options)
+): CursorJsonApiAction<M, T> = subscriptionsInternal(deserializer, null, screenName, count, cursor, *options)
 
-private fun Lists.subscriptionsInternal(
+public inline fun <reified M: CursorModel<T>, T: Any> Lists.subscriptionsByScreenName(
+    screenName: String,
+    count: Int? = null,
+    cursor: Long? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = subscriptionsByScreenName(deserializer(), screenName, count, cursor, *options)
+
+private fun <M: CursorModel<T>, T: Any> Lists.subscriptionsInternal(
+    deserializer: DeserializationStrategy<M>,
     userId: Long? = null,
     screenName: String? = null,
     count: Int? = null,
@@ -103,11 +128,4 @@ private fun Lists.subscriptionsInternal(
         "cursor" to cursor,
         *options
     )
-}.cursorJsonObject { CursorLists(it, client) }
-
- /**
- * Shorthand property to [Lists.subscriptions].
- * @see Lists.subscriptions
- */
-public val Lists.subscriptions: CursorJsonApiAction<CursorLists, TwitterList>
-     get() = subscriptions()
+}.cursorJson(deserializer)

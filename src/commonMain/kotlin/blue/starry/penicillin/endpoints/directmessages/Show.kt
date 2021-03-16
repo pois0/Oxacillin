@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.DirectMessages
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.directMessageDeprecatedMessage
-import blue.starry.penicillin.models.DirectMessage
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Abolished endpoint.
@@ -42,12 +43,19 @@ import blue.starry.penicillin.models.DirectMessage
  * @return [JsonGeneralApiAction] for [DirectMessage] model.
  */
 @Deprecated(directMessageDeprecatedMessage, replaceWith = ReplaceWith("directMessageEvent.show", "blue.starry.penicillin.endpoints.directMessageEvent", "blue.starry.penicillin.endpoints.directmessages.events.show"))
-public fun DirectMessages.show(
+public fun <T> DirectMessages.show(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     vararg options: Option
-): JsonGeneralApiAction<DirectMessage> = client.session.get("/1.1/direct_messages/show.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/direct_messages/show.json") {
     parameters(
         "id" to id,
         *options
     )
-}.jsonObject { DirectMessage(it, client) }
+}.json(deserializer)
+
+@Deprecated(directMessageDeprecatedMessage, replaceWith = ReplaceWith("directMessageEvent.show", "blue.starry.penicillin.endpoints.directMessageEvent", "blue.starry.penicillin.endpoints.directmessages.events.show"))
+public inline fun <reified T> DirectMessages.show(
+    id: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = show(deserializer(), id, *options)

@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Users
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a [variety of information](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) about the user specified by the required user_id or screen_name parameter. The author's most recent Tweet will be returned inline when possible.
@@ -47,11 +48,18 @@ import blue.starry.penicillin.models.User
  * @receiver [Users] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Users.showByScreenName(
+public fun <T> Users.showByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = show(screenName, null, includeEntities, *options)
+): JsonGeneralApiAction<T> = show(deserializer, screenName, null, includeEntities, *options)
+
+public inline fun <reified T> Users.showByScreenName(
+    screenName: String,
+    includeEntities: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = showByScreenName(deserializer(), screenName, includeEntities, *options)
 
 /**
  * Returns a [variety of information](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) about the user specified by the required user_id or screen_name parameter. The author's most recent Tweet will be returned inline when possible.
@@ -66,13 +74,21 @@ public fun Users.showByScreenName(
  * @receiver [Users] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Users.showByUserId(
+public fun <T> Users.showByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = show(null, userId, includeEntities, *options)
+): JsonGeneralApiAction<T> = show(deserializer, null, userId, includeEntities, *options)
 
-private fun Users.show(
+public inline fun <reified T> Users.showByUserId(
+    userId: Long,
+    includeEntities: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = showByUserId(deserializer(),userId, includeEntities, *options)
+
+private fun <T> Users.show(
+    deserializer: DeserializationStrategy<T>,
     screenName: String? = null,
     userId: Long? = null,
     includeEntities: Boolean? = null,
@@ -94,4 +110,4 @@ private fun Users.show(
         "include_entities" to includeEntities,
         *options
     )
-}.jsonObject { User(it, client) }
+}.json(deserializer)

@@ -54,7 +54,7 @@ public fun DirectMessageEvents.list(
         "cursor" to cursor,
         *options
     )
-}.jsonObject { DirectMessageEvent.List(it, client) }
+}.json { DirectMessageEvent.List(it, client) }
 
  /**
  * Shorthand property to [DirectMessageEvents.list].

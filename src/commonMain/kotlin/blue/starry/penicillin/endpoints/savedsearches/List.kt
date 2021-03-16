@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.SavedSearches
-import blue.starry.penicillin.models.SavedSearch
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the authenticated user's saved search queries.
@@ -43,13 +44,14 @@ import blue.starry.penicillin.models.SavedSearch
  * @receiver [SavedSearches] endpoint instance.
  * @return [JsonGeneralApiAction] for [SavedSearch] model.
  */
-public fun SavedSearches.list(vararg options: Option): JsonArrayApiAction<SavedSearch> = client.session.get("/1.1/saved_searches/list.json") {
+public fun <T> SavedSearches.list(
+    deserializer: DeserializationStrategy<T>,
+    vararg options: Option
+): JsonGeneralApiAction<T> = client.session.get("/1.1/saved_searches/list.json") {
     parameters(*options)
-}.jsonArray { SavedSearch(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [SavedSearches.list].
- * @see SavedSearches.list
- */
-public val SavedSearches.list: JsonArrayApiAction<SavedSearch>
-    get() = list()
+public inline fun <reified T> SavedSearches.list(
+    vararg options: Option
+): JsonGeneralApiAction<T> = list(deserializer(), *options)
+

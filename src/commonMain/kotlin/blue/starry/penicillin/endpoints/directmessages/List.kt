@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.DirectMessages
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.directMessageDeprecatedMessage
-import blue.starry.penicillin.models.DirectMessage
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Abolished endpoint.
@@ -42,14 +43,15 @@ import blue.starry.penicillin.models.DirectMessage
  * @return [JsonGeneralApiAction] for [DirectMessage] model.
  */
 @Deprecated(directMessageDeprecatedMessage, replaceWith = ReplaceWith("directMessageEvent.list", "blue.starry.penicillin.endpoints.directMessageEvent", "blue.starry.penicillin.endpoints.directmessages.events.list"))
-public fun DirectMessages.list(
+public fun <T> DirectMessages.list(
+    deserializer: DeserializationStrategy<T>,
     sinceId: Long? = null,
     maxId: Long? = null,
     count: Int? = null,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<DirectMessage> = client.session.get("/1.1/direct_messages.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/direct_messages.json") {
     parameters(
         "since_id" to sinceId,
         "max_id" to maxId,
@@ -58,4 +60,14 @@ public fun DirectMessages.list(
         "skip_status" to skipStatus,
         *options
     )
-}.jsonArray { DirectMessage(it, client) }
+}.json(deserializer)
+
+@Deprecated(directMessageDeprecatedMessage, replaceWith = ReplaceWith("directMessageEvent.list", "blue.starry.penicillin.endpoints.directMessageEvent", "blue.starry.penicillin.endpoints.directmessages.events.list"))
+public inline fun <reified T> DirectMessages.list(
+    sinceId: Long? = null,
+    maxId: Long? = null,
+    count: Int? = null,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = list(deserializer(), sinceId, maxId, count, includeEntities, skipStatus, *options)

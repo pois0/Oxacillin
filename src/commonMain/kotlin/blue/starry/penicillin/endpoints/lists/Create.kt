@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.TwitterList
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Creates a new list for the authenticated user. Note that you can create up to 1000 lists per account.
@@ -45,16 +46,24 @@ import blue.starry.penicillin.models.TwitterList
  * @receiver [Lists] endpoint instance.
  * @return [JsonGeneralApiAction] for [TwitterList] model.
  */
-public fun Lists.create(
+public fun <T> Lists.create(
+    deserializer: DeserializationStrategy<T>,
     name: String,
     mode: ListVisibilityMode = ListVisibilityMode.Default,
     description: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = client.session.post("/1.1/lists/create.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/lists/create.json") {
     formBody(
         "name" to name,
         "mode" to mode,
         "description" to description,
         *options
     )
-}.jsonObject { TwitterList(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Lists.create(
+    name: String,
+    mode: ListVisibilityMode = ListVisibilityMode.Default,
+    description: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = create(deserializer(), name, mode, description, *options)

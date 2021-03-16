@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.AccountActivity
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Subscription
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the count of subscriptions that are currently active on your account for all activities. Note that the /count endpoint requires application-only OAuth, so that you should make requests using a bearer token instead of user context.
@@ -42,15 +43,13 @@ import blue.starry.penicillin.models.Subscription
  * @receiver [AccountActivity] endpoint instance.
  * @return [JsonGeneralApiAction] for [Subscription.Count] model.
  */
-public fun AccountActivity.subscriptionCount(
+public fun <T> AccountActivity.subscriptionCount(
+    deserializer: DeserializationStrategy<T>,
     vararg options: Option
-): JsonGeneralApiAction<Subscription.Count> = client.session.get("/1.1/account_activity/all/subscriptions/count.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/account_activity/all/subscriptions/count.json") {
     parameters(*options)
-}.jsonObject { Subscription.Count(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [AccountActivity.subscriptionCount].
- * @see AccountActivity.subscriptionCount
- */
-public val AccountActivity.subscriptionCount: JsonGeneralApiAction<Subscription.Count>
-    get() = subscriptionCount()
+public inline fun <reified T> AccountActivity.subscriptionCount(
+    vararg options: Option
+): JsonGeneralApiAction<T> = subscriptionCount(deserializer(), *options)

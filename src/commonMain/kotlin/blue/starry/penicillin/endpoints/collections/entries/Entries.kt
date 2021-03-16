@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.CollectionEntries
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Collection
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Retrieve the identified Collection, presented as a list of the Tweets curated within.
@@ -48,13 +49,14 @@ import blue.starry.penicillin.models.Collection
  * @receiver [CollectionEntries] endpoint instance.
  * @return [JsonGeneralApiAction] for [Collection.Entry.Result] model.
  */
-public fun CollectionEntries.entries(
+public fun <T> CollectionEntries.entries(
+    deserializer: DeserializationStrategy<T>,
     id: String,
     count: Int? = null,
     maxPosition: Int? = null,
     minPosition: Int? = null,
     vararg options: Option
-): JsonGeneralApiAction<Collection.Entry.Result> = client.session.get("/1.1/collections/entries.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/collections/entries.json") {
     parameters(
         "id" to id,
         "count" to count,
@@ -62,4 +64,12 @@ public fun CollectionEntries.entries(
         "min_position" to minPosition,
         *options
     )
-}.jsonObject { Collection.Entry.Result(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> CollectionEntries.entries(
+    id: String,
+    count: Int? = null,
+    maxPosition: Int? = null,
+    minPosition: Int? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = entries(deserializer(), id, count, maxPosition, minPosition, *options)

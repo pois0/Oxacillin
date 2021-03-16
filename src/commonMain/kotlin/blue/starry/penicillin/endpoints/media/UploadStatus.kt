@@ -32,6 +32,9 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Media
 import blue.starry.penicillin.endpoints.Option
+import blue.starry.penicillin.util.deserializer
+import io.ktor.http.LinkHeader.Parameters.Media
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * The STATUS command is used to periodically poll for updates of media processing operation. After the STATUS command response returns succeeded, you can move on to the next step which is usually create Tweet with media_id.
@@ -43,15 +46,22 @@ import blue.starry.penicillin.endpoints.Option
  * @receiver [Media] endpoint instance.
  * @return [JsonGeneralApiAction] for [blue.starry.penicillin.models.Media] model.
  */
-public fun Media.uploadStatus(
+public fun <T> Media.uploadStatus(
+    deserializer: DeserializationStrategy<T>,
     mediaId: Long,
     mediaKey: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<blue.starry.penicillin.models.Media> = client.session.get("/1.1/media/upload.json", EndpointHost.MediaUpload) {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/media/upload.json", EndpointHost.MediaUpload) {
     parameters(
         "command" to "STATUS",
         "media_id" to mediaId,
         "media_key" to mediaKey,
         *options
     )
-}.jsonObject { blue.starry.penicillin.models.Media(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Media.uploadStatus(
+    mediaId: Long,
+    mediaKey: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = uploadStatus(deserializer(), mediaId, mediaKey, *options)

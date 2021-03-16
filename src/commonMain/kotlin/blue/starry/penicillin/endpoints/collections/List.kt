@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Collections
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Collection
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Find Collections created by a specific user or containing a specific curated Tweet.
@@ -46,14 +47,22 @@ import blue.starry.penicillin.models.Collection
  * @receiver [Collections] endpoint instance.
  * @return [JsonGeneralApiAction] for [Collection.List] model.
  */
-public fun Collections.list(
+public fun <T> Collections.list(
+    deserializer: DeserializationStrategy<T>,
     tweetId: Long? = null,
     count: Int? = null,
     cursor: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<Collection.List> = listInternal(null, null, tweetId, count, cursor, *options)
+): JsonGeneralApiAction<T> = listInternal(deserializer, null, null, tweetId, count, cursor, *options)
 
-/**
+public inline fun <reified T> Collections.list(
+    tweetId: Long? = null,
+    count: Int? = null,
+    cursor: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = list(deserializer(), tweetId, count, cursor, *options)
+
+    /**
  * Find Collections created by a specific user or containing a specific curated Tweet.
  * Results are organized in a cursored collection.
  *
@@ -67,15 +76,24 @@ public fun Collections.list(
  * @receiver [Collections] endpoint instance.
  * @return [JsonGeneralApiAction] for [Collection.List] model.
  */
-public fun Collections.listByUserId(
+public fun <T> Collections.listByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     tweetId: Long? = null,
     count: Int? = null,
     cursor: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<Collection.List> = listInternal(userId, null, tweetId, count, cursor, *options)
+): JsonGeneralApiAction<T> = listInternal(deserializer, userId, null, tweetId, count, cursor, *options)
 
-/**
+public inline fun <reified T> Collections.listByUserId(
+    userId: Long,
+    tweetId: Long? = null,
+    count: Int? = null,
+    cursor: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = listByUserId(deserializer(), userId, tweetId, count, cursor, *options)
+
+    /**
  * Find Collections created by a specific user or containing a specific curated Tweet.
  * Results are organized in a cursored collection.
  *
@@ -89,15 +107,25 @@ public fun Collections.listByUserId(
  * @receiver [Collections] endpoint instance.
  * @return [JsonGeneralApiAction] for [Collection.List] model.
  */
-public fun Collections.listByScreenName(
+public fun <T> Collections.listByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     tweetId: Long? = null,
     count: Int? = null,
     cursor: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<Collection.List> = listInternal(null, screenName, tweetId, count, cursor, *options)
+): JsonGeneralApiAction<T> = listInternal(deserializer, null, screenName, tweetId, count, cursor, *options)
 
-private fun Collections.listInternal(
+public inline fun <reified T> Collections.listByScreenName(
+    screenName: String,
+    tweetId: Long? = null,
+    count: Int? = null,
+    cursor: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = listByScreenName(deserializer(), screenName, tweetId, count, cursor, *options)
+
+    private fun <T> Collections.listInternal(
+    deserializer: DeserializationStrategy<T>,
     userId: Long? = null,
     screenName: String? = null,
     tweetId: Long? = null,
@@ -113,11 +141,4 @@ private fun Collections.listInternal(
         "cursor" to cursor,
         *options
     )
-}.jsonObject { Collection.List(it, client) }
-
- /**
- * Shorthand property to [Collections.list].
- * @see Collections.list
- */
-public val Collections.list: JsonGeneralApiAction<Collection.List>
-     get() = list()
+}.json(deserializer)

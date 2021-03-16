@@ -31,8 +31,9 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Blocks
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
-import blue.starry.penicillin.models.cursor.CursorUsers
+import blue.starry.penicillin.models.cursor.CursorModel
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a collection of [user objects](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) that the authenticating user is blocking.
@@ -48,23 +49,24 @@ import blue.starry.penicillin.models.cursor.CursorUsers
  * @receiver [Blocks] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorUsers] model.
  */
-public fun Blocks.listUsers(
+public fun <M: CursorModel<T>, T: Any> Blocks.listUsers(
+    deserializer: DeserializationStrategy<M>,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     cursor: Long? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorUsers, User> = client.session.get("/1.1/blocks/list.json") {
+): CursorJsonApiAction<M, T> = client.session.get("/1.1/blocks/list.json") {
     parameters(
         "include_entities" to includeEntities,
         "skip_status" to skipStatus,
         "cursor" to cursor,
         *options
     )
-}.cursorJsonObject { CursorUsers(it, client) }
+}.cursorJson(deserializer)
 
-/**
- * Shorthand extension property to [Blocks.listUsers].
- * @see Blocks.listUsers
- */
-public val Blocks.listUsers: CursorJsonApiAction<CursorUsers, User>
-    get() = listUsers()
+public inline fun <reified M: CursorModel<T>, T: Any> Blocks.listUsers(
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    cursor: Long? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = listUsers(deserializer(), includeEntities, skipStatus, cursor, *options)

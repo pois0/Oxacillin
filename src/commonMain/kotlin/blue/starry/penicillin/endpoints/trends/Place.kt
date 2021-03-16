@@ -26,11 +26,13 @@
 
 package blue.starry.penicillin.endpoints.trends
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Trends
-import blue.starry.penicillin.models.TrendPlace
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the top 50 trending topics for a specific WOEID, if trending information is available for it.
@@ -46,14 +48,21 @@ import blue.starry.penicillin.models.TrendPlace
  * @receiver [Trends] endpoint instance.
  * @return [JsonArrayApiAction] for [TrendPlace] model.
  */
-public fun Trends.place(
+public fun <T> Trends.place(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     exclude: TrendExclude = TrendExclude.Default,
     vararg options: Option
-): JsonArrayApiAction<TrendPlace> = client.session.get("/1.1/trends/place.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/trends/place.json") {
     parameters(
         "id" to id,
         "exclude" to exclude,
         *options
     )
-}.jsonArray { TrendPlace(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Trends.place(
+    id: Long,
+    exclude: TrendExclude = TrendExclude.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = place(deserializer(), id, exclude, *options)

@@ -31,8 +31,9 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Lists
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
-import blue.starry.penicillin.models.cursor.CursorUsers
+import blue.starry.penicillin.models.cursor.CursorModel
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the subscribers of the specified list. Private list subscribers will only be shown if the authenticated user owns the specified list.
@@ -48,14 +49,24 @@ import blue.starry.penicillin.models.cursor.CursorUsers
  * @receiver [Lists] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorUsers] model.
  */
-public fun Lists.subscribers(
+public fun <M: CursorModel<T>, T: Any> Lists.subscribers(
+    deserializer: DeserializationStrategy<M>,
     listId: Long,
     count: Int? = null,
     cursor: Long? = null,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorUsers, User> = subscribers(listId, null, null, null, count, cursor, includeEntities, skipStatus, *options)
+): CursorJsonApiAction<M, T> = subscribers(deserializer, listId, null, null, null, count, cursor, includeEntities, skipStatus, *options)
+
+public inline fun <reified M: CursorModel<T>, T: Any> Lists.subscribers(
+    listId: Long,
+    count: Int? = null,
+    cursor: Long? = null,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = subscribers(deserializer(), listId, count, cursor, includeEntities, skipStatus, *options)
 
 /**
  * Returns the subscribers of the specified list. Private list subscribers will only be shown if the authenticated user owns the specified list.
@@ -72,7 +83,8 @@ public fun Lists.subscribers(
  * @receiver [Lists] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorUsers] model.
  */
-public fun Lists.subscribersByOwnerScreenName(
+public fun <M: CursorModel<T>, T: Any> Lists.subscribersByOwnerScreenName(
+    deserializer: DeserializationStrategy<M>,
     slug: String,
     ownerScreenName: String,
     count: Int? = null,
@@ -80,7 +92,17 @@ public fun Lists.subscribersByOwnerScreenName(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorUsers, User> = subscribers(null, slug, ownerScreenName, null, count, cursor, includeEntities, skipStatus, *options)
+): CursorJsonApiAction<M, T> = subscribers(deserializer,null, slug, ownerScreenName, null, count, cursor, includeEntities, skipStatus, *options)
+
+public inline fun <reified M: CursorModel<T>, T: Any> Lists.subscribersByOwnerScreenName(
+    slug: String,
+    ownerScreenName: String,
+    count: Int? = null,
+    cursor: Long? = null,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = subscribersByOwnerScreenName(deserializer(), slug, ownerScreenName, count, cursor, includeEntities, skipStatus, *options)
 
 /**
  * Returns the subscribers of the specified list. Private list subscribers will only be shown if the authenticated user owns the specified list.
@@ -97,7 +119,8 @@ public fun Lists.subscribersByOwnerScreenName(
  * @receiver [Lists] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorUsers] model.
  */
-public fun Lists.subscribersByOwnerId(
+public fun <M: CursorModel<T>, T: Any> Lists.subscribersByOwnerId(
+    deserializer: DeserializationStrategy<M>,
     slug: String,
     ownerId: Long,
     count: Int? = null,
@@ -105,9 +128,20 @@ public fun Lists.subscribersByOwnerId(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorUsers, User> = subscribers(null, slug, null, ownerId, count, cursor, includeEntities, skipStatus, *options)
+): CursorJsonApiAction<M, T> = subscribers(deserializer, null, slug, null, ownerId, count, cursor, includeEntities, skipStatus, *options)
 
-private fun Lists.subscribers(
+public inline fun <reified M: CursorModel<T>, T: Any> Lists.subscribersByOwnerId(
+    slug: String,
+    ownerId: Long,
+    count: Int? = null,
+    cursor: Long? = null,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = subscribersByOwnerId(deserializer(), slug, ownerId, count, cursor, includeEntities, skipStatus, *options)
+
+private fun <M: CursorModel<T>, T: Any> Lists.subscribers(
+    deserializer: DeserializationStrategy<M>,
     listId: Long? = null,
     slug: String? = null,
     ownerScreenName: String? = null,
@@ -129,4 +163,4 @@ private fun Lists.subscribers(
         "skip_status" to skipStatus,
         *options
     )
-}.cursorJsonObject { CursorUsers(it, client) }
+}.cursorJson(deserializer)

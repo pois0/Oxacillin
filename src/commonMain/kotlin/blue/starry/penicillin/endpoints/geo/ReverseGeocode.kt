@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Geo
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.GeoResult
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Given a latitude and a longitude, searches for up to 20 places that can be used as a place_id when updating a status.
@@ -48,14 +49,15 @@ import blue.starry.penicillin.models.GeoResult
  * @receiver [Geo] endpoint instance.
  * @return [JsonGeneralApiAction] for [GeoResult] model.
  */
-public fun Geo.reverseGeocode(
+public fun <T> Geo.reverseGeocode(
+    deserializer: DeserializationStrategy<T>,
     latitude: Double,
     longitude: Double,
     accuracy: String? = null,
     granularity: GeoGranularity = GeoGranularity.Default,
     maxResults: Int? = null,
     vararg options: Option
-): JsonGeneralApiAction<GeoResult> = client.session.get("/1.1/geo/reverse_geocode.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/geo/reverse_geocode.json") {
     parameters(
         "lat" to latitude,
         "long" to longitude,
@@ -64,4 +66,13 @@ public fun Geo.reverseGeocode(
         "max_results" to maxResults,
         *options
     )
-}.jsonObject { GeoResult(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Geo.reverseGeocode(
+    latitude: Double,
+    longitude: Double,
+    accuracy: String? = null,
+    granularity: GeoGranularity = GeoGranularity.Default,
+    maxResults: Int? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = reverseGeocode(deserializer(), latitude, longitude, accuracy, granularity, maxResults, *options)

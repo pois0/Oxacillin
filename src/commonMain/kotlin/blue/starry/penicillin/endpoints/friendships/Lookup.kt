@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Friendships
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Friendships.Lookup
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the relationships of the authenticating user to the comma-separated list of up to 100 screen_names or user_ids provided. Values for connections can be: following, following_requested, followed_by, none, blocking, muting.
@@ -43,12 +44,18 @@ import blue.starry.penicillin.models.Friendships.Lookup
  * @receiver [Friendships] endpoint instance.
  * @return [JsonGeneralApiAction] for [Lookup] model.
  */
-public fun Friendships.lookupByScreenNames(
+public fun <T> Friendships.lookupByScreenNames(
+    deserializer: DeserializationStrategy<T>,
     screenNames: List<String>,
     vararg options: Option
-): JsonArrayApiAction<Lookup> = lookup(screenNames, null, *options)
+): JsonGeneralApiAction<T> = lookup(deserializer, screenNames, null, *options)
 
-/**
+public inline fun <reified T> Friendships.lookupByScreenNames(
+    screenNames: List<String>,
+    vararg options: Option
+): JsonGeneralApiAction<T> = lookupByScreenNames(deserializer(), screenNames, *options)
+
+    /**
  * Returns the relationships of the authenticating user to the comma-separated list of up to 100 screen_names or user_ids provided. Values for connections can be: following, following_requested, followed_by, none, blocking, muting.
  * 
  * [Twitter API reference](https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-friendships-lookup)
@@ -58,12 +65,19 @@ public fun Friendships.lookupByScreenNames(
  * @receiver [Friendships] endpoint instance.
  * @return [JsonGeneralApiAction] for [Lookup] model.
  */
-public fun Friendships.lookupByUserIds(
+public fun <T> Friendships.lookupByUserIds(
+    deserializer: DeserializationStrategy<T>,
     userIds: List<Long>,
     vararg options: Option
-): JsonArrayApiAction<Lookup> = lookup(null, userIds, *options)
+): JsonGeneralApiAction<T> = lookup(deserializer, null, userIds, *options)
 
-private fun Friendships.lookup(
+public inline fun <reified T> Friendships.lookupByUserIds(
+    userIds: List<Long>,
+    vararg options: Option
+): JsonGeneralApiAction<T> = lookupByUserIds(deserializer(), userIds, *options)
+
+    private fun <T> Friendships.lookup(
+    deserializer: DeserializationStrategy<T>,
     screenNames: List<String>? = null,
     userIds: List<Long>? = null,
     vararg options: Option
@@ -73,4 +87,4 @@ private fun Friendships.lookup(
         "user_id" to userIds?.joinToString(","),
         *options
     )
-}.jsonArray { Lookup(it, client) }
+}.json(deserializer)

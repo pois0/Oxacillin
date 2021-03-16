@@ -26,14 +26,16 @@
 
 package blue.starry.penicillin.endpoints.welcomemessages.rules
 
-import blue.starry.jsonkt.jsonObjectOf
 import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.jsonBody
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.WelcomeMessageRules
-import blue.starry.penicillin.models.WelcomeMessageRule
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonObject
 
 /**
  * Creates a new Welcome Message Rule that determines which Welcome Message will be shown in a given conversation. Returns the created rule if successful.
@@ -48,15 +50,21 @@ import blue.starry.penicillin.models.WelcomeMessageRule
  * @receiver [WelcomeMessageRules] endpoint instance.
  * @return [JsonGeneralApiAction] for [WelcomeMessageRule.Single] model.
  */
-public fun WelcomeMessageRules.create(
+public fun <T> WelcomeMessageRules.create(
+    deserializer: DeserializationStrategy<T>,
     id: String,
     vararg options: Option
-): JsonGeneralApiAction<WelcomeMessageRule.Single> = client.session.post("/1.1/direct_messages/welcome_messages/rules/new.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/direct_messages/welcome_messages/rules/new.json") {
     parameters(*options)
 
-    jsonBody(
-        "welcome_message_rule" to jsonObjectOf(
-            "welcome_message_id" to id
-        )
-    )
-}.jsonObject { WelcomeMessageRule.Single(it, client) }
+    jsonBody(pairs = options) {
+        putJsonObject("welcome_message_rule") {
+            put("welcome_message_id", id)
+        }
+    }
+}.json(deserializer)
+
+public inline fun <reified T> WelcomeMessageRules.create(
+    id: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = create(deserializer(), id, *options)

@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Geo
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Place
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns all the information about a known [place](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/geo-objects).
@@ -43,9 +44,15 @@ import blue.starry.penicillin.models.Place
  * @receiver [Geo] endpoint instance.
  * @return [JsonGeneralApiAction] for [Geo] model.
  */
-public fun Geo.place(
+public fun <T> Geo.place(
+    deserializer: DeserializationStrategy<T>,
     placeId: String,
     vararg options: Option
-): JsonGeneralApiAction<Place> = client.session.get("/1.1/geo/id/$placeId.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/geo/id/$placeId.json") {
     parameters(*options)
-}.jsonObject { Place(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Geo.place(
+    placeId: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = place(deserializer(), placeId, *options)

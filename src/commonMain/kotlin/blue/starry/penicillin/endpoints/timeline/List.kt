@@ -26,12 +26,14 @@
 
 package blue.starry.penicillin.endpoints.timeline
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Timeline
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a timeline of tweets authored by members of the specified list. Retweets are included by default. Use the include_rts=false parameter to omit retweets.
@@ -51,7 +53,8 @@ import blue.starry.penicillin.models.Status
  * @see listTimelineByOwnerScreenName
  * @see listTimelineByOwnerId
  */
-public fun Timeline.listTimeline(
+public fun <T> Timeline.listTimeline(
+    deserializer: DeserializationStrategy<T>,
     listId: Long,
     sinceId: Long? = null,
     maxId: Long? = null,
@@ -62,7 +65,20 @@ public fun Timeline.listTimeline(
     includeMyRetweet: Boolean? = null,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<Status> = listTimeline(listId, null, null, null, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
+): JsonGeneralApiAction<T> = listTimeline(deserializer, listId, null, null, null, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
+
+public inline fun <reified T> Timeline.listTimeline(
+    listId: Long,
+    sinceId: Long? = null,
+    maxId: Long? = null,
+    count: Int? = null,
+    includeEntities: Boolean? = null,
+    includeRTs: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    includeMyRetweet: Boolean? = null,
+    includeCardUri: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = listTimeline(deserializer(), listId, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
 
 /**
  * Returns a timeline of tweets authored by members of the specified list. Retweets are included by default. Use the include_rts=false parameter to omit retweets.
@@ -83,7 +99,8 @@ public fun Timeline.listTimeline(
  * @see listTimeline
  * @see listTimelineByOwnerId
  */
-public fun Timeline.listTimelineByOwnerScreenName(
+public fun <T> Timeline.listTimelineByOwnerScreenName(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerScreenName: String,
     sinceId: Long? = null,
@@ -95,7 +112,21 @@ public fun Timeline.listTimelineByOwnerScreenName(
     includeMyRetweet: Boolean? = null,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<Status> = listTimeline(null, slug, ownerScreenName, null, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
+): JsonGeneralApiAction<T> = listTimeline(deserializer, null, slug, ownerScreenName, null, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
+
+public inline fun <reified T> Timeline.listTimelineByOwnerScreenName(
+    slug: String,
+    ownerScreenName: String,
+    sinceId: Long? = null,
+    maxId: Long? = null,
+    count: Int? = null,
+    includeEntities: Boolean? = null,
+    includeRTs: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    includeMyRetweet: Boolean? = null,
+    includeCardUri: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = listTimelineByOwnerScreenName(deserializer(), slug, ownerScreenName, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
 
 /**
  * Returns a timeline of tweets authored by members of the specified list. Retweets are included by default. Use the include_rts=false parameter to omit retweets.
@@ -116,7 +147,8 @@ public fun Timeline.listTimelineByOwnerScreenName(
  * @see listTimeline
  * @see listTimelineByOwnerScreenName
  */
-public fun Timeline.listTimelineByOwnerId(
+public fun <T> Timeline.listTimelineByOwnerId(
+    deserializer: DeserializationStrategy<T>,
     slug: String,
     ownerId: Long,
     sinceId: Long? = null,
@@ -128,9 +160,24 @@ public fun Timeline.listTimelineByOwnerId(
     includeMyRetweet: Boolean? = null,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<Status> = listTimeline(null, slug, null, ownerId, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
+): JsonGeneralApiAction<T> = listTimeline(deserializer, null, slug, null, ownerId, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
 
-private fun Timeline.listTimeline(
+public inline fun <reified T> Timeline.listTimelineByOwnerId(
+    slug: String,
+    ownerId: Long,
+    sinceId: Long? = null,
+    maxId: Long? = null,
+    count: Int? = null,
+    includeEntities: Boolean? = null,
+    includeRTs: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    includeMyRetweet: Boolean? = null,
+    includeCardUri: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = listTimelineByOwnerId(deserializer(), slug, ownerId, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
+
+private fun <T> Timeline.listTimeline(
+    deserializer: DeserializationStrategy<T>,
     listId: Long? = null,
     slug: String? = null,
     ownerScreenName: String? = null,
@@ -160,4 +207,4 @@ private fun Timeline.listTimeline(
         "include_card_uri" to includeCardUri,
         *options
     )
-}.jsonArray { Status(it, client) }
+}.json(deserializer)

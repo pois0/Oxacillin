@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.CollectionEntries
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Collection
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Add a specified Tweet to a Collection.
@@ -48,13 +49,14 @@ import blue.starry.penicillin.models.Collection
  * @receiver [CollectionEntries] endpoint instance.
  * @return [JsonGeneralApiAction] for [Collection.Entry.Result] model.
  */
-public fun CollectionEntries.add(
+public fun <T> CollectionEntries.add(
+    deserializer: DeserializationStrategy<T>,
     id: String,
     tweetId: Long,
     relativeTo: Long? = null,
     above: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<Collection.Entry.Result> = client.session.post("/1.1/collections/entries/add.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/collections/entries/add.json") {
     formBody(
         "id" to id,
         "tweet_id" to tweetId,
@@ -62,5 +64,12 @@ public fun CollectionEntries.add(
         "above" to above,
         *options
     )
+}.json(deserializer)
 
-}.jsonObject { Collection.Entry.Result(it, client) }
+public inline fun <reified T> CollectionEntries.add(
+    id: String,
+    tweetId: Long,
+    relativeTo: Long? = null,
+    above: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = add(deserializer(), id, tweetId, relativeTo, above, *options)

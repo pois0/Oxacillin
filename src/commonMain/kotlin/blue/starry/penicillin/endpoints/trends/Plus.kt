@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Trends
-import blue.starry.penicillin.models.TrendPlus
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Undocumented endpoint.
@@ -41,9 +42,10 @@ import blue.starry.penicillin.models.TrendPlus
  * @receiver [Trends] endpoint instance.
  * @return [JsonGeneralApiAction] for [TrendPlus] model.
  */
-public fun Trends.plus(
+public fun <T> Trends.plus(
+    deserializer: DeserializationStrategy<T>,
     vararg options: Option
-): JsonGeneralApiAction<TrendPlus> = client.session.get("/1.1/trends/plus.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/trends/plus.json") {
     emulationModes += EmulationMode.TwitterForiPhone
 
     parameters(
@@ -67,11 +69,8 @@ public fun Trends.plus(
         "tweet_mode" to "extended",
         *options
     )
-}.jsonObject { TrendPlus(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [Trends.plus].
- * @see Trends.plus
- */
-public val Trends.plus: JsonGeneralApiAction<TrendPlus>
-    get() = plus()
+public inline fun <reified T> Trends.plus(
+    vararg options: Option
+): JsonGeneralApiAction<T> = plus(deserializer(), *options)

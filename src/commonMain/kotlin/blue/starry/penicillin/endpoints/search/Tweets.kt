@@ -34,9 +34,9 @@ import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Search
 import blue.starry.penicillin.endpoints.common.TweetMode
 import blue.starry.penicillin.extensions.toYYYYMMdd
+import blue.starry.penicillin.util.deserializer
 import kotlinx.datetime.LocalDate
-
-private typealias SearchModel = blue.starry.penicillin.models.Search
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a collection of relevant [Tweets](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object) matching a specified query.
@@ -59,7 +59,8 @@ private typealias SearchModel = blue.starry.penicillin.models.Search
  * @receiver [Search] endpoint instance.
  * @return [JsonGeneralApiAction] for [SearchModel] model.
  */
-public fun Search.search(
+public fun <T> Search.search(
+    deserializer: DeserializationStrategy<T>,
     query: String,
     geocode: String? = null,
     lang: String? = null,
@@ -72,7 +73,7 @@ public fun Search.search(
     includeEntities: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonGeneralApiAction<SearchModel /* = blue.starry.penicillin.models.Search */> = client.session.get("/1.1/search/tweets.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/search/tweets.json") {
     parameters(
         "q" to query,
         "geocode" to geocode,
@@ -87,4 +88,19 @@ public fun Search.search(
         "tweet_mode" to tweetMode,
         *options
     )
-}.jsonObject { SearchModel(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Search.search(
+    query: String,
+    geocode: String? = null,
+    lang: String? = null,
+    locale: String? = null,
+    resultType: SearchResultType = SearchResultType.Default,
+    count: Int? = null,
+    until: LocalDate? = null,
+    sinceId: Long? = null,
+    maxId: Long? = null,
+    includeEntities: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = search(deserializer(), query, geocode, lang, locale, resultType, count, until, sinceId, maxId, includeEntities, tweetMode, *options)

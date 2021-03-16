@@ -26,14 +26,15 @@
 
 package blue.starry.penicillin.endpoints.collections.entries
 
-import blue.starry.jsonkt.JsonObject
 import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.jsonBody
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.CollectionEntries
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Collection
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.json.JsonElement
 
 /**
  * Curate a Collection by adding or removing Tweets in bulk. Updates must be limited to 100 cumulative additions or removals per request.
@@ -45,10 +46,16 @@ import blue.starry.penicillin.models.Collection
  * @receiver [CollectionEntries] endpoint instance.
  * @return [JsonGeneralApiAction] for [Collection.Entry.Result] model.
  */
-public fun CollectionEntries.curate(
-    payload: JsonObject,
+public fun <T> CollectionEntries.curate(
+    deserializer: DeserializationStrategy<T>,
+    payload: JsonElement,
     vararg options: Option
-): JsonGeneralApiAction<Collection.Entry.Result> = client.session.post("/1.1/collections/entries/curate.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/collections/entries/curate.json") {
     parameters(*options)
     jsonBody(payload)
-}.jsonObject { Collection.Entry.Result(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> CollectionEntries.curate(
+    payload: JsonElement,
+    vararg options: Option
+): JsonGeneralApiAction<T> = curate(deserializer(), payload, *options)

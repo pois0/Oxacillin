@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.OAuth
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.OAuthToken
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Allows a registered application to revoke an issued OAuth access_token by presenting its client credentials. Once an access_token has been invalidated, new creation attempts will yield a different Access Token and usage of the invalidated token will no longer be allowed.
@@ -44,11 +45,18 @@ import blue.starry.penicillin.models.OAuthToken
  * @receiver [OAuth] endpoint instance.
  * @return [JsonGeneralApiAction] for [OAuthToken] model.
  */
-public fun OAuth.invalidateToken(
+public fun <T> OAuth.invalidateToken(
+    deserializer: DeserializationStrategy<T>,
     accessToken: String,
     accessTokenSecret: String,
     vararg options: Option
-): JsonGeneralApiAction<OAuthToken> = invalidateTokenInternal(accessToken, accessTokenSecret, *options)
+): JsonGeneralApiAction<T> = invalidateTokenInternal(deserializer, accessToken, accessTokenSecret, *options)
+
+public inline fun <reified T> OAuth.invalidateToken(
+    accessToken: String,
+    accessTokenSecret: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = invalidateToken(deserializer(), accessToken, accessTokenSecret, *options)
 
 /**
  * Allows a registered application to revoke an issued OAuth access_token by presenting its client credentials. Once an access_token has been invalidated, new creation attempts will yield a different Access Token and usage of the invalidated token will no longer be allowed.
@@ -59,18 +67,17 @@ public fun OAuth.invalidateToken(
  * @receiver [OAuth] endpoint instance.
  * @return [JsonGeneralApiAction] for [OAuthToken] model.
  */
-public fun OAuth.invalidateToken(
+public fun <T> OAuth.invalidateToken(
+    deserializer: DeserializationStrategy<T>,
     vararg options: Option
-): JsonGeneralApiAction<OAuthToken> = invalidateTokenInternal(client.session.credentials.accessToken!!, client.session.credentials.accessTokenSecret!!, *options)
+): JsonGeneralApiAction<T> = invalidateTokenInternal(deserializer, client.session.credentials.accessToken!!, client.session.credentials.accessTokenSecret!!, *options)
 
-/**
- * Shorthand property to [OAuth.invalidateToken].
- * @see OAuth.invalidateToken
- */
-public val OAuth.invalidateToken: JsonGeneralApiAction<OAuthToken>
-    get() = invalidateToken()
+public inline fun <reified T> OAuth.invalidateToken(
+    vararg options: Option
+): JsonGeneralApiAction<T> = invalidateToken(deserializer(), *options)
 
-private fun OAuth.invalidateTokenInternal(
+private fun <T> OAuth.invalidateTokenInternal(
+    deserializer: DeserializationStrategy<T>,
     accessToken: String? = null,
     accessTokenSecret: String? = null,
     vararg options: Option
@@ -80,4 +87,4 @@ private fun OAuth.invalidateTokenInternal(
         "access_token_secret" to accessTokenSecret,
         *options
     )
-}.jsonObject { OAuthToken(it, client) }
+}.json(deserializer)

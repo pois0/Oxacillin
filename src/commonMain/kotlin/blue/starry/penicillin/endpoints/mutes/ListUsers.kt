@@ -31,8 +31,9 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Mutes
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
-import blue.starry.penicillin.models.cursor.CursorUsers
+import blue.starry.penicillin.models.cursor.CursorModel
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns an array of [user objects](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) the authenticating user has muted.
@@ -46,23 +47,24 @@ import blue.starry.penicillin.models.cursor.CursorUsers
  * @receiver [Mutes] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorUsers] model.
  */
-public fun Mutes.listUsers(
+public fun <M: CursorModel<T>, T: Any> Mutes.listUsers(
+    deserializer: DeserializationStrategy<M>,
     cursor: Long? = null,
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorUsers, User> = client.session.get("/1.1/mutes/users/list.json") {
+): CursorJsonApiAction<M, T> = client.session.get("/1.1/mutes/users/list.json") {
     parameters(
         "cursor" to cursor,
         "include_entities" to includeEntities,
         "skip_status" to skipStatus,
         *options
     )
-}.cursorJsonObject { CursorUsers(it, client) }
+}.cursorJson(deserializer)
 
-/**
- * Shorthand property to [Mutes.listUsers].
- * @see Mutes.listUsers
- */
-public val Mutes.listUsers: CursorJsonApiAction<CursorUsers, User>
-    get() = listUsers()
+public inline fun <reified M: CursorModel<T>, T: Any> Mutes.listUsers(
+    cursor: Long? = null,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = listUsers(deserializer(), cursor, includeEntities, skipStatus, *options)

@@ -31,7 +31,9 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Account
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 
 /**
  * Sets some values that users are able to set under the "Account" tab of their settings page. Only the parameters specified will be updated.
@@ -49,7 +51,8 @@ import blue.starry.penicillin.models.User
  * @receiver [Account] endpoint instance.
  * @return [JsonGeneralApiAction] for [User] model.
  */
-public fun Account.updateProfile(
+public fun <T> Account.updateProfile(
+    deserializer: DeserializationStrategy<T>,
     name: String? = null,
     url: String? = null,
     location: String? = null,
@@ -61,7 +64,7 @@ public fun Account.updateProfile(
     birthdateMonth: Int? = null,
     birthdateDay: Int? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = client.session.post("/1.1/account/update_profile.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/account/update_profile.json") {
     formBody(
         "name" to name,
         "url" to url,
@@ -75,12 +78,20 @@ public fun Account.updateProfile(
         "birthdate_day" to birthdateDay,
         *options
     )
+}.json(deserializer)
 
-}.jsonObject { User(it, client) }
-
-/**
- * Shorthand extension property to [Account.updateProfile].
- * @see Account.updateProfile
- */
-public val Account.updateProfile: JsonGeneralApiAction<User>
-    get() = updateProfile()
+public inline fun <reified T> Account.updateProfile(
+    name: String? = null,
+    url: String? = null,
+    location: String? = null,
+    description: String? = null,
+    profileLinkColor: String? = null,
+    includeEntities: Boolean? = null,
+    skipStatus: Boolean? = null,
+    birthdateYear: Int? = null,
+    birthdateMonth: Int? = null,
+    birthdateDay: Int? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = updateProfile(
+    serializer(), name, url, location, description, profileLinkColor, includeEntities, skipStatus, birthdateYear, birthdateMonth, birthdateDay, *options
+)

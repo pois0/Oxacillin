@@ -31,7 +31,9 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Followers
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.cursor.CursorIds
+import blue.starry.penicillin.models.cursor.CursorModel
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a cursored collection of user IDs for every user following the specified user.
@@ -47,14 +49,22 @@ import blue.starry.penicillin.models.cursor.CursorIds
  * @receiver [Followers] endpoint instance.
  * @return [CursorJsonApiAction] for [CursorIds] model.
  */
-public fun Followers.listIds(
+public fun <M: CursorModel<T>, T: Any> Followers.listIds(
+    deserializer: DeserializationStrategy<M>,
     cursor: Long? = null,
     stringifyIds: Boolean? = null,
     count: Int? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorIds, Long> = listIdsInternal(null, null, cursor, stringifyIds, count, *options)
+): CursorJsonApiAction<M, T> = listIdsInternal(deserializer, null, null, cursor, stringifyIds, count, *options)
 
-/**
+public inline fun <reified M: CursorModel<T>, T: Any> Followers.listIds(
+    cursor: Long? = null,
+    stringifyIds: Boolean? = null,
+    count: Int? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = listIds(deserializer(), cursor, stringifyIds, count, *options)
+
+    /**
  * Returns a cursored collection of user IDs for every user following the specified user.
  * At this time, results are ordered with the most recent following first — however, this ordering is subject to unannounced change and eventual consistency issues. Results are given in groups of 5,000 user IDs and multiple "pages" of results can be navigated through using the next_cursor value in subsequent requests. See [Using cursors to navigate collections](https://developer.twitter.com/en/docs/basics/cursoring) for more information.
  * This method is especially powerful when used in conjunction with [GET users/lookup](https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-lookup), a method that allows you to convert user IDs into full [user objects](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) in bulk.
@@ -71,15 +81,24 @@ public fun Followers.listIds(
  * @see listIdsByScreenName
  * @see listIds
  */
-public fun Followers.listIdsByUserId(
+public fun <M: CursorModel<T>, T: Any> Followers.listIdsByUserId(
+    deserializer: DeserializationStrategy<M>,
     userId: Long,
     cursor: Long? = null,
     stringifyIds: Boolean? = null,
     count: Int? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorIds, Long> = listIdsInternal(userId, null, cursor, stringifyIds, count, *options)
+): CursorJsonApiAction<M, T> = listIdsInternal(deserializer, userId, null, cursor, stringifyIds, count, *options)
 
-/**
+public inline fun <reified M: CursorModel<T>, T: Any> Followers.listIdsByUserId(
+    userId: Long,
+    cursor: Long? = null,
+    stringifyIds: Boolean? = null,
+    count: Int? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = listIdsByUserId(deserializer(), userId, cursor, stringifyIds, count, *options)
+
+    /**
  * Returns a cursored collection of user IDs for every user following the specified user.
  * At this time, results are ordered with the most recent following first — however, this ordering is subject to unannounced change and eventual consistency issues. Results are given in groups of 5,000 user IDs and multiple "pages" of results can be navigated through using the next_cursor value in subsequent requests. See [Using cursors to navigate collections](https://developer.twitter.com/en/docs/basics/cursoring) for more information.
  * This method is especially powerful when used in conjunction with [GET users/lookup](https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-lookup), a method that allows you to convert user IDs into full [user objects](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) in bulk.
@@ -96,15 +115,25 @@ public fun Followers.listIdsByUserId(
  * @see listIdsByUserId
  * @see listIds
  */
-public fun Followers.listIdsByScreenName(
+public fun <M: CursorModel<T>, T: Any> Followers.listIdsByScreenName(
+    deserializer: DeserializationStrategy<M>,
     screenName: String,
     cursor: Long? = null,
     stringifyIds: Boolean? = null,
     count: Int? = null,
     vararg options: Option
-): CursorJsonApiAction<CursorIds, Long> = listIdsInternal(null, screenName, cursor, stringifyIds, count, *options)
+): CursorJsonApiAction<M, T> = listIdsInternal(deserializer, null, screenName, cursor, stringifyIds, count, *options)
 
-private fun Followers.listIdsInternal(
+public inline fun <reified M: CursorModel<T>, T: Any> Followers.listIdsByScreenName(
+    screenName: String,
+    cursor: Long? = null,
+    stringifyIds: Boolean? = null,
+    count: Int? = null,
+    vararg options: Option
+): CursorJsonApiAction<M, T> = listIdsByScreenName(deserializer(), screenName, cursor, stringifyIds, count, *options)
+
+    private fun <M: CursorModel<T>, T: Any> Followers.listIdsInternal(
+    deserializer: DeserializationStrategy<M>,
     userId: Long? = null,
     screenName: String? = null,
     cursor: Long? = null,
@@ -120,11 +149,4 @@ private fun Followers.listIdsInternal(
         "count" to count,
         *options
     )
-}.cursorJsonObject { CursorIds(it, client) }
-
-/**
- * Shorthand property to [Followers.listIds].
- * @see Followers.listIds
- */
-public val Followers.listIds: CursorJsonApiAction<CursorIds, Long>
-    get() = listIdsInternal()
+}.cursorJson(deserializer)

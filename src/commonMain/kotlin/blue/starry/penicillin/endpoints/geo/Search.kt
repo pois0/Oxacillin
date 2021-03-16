@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Geo
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.GeoResult
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Search for places that can be attached to a Tweet via [POST statuses/update](https://developer.twitter.com/en/docs/tweets/post-and-engage/post-statuses-update). Given a latitude and a longitude pair, an IP address, or a name, this request will return a list of all the valid places that can be used as the place_id when updating a status.
@@ -54,7 +55,8 @@ import blue.starry.penicillin.models.GeoResult
  * @receiver [Geo] endpoint instance.
  * @return [JsonGeneralApiAction] for [GeoResult] model.
  */
-public fun Geo.search(
+public fun <T> Geo.search(
+    deserializer: DeserializationStrategy<T>,
     latitude: Double? = null,
     longitude: Double? = null,
     query: String? = null,
@@ -66,7 +68,7 @@ public fun Geo.search(
     attributeStreetAddress: String? = null,
     callback: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<GeoResult> = client.session.get("/1.1/geo/search.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/geo/search.json") {
     parameters(
         "lat" to latitude,
         "long" to longitude,
@@ -80,4 +82,18 @@ public fun Geo.search(
         "callback" to callback,
         *options
     )
-}.jsonObject { GeoResult(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Geo.search(
+    latitude: Double? = null,
+    longitude: Double? = null,
+    query: String? = null,
+    ip: String? = null,
+    granularity: GeoGranularity? = null,
+    accuracy: String? = null,
+    maxResults: Int? = null,
+    containedWithin: String? = null,
+    attributeStreetAddress: String? = null,
+    callback: String? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = search(deserializer(), latitude, longitude, query, ip, granularity, accuracy, maxResults, containedWithin, attributeStreetAddress, callback, *options)

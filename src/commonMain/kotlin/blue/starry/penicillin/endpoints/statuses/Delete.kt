@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Statuses
 import blue.starry.penicillin.endpoints.common.TweetMode
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Destroys the status specified by the required ID parameter. The authenticating user must be the author of the specified status. Returns the destroyed status if successful.
@@ -45,15 +46,23 @@ import blue.starry.penicillin.models.Status
  * @receiver [Statuses] endpoint instance.
  * @return [JsonGeneralApiAction] for [Status] model.
  */
-public fun Statuses.delete(
+public fun <T> Statuses.delete(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     trimUser: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonGeneralApiAction<Status> = client.session.post("/1.1/statuses/destroy/$id.json") {
+): JsonGeneralApiAction<T> = client.session.post("/1.1/statuses/destroy/$id.json") {
     formBody(
         "trim_user" to trimUser,
         "tweet_mode" to tweetMode,
         *options
     )
-}.jsonObject { Status(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> Statuses.delete(
+    id: Long,
+    trimUser: Boolean? = null,
+    tweetMode: TweetMode = TweetMode.Default,
+    vararg options: Option
+): JsonGeneralApiAction<T> = delete(deserializer(), id, trimUser, tweetMode, *options)

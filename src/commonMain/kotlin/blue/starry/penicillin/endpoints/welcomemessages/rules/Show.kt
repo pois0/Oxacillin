@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.WelcomeMessageRules
-import blue.starry.penicillin.models.WelcomeMessageRule
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns a Welcome Message Rule by the given id.
@@ -43,12 +44,18 @@ import blue.starry.penicillin.models.WelcomeMessageRule
  * @receiver [WelcomeMessageRules] endpoint instance.
  * @return [JsonGeneralApiAction] for [WelcomeMessageRule.Single] model.
  */
-public fun WelcomeMessageRules.show(
+public fun <T> WelcomeMessageRules.show(
+    deserializer: DeserializationStrategy<T>,
     id: Long,
     vararg options: Option
-): JsonGeneralApiAction<WelcomeMessageRule.Single> = client.session.get("/1.1/direct_messages/welcome_messages/rules/show.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/direct_messages/welcome_messages/rules/show.json") {
     parameters(
         "id" to id,
         *options
     )
-}.jsonObject { WelcomeMessageRule.Single(it, client) }
+}.json(deserializer)
+
+public inline fun <reified T> WelcomeMessageRules.show(
+    id: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = show(deserializer(), id, *options)

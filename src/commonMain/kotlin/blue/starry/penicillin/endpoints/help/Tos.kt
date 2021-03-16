@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Help
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Help.Tos
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the [Twitter Terms of Service](https://twitter.com/tos). Note: these are not the same as the [Developer Policy](https://developer.twitter.com/overview/terms/policy).
@@ -42,15 +43,13 @@ import blue.starry.penicillin.models.Help.Tos
  * @receiver [Help] endpoint instance.
  * @return [JsonGeneralApiAction] for [Tos] model.
  */
-public fun Help.tos(
+public fun <T> Help.tos(
+    deserializer: DeserializationStrategy<T>,
     vararg options: Option
-): JsonGeneralApiAction<Tos> = client.session.get("/1.1/help/tos.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/help/tos.json") {
     parameters(*options)
-}.jsonObject { Tos(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [Help.tos].
- * @see Help.tos
- */
-public val Help.tos: JsonGeneralApiAction<Tos>
-    get() = tos()
+public inline fun <reified T> Help.tos(
+    vararg options: Option
+): JsonGeneralApiAction<T> = tos(deserializer(), *options)

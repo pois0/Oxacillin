@@ -27,11 +27,13 @@
 package blue.starry.penicillin.endpoints.users
 
 import blue.starry.penicillin.core.emulation.EmulationMode
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Option
 import blue.starry.penicillin.endpoints.Users
-import blue.starry.penicillin.models.Recommendation
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Undocumented endpoint.
@@ -40,10 +42,16 @@ import blue.starry.penicillin.models.Recommendation
  * @receiver [Users] endpoint instance.
  * @return [JsonArrayApiAction] for [Recommendation] model.
  */
-public fun Users.recommendationsByScreenName(
+public fun <T> Users.recommendationsByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     vararg options: Option
-): JsonArrayApiAction<Recommendation> = recommendations(screenName, null, *options)
+): JsonGeneralApiAction<T> = recommendations(deserializer, screenName, null, *options)
+
+public inline fun <reified T> Users.recommendationsByScreenName(
+    screenName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = recommendationsByScreenName(deserializer(), screenName, *options)
 
 /**
  * Undocumented endpoint.
@@ -52,12 +60,19 @@ public fun Users.recommendationsByScreenName(
  * @receiver [Users] endpoint instance.
  * @return [JsonArrayApiAction] for [Recommendation] model.
  */
-public fun Users.recommendationsByUserId(
+public fun <T> Users.recommendationsByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     vararg options: Option
-): JsonArrayApiAction<Recommendation> = recommendations(null, userId, *options)
+): JsonGeneralApiAction<T> = recommendations(deserializer, null, userId, *options)
 
-private fun Users.recommendations(
+public inline fun <reified T> Users.recommendationsByUserId(
+    userId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = recommendationsByUserId(deserializer(), userId, *options)
+
+private fun <T> Users.recommendations(
+    deserializer: DeserializationStrategy<T>,
     screenName: String? = null,
     userId: Long? = null,
     vararg options: Option
@@ -81,4 +96,4 @@ private fun Users.recommendations(
         "user_id" to userId,
         *options
     )
-}.jsonArray { Recommendation(it, client) }
+}.json(deserializer)

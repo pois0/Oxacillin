@@ -31,7 +31,8 @@ import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Favorites
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Status
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Note: favorites are now known as likes.
@@ -47,15 +48,24 @@ import blue.starry.penicillin.models.Status
  * @receiver [Favorites] endpoint instance.
  * @return [JsonGeneralApiAction] for [Status] model.
  */
-public fun Favorites.list(
+public fun <T> Favorites.list(
+    deserializer: DeserializationStrategy<T>,
     count: Int? = null,
     sinceId: Long? = null,
     maxId: Long? = null,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<Status> = listInternal(null, null, count, sinceId, maxId, includeEntities, *options)
+): JsonGeneralApiAction<T> = listInternal(deserializer, null, null, count, sinceId, maxId, includeEntities, *options)
 
-/**
+public inline fun <reified T> Favorites.list(
+    count: Int? = null,
+    sinceId: Long? = null,
+    maxId: Long? = null,
+    includeEntities: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = list(deserializer(), count, sinceId, maxId, includeEntities, *options)
+
+    /**
  * Note: favorites are now known as likes.
  * Returns the 20 most recent Tweets liked by the authenticating or specified user.
  *
@@ -70,16 +80,26 @@ public fun Favorites.list(
  * @receiver [Favorites] endpoint instance.
  * @return [JsonGeneralApiAction] for [Status] model.
  */
-public fun Favorites.listByUserId(
+public fun <T> Favorites.listByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     count: Int? = null,
     sinceId: Long? = null,
     maxId: Long? = null,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<Status> = listInternal(userId, null, count, sinceId, maxId, includeEntities, *options)
+): JsonGeneralApiAction<T> = listInternal(deserializer, userId, null, count, sinceId, maxId, includeEntities, *options)
 
-/**
+public inline fun <reified T> Favorites.listByUserId(
+    userId: Long,
+    count: Int? = null,
+    sinceId: Long? = null,
+    maxId: Long? = null,
+    includeEntities: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = listByUserId(deserializer(), userId, count, sinceId, maxId, includeEntities, *options)
+
+    /**
  * Note: favorites are now known as likes.
  * Returns the 20 most recent Tweets liked by the authenticating or specified user.
  *
@@ -94,16 +114,27 @@ public fun Favorites.listByUserId(
  * @receiver [Favorites] endpoint instance.
  * @return [JsonGeneralApiAction] for [Status] model.
  */
-public fun Favorites.listByScreenName(
+public fun <T> Favorites.listByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     count: Int? = null,
     sinceId: Long? = null,
     maxId: Long? = null,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonArrayApiAction<Status> = listInternal(null, screenName, count, sinceId, maxId, includeEntities, *options)
+): JsonGeneralApiAction<T> = listInternal(deserializer, null, screenName, count, sinceId, maxId, includeEntities, *options)
 
-private fun Favorites.listInternal(
+public inline fun <reified T> Favorites.listByScreenName(
+    screenName: String,
+    count: Int? = null,
+    sinceId: Long? = null,
+    maxId: Long? = null,
+    includeEntities: Boolean? = null,
+    vararg options: Option
+): JsonGeneralApiAction<T> = listByScreenName(deserializer(), screenName, count, sinceId, maxId, includeEntities, *options)
+
+private fun <T> Favorites.listInternal(
+    deserializer: DeserializationStrategy<T>,
     userId: Long? = null,
     screenName: String? = null,
     count: Int? = null,
@@ -121,11 +152,4 @@ private fun Favorites.listInternal(
         "include_entities" to includeEntities,
         *options
     )
-}.jsonArray { Status(it, client) }
-
-/**
- * Shorthand property to [Favorites.list].
- * @see Favorites.list
- */
-public val Favorites.list: JsonArrayApiAction<Status>
-    get() = list()
+}.json(deserializer)

@@ -32,7 +32,8 @@ import blue.starry.penicillin.core.request.formBody
 import blue.starry.penicillin.core.session.post
 import blue.starry.penicillin.endpoints.Friendships
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.User
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Allows the authenticating user to unfollow the user specified in the ID parameter.
@@ -47,12 +48,18 @@ import blue.starry.penicillin.models.User
  * @return [JsonGeneralApiAction] for [User] model.
  * @see destroyByScreenName
  */
-public fun Friendships.destroyByUserId(
+public fun <T> Friendships.destroyByUserId(
+    deserializer: DeserializationStrategy<T>,
     userId: Long,
     vararg options: Option
-): JsonGeneralApiAction<User> = destroy(userId, null, *options)
+): JsonGeneralApiAction<T> = destroy(deserializer, userId, null, *options)
 
-/**
+public inline fun <reified T> Friendships.destroyByUserId(
+    userId: Long,
+    vararg options: Option
+): JsonGeneralApiAction<T> = destroyByUserId(deserializer(), userId, *options)
+
+    /**
  * Allows the authenticating user to unfollow the user specified in the ID parameter.
  * Returns the unfollowed user when successful. Returns a string describing the failure condition when unsuccessful.
  * Actions taken in this method are asynchronous. Changes will be eventually consistent.
@@ -65,12 +72,19 @@ public fun Friendships.destroyByUserId(
  * @return [JsonGeneralApiAction] for [User] model.
  * @see destroyByUserId
  */
-public fun Friendships.destroyByScreenName(
+public fun <T> Friendships.destroyByScreenName(
+    deserializer: DeserializationStrategy<T>,
     screenName: String,
     vararg options: Option
-): JsonGeneralApiAction<User> = destroy(null, screenName, *options)
+): JsonGeneralApiAction<T> = destroy(deserializer, null, screenName, *options)
 
-private fun Friendships.destroy(
+public inline fun <reified T> Friendships.destroyByScreenName(
+    screenName: String,
+    vararg options: Option
+): JsonGeneralApiAction<T> = destroyByScreenName(deserializer(), screenName, *options)
+
+    private fun <T> Friendships.destroy(
+    deserializer: DeserializationStrategy<T>,
     userId: Long? = null,
     screenName: String? = null,
     vararg options: Option
@@ -80,4 +94,4 @@ private fun Friendships.destroy(
         "screen_name" to screenName,
         *options
     )
-}.jsonObject { User(it, client) }
+}.json(deserializer)

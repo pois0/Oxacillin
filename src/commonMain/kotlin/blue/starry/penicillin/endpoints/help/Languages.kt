@@ -26,11 +26,13 @@
 
 package blue.starry.penicillin.endpoints.help
 
+import blue.starry.penicillin.core.request.action.JsonGeneralApiAction
 import blue.starry.penicillin.core.request.parameters
 import blue.starry.penicillin.core.session.get
 import blue.starry.penicillin.endpoints.Help
 import blue.starry.penicillin.endpoints.Option
-import blue.starry.penicillin.models.Help.Language
+import blue.starry.penicillin.util.deserializer
+import kotlinx.serialization.DeserializationStrategy
 
 /**
  * Returns the list of languages supported by Twitter along with the language code supported by Twitter.
@@ -42,15 +44,13 @@ import blue.starry.penicillin.models.Help.Language
  * @receiver [Help] endpoint instance.
  * @return [JsonArrayApiAction] for [Language] model.
  */
-public fun Help.languages(
+public fun <T> Help.languages(
+    deserializer: DeserializationStrategy<T>,
     vararg options: Option
-): JsonArrayApiAction<Language> = client.session.get("/1.1/help/languages.json") {
+): JsonGeneralApiAction<T> = client.session.get("/1.1/help/languages.json") {
     parameters(*options)
-}.jsonArray { Language(it, client) }
+}.json(deserializer)
 
-/**
- * Shorthand property to [Help.languages].
- * @see Help.languages
- */
-public val Help.languages: JsonArrayApiAction<Language>
-    get() = languages()
+public inline fun <reified T> Help.languages(
+    vararg options: Option
+): JsonGeneralApiAction<T> = languages(deserializer(), *options)
