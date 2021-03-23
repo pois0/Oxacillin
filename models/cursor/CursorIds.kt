@@ -24,11 +24,11 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models.cursor
+package jp.pois.oxacillin.models.cursor
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.longList
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 
 public data class CursorIds(
     private val parentJson: JsonObject,

@@ -24,11 +24,11 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models
+package jp.pois.oxacillin.models
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.string
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 
 public data class Card(override val json: JsonObject, override val client: ApiClient): PenicillinModel {
     public val cardUri: String by string("card_uri")

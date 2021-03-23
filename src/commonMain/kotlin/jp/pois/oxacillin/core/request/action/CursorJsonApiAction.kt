@@ -1,0 +1,76 @@
+/*
+ * The MIT License (MIT)
+ *
+ *     Copyright (c) 2017-2020 StarryBlueSky
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package jp.pois.oxacillin.core.request.action
+
+
+import jp.pois.oxacillin.core.exceptions.PenicillinException
+import jp.pois.oxacillin.core.i18n.LocalizedString
+import jp.pois.oxacillin.core.request.ApiRequest
+import jp.pois.oxacillin.core.response.CursorJsonObjectResponse
+import jp.pois.oxacillin.core.session.ApiClient
+import jp.pois.oxacillin.extensions.models.untilLast
+import jp.pois.oxacillin.models.CursorModel
+import io.ktor.client.statement.request
+import kotlinx.coroutines.flow.AbstractFlow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.json.Json
+
+/**
+ * The [ApiAction] that provides parsed json object with json model. This class supports cursor api operation.
+ */
+public class CursorJsonApiAction<M: CursorModel<T>, T: Any>(
+    override val client: ApiClient,
+    override val request: ApiRequest,
+    internal val deserializer: DeserializationStrategy<M>
+): ApiAction<CursorJsonObjectResponse<M, T>>, AbstractFlow<T>() {
+    override suspend fun execute(): CursorJsonObjectResponse<M, T> {
+        val response = doRequest()
+        val request = response.request
+
+        val content = response.readTextOrNull()
+
+        checkError(request, response, content)
+
+        var cause: Throwable? = null
+
+        if (content != null) {
+            runCatching {
+                Json.decodeFromString(deserializer, content)
+            }.onSuccess {
+                return CursorJsonObjectResponse(client, it, request, response, content.orEmpty(), this)
+            }.onFailure {
+                cause = it
+            }
+        }
+
+        throw PenicillinException(LocalizedString.JsonModelCastFailed, cause, request, response, content)
+    }
+
+    override suspend fun collectSafely(collector: FlowCollector<T>) {
+        collector.emitAll(untilLast())
+    }
+}

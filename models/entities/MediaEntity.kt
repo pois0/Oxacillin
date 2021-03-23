@@ -24,17 +24,17 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models.entities
+package jp.pois.oxacillin.models.entities
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 
 
-import blue.starry.penicillin.models.FaceCoordinate
-import blue.starry.penicillin.models.PenicillinModel
-import blue.starry.penicillin.models.Photo
-import blue.starry.penicillin.models.UrlEntityModel
+import jp.pois.oxacillin.models.FaceCoordinate
+import jp.pois.oxacillin.models.PenicillinModel
+import jp.pois.oxacillin.models.Photo
+import jp.pois.oxacillin.models.UrlEntityModel
 
 public data class MediaEntity(override val json: JsonObject, override val client: ApiClient): UrlEntityModel {
     public val additionalMediaInfo: AdditionalMediaInfo? by nullableModel("additional_media_info") { AdditionalMediaInfo(it, client) }

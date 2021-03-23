@@ -24,12 +24,12 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models
+package jp.pois.oxacillin.models
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.modelList
 import blue.starry.jsonkt.delegation.string
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 
 
 public object Subscription {

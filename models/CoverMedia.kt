@@ -24,11 +24,11 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models
+package jp.pois.oxacillin.models
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 
 public data class CoverMedia(private val parentJson: JsonObject, private val parentClient: ApiClient): CommonCoverMedia(parentJson, parentClient)
 

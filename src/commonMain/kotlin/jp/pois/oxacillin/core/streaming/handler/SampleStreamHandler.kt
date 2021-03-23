@@ -1,0 +1,63 @@
+/*
+ * The MIT License (MIT)
+ *
+ *     Copyright (c) 2017-2020 StarryBlueSky
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package jp.pois.oxacillin.core.streaming.handler
+
+import jp.pois.oxacillin.core.session.ApiClient
+import jp.pois.oxacillin.core.streaming.listener.SampleStreamListener
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+
+/**
+ * Default SampleStream [StreamHandler].
+ * Accepts listener of [SampleStreamListener].
+ */
+public class SampleStreamHandler<STATUS, DELETE, WARNING>(
+    override val client: ApiClient,
+    override val listener: SampleStreamListener<STATUS, DELETE, WARNING>,
+    private val statusDeserializer: DeserializationStrategy<STATUS>,
+    private val deleteDeserializer: DeserializationStrategy<DELETE>,
+    private val warningDeserializer: DeserializationStrategy<WARNING>
+): StreamHandler<SampleStreamListener<STATUS, DELETE, WARNING>> {
+    override suspend fun handle(json: JsonObject) {
+        when {
+            "text" in json -> {
+                listener.onStatus(Json.decodeFromJsonElement(statusDeserializer, json))
+            }
+            "delete" in json -> {
+                listener.onDelete(Json.decodeFromJsonElement(deleteDeserializer, json))
+            }
+            "warning" in json -> {
+                listener.onWarning(Json.decodeFromJsonElement(warningDeserializer, json))
+            }
+            else -> {
+                listener.onUnhandledJson(json)
+            }
+        }
+
+        listener.onAnyJson(json)
+    }
+}

@@ -24,7 +24,7 @@
 
 package tests
 
-import blue.starry.penicillin.core.auth.OAuthUtil
+import jp.pois.oxacillin.core.auth.OAuthUtil
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer

@@ -24,13 +24,13 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models
+package jp.pois.oxacillin.models
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.int
 import blue.starry.jsonkt.delegation.long
 import blue.starry.jsonkt.delegation.string
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 
 public data class TrendMetadata(override val json: JsonObject, override val client: ApiClient): PenicillinModel {
     public val contextMode: String by string("context_mode")

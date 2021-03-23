@@ -1,1 +1,1 @@
-rootProject.name = "penicillin"
+rootProject.name = "oxacillin"

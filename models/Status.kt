@@ -24,16 +24,16 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models
+package jp.pois.oxacillin.models
 
 import blue.starry.jsonkt.JsonElement
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 
 
 
-import blue.starry.penicillin.models.entities.StatusEntity
+import jp.pois.oxacillin.models.entities.StatusEntity
 
 public data class Status(override val json: JsonObject, override val client: ApiClient): PenicillinModel {
     public val createdAtRaw: String by string("created_at")

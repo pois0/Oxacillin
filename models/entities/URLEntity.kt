@@ -24,13 +24,13 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models.entities
+package jp.pois.oxacillin.models.entities
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.intList
 import blue.starry.jsonkt.delegation.string
-import blue.starry.penicillin.core.session.ApiClient
-import blue.starry.penicillin.models.UrlEntityModel
+import jp.pois.oxacillin.core.session.ApiClient
+import jp.pois.oxacillin.models.UrlEntityModel
 
 public data class URLEntity(override val json: JsonObject, override val client: ApiClient): UrlEntityModel {
     override val url: String by string

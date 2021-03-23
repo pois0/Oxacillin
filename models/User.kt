@@ -24,14 +24,14 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models
+package jp.pois.oxacillin.models
 
 import blue.starry.jsonkt.JsonElement
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 
-import blue.starry.penicillin.models.entities.UserEntity
+import jp.pois.oxacillin.models.entities.UserEntity
 
 public data class User(private val parentJson: JsonObject, private val parentClient: ApiClient): CommonUser(parentJson, parentClient)
 

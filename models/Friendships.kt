@@ -24,14 +24,14 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models
+package jp.pois.oxacillin.models
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.long
 import blue.starry.jsonkt.delegation.model
 import blue.starry.jsonkt.delegation.string
 import blue.starry.jsonkt.delegation.stringList
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 public object Friendships {
     public data class Show(override val json: JsonObject, override val client: ApiClient): PenicillinModel {
         public val relationship: Relationship by model { Relationship(it, client) }

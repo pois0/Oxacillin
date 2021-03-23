@@ -24,12 +24,12 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models
+package jp.pois.oxacillin.models
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*
 import blue.starry.jsonkt.parseObject
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 import kotlinx.serialization.json.jsonObject
 
 public data class Moment(override val json: JsonObject, override val client: ApiClient): PenicillinModel {

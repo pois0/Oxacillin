@@ -24,7 +24,7 @@
 
 @file:Suppress("UNUSED")
 
-package blue.starry.penicillin.models
+package jp.pois.oxacillin.models
 
 /**
  * A entity model that has "indices" property.

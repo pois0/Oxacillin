@@ -24,13 +24,13 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models.cursor
+package jp.pois.oxacillin.models.cursor
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.modelList
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 
-import blue.starry.penicillin.models.TwitterList
+import jp.pois.oxacillin.models.TwitterList
 
 public data class CursorLists(
     private val parentJson: JsonObject,

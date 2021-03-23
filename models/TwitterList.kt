@@ -24,12 +24,12 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models
+package jp.pois.oxacillin.models
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*
-import blue.starry.penicillin.core.session.ApiClient
-import blue.starry.penicillin.endpoints.lists.ListVisibilityMode
+import jp.pois.oxacillin.core.session.ApiClient
+import jp.pois.oxacillin.endpoints.lists.ListVisibilityMode
 
 public data class TwitterList(override val json: JsonObject, override val client: ApiClient): PenicillinModel {
     public val createdAtRaw: String by string("created_at")

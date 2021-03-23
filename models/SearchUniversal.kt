@@ -24,12 +24,12 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models
+package jp.pois.oxacillin.models
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.*
 import blue.starry.jsonkt.parseObjectOrNull
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 
@@ -51,7 +51,7 @@ public data class SearchUniversal(override val json: JsonObject, override val cl
 
     public data class Status(override val json: JsonObject, override val client: ApiClient): PenicillinModel {
         public val metadata: StatusMetadata by model { StatusMetadata(it, client) }
-        public val data: blue.starry.penicillin.models.Status by model { blue.starry.penicillin.models.Status(it, client) }
+        public val data: jp.pois.oxacillin.models.Status by model { jp.pois.oxacillin.models.Status(it, client) }
 
         public data class StatusMetadata(override val json: JsonObject, override val client: ApiClient): PenicillinModel {
             public val resultType: String by string("result_type")

@@ -23,15 +23,15 @@
  */
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models.entities
+package jp.pois.oxacillin.models.entities
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.modelList
 import blue.starry.jsonkt.delegation.nullableModel
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 
 
-import blue.starry.penicillin.models.PenicillinModel
+import jp.pois.oxacillin.models.PenicillinModel
 
 public data class UserEntity(override val json: JsonObject, override val client: ApiClient): PenicillinModel {
     public val url: UserProfileEntity? by nullableModel { UserProfileEntity(it, client) }

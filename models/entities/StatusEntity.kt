@@ -24,16 +24,16 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models.entities
+package jp.pois.oxacillin.models.entities
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.intList
 import blue.starry.jsonkt.delegation.long
 import blue.starry.jsonkt.delegation.modelList
 import blue.starry.jsonkt.delegation.string
-import blue.starry.penicillin.core.session.ApiClient
+import jp.pois.oxacillin.core.session.ApiClient
 
-import blue.starry.penicillin.models.PenicillinModel
+import jp.pois.oxacillin.models.PenicillinModel
 
 public data class StatusEntity(override val json: JsonObject, override val client: ApiClient): PenicillinModel {
     public val hashtags: List<HashtagEntity> by modelList { HashtagEntity(it, client) }

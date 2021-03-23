@@ -56,7 +56,7 @@ object Libraries {
         "kotlin.time.ExperimentalTime",
         "io.ktor.util.InternalAPI",
         "kotlinx.coroutines.FlowPreview",
-        "blue.starry.penicillin.core.experimental.PenicillinExperimentalApi"
+        "jp.pois.oxacillin.core.experimental.OxacillinExperimentalApi"
     )
 }
 

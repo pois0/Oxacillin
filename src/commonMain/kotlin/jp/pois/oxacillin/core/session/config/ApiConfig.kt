@@ -1,0 +1,109 @@
+/*
+ * The MIT License (MIT)
+ *
+ *     Copyright (c) 2017-2020 StarryBlueSky
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+@file:Suppress("UNUSED")
+
+package jp.pois.oxacillin.core.session.config
+
+import jp.pois.oxacillin.core.emulation.EmulationMode
+import jp.pois.oxacillin.core.session.ApiClientDsl
+import jp.pois.oxacillin.core.session.SessionBuilder
+import jp.pois.oxacillin.endpoints.common.TweetMode
+
+/**
+ * Creates [ApiConfig] configurations.
+ * Provides timeout, retries, emulations and so on.
+ * 
+ * @see ApiConfig
+ */
+@ApiClientDsl
+public fun SessionBuilder.api(block: ApiConfig.Builder.() -> Unit) {
+    getOrPutBuilder { 
+        ApiConfig.Builder()
+    }.apply(block)
+}
+
+internal fun SessionBuilder.createApiConfig(): ApiConfig {
+    return getOrPutBuilder {
+        ApiConfig.Builder()
+    }.build()
+}
+
+/**
+ * Configurations related to api execution.
+ * @see SessionBuilder.api
+ */
+public data class ApiConfig(
+    /**
+     * EmulationMode which is used to access Twitter Private endpoints.
+     */
+    public val emulationMode: EmulationMode,
+
+    /**
+     * Skips emulationMode checking if true
+     */
+    public val skipEmulationChecking: Boolean,
+
+    /**
+     * Default value for tweetMode parameter.
+     */
+    public val defaultTweetMode: TweetMode
+): SessionConfig {
+    
+    /**
+     * Provides ApiConfig builder.
+     */
+    public class Builder: SessionConfigBuilder<ApiConfig> {
+        /**
+         * Sets emulationMode which is used to access Twitter Private endpoints.
+         * For example, to access Cards API, you must set this [EmulationMode.TwitterForiPhone].
+         */
+        public var emulationMode: EmulationMode = EmulationMode.None
+        
+        /**
+         * Skips emulationMode checking if true.
+         * It means that you may access Twitter Private endpoints despite using non-official application.
+         * @see ApiConfig.Builder.skipEmulationChecking
+         */
+        public var skipEmulationChecking: Boolean = false
+        
+        /**
+         * Sets default value for tweetMode parameter.
+         * Learn more at [Tweet updates](https://developer.twitter.com/en/docs/tweets/tweet-updates).
+         */
+        @Suppress("MemberVisibilityPrivate")
+        public var defaultTweetMode: TweetMode = TweetMode.Extended
+
+        override fun build(): ApiConfig {
+            return ApiConfig(emulationMode, skipEmulationChecking, defaultTweetMode)
+        }
+    }
+}
+
+/**
+ * Skips emulationMode checking.
+ */
+public fun ApiConfig.Builder.skipEmulationChecking() {
+    skipEmulationChecking = true
+}

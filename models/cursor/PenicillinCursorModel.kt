@@ -24,11 +24,11 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models.cursor
+package jp.pois.oxacillin.models.cursor
 
 
-import blue.starry.penicillin.core.session.ApiClient
-import blue.starry.penicillin.models.PenicillinModel
+import jp.pois.oxacillin.core.session.ApiClient
+import jp.pois.oxacillin.models.PenicillinModel
 
 public abstract class PenicillinCursorModel<T: Any>(final override val json: JsonObject, final override val client: ApiClient): PenicillinModel {
     public val nextCursor: Long by long("next_cursor")

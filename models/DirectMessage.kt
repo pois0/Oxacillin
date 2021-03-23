@@ -24,15 +24,15 @@
 
 @file:Suppress("UNUSED", "KDocMissingDocumentation")
 
-package blue.starry.penicillin.models
+package jp.pois.oxacillin.models
 
 import blue.starry.jsonkt.JsonObject
 import blue.starry.jsonkt.delegation.boolean
 import blue.starry.jsonkt.delegation.long
 import blue.starry.jsonkt.delegation.model
 import blue.starry.jsonkt.delegation.string
-import blue.starry.penicillin.core.session.ApiClient
-import blue.starry.penicillin.models.entities.StatusEntity
+import jp.pois.oxacillin.core.session.ApiClient
+import jp.pois.oxacillin.models.entities.StatusEntity
 
 public data class DirectMessage(override val json: JsonObject, override val client: ApiClient): PenicillinModel {
     public val createdAtRaw: String by string("created_at")
