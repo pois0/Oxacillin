@@ -33,7 +33,7 @@ import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.account.updateProfileBackgroundImage
 import jp.pois.oxacillin.endpoints.media
 import jp.pois.oxacillin.endpoints.media.MediaComponent
-import jp.pois.oxacillin.extensions.Media
+import jp.pois.oxacillin.extensions.InternalMedia
 import jp.pois.oxacillin.util.deserializer
 import kotlinx.serialization.DeserializationStrategy
 
@@ -56,7 +56,7 @@ public fun <T> Account.updateProfileBackgroundImage(
     skipStatus: Boolean? = null,
     vararg options: Option
 ): ApiAction<JsonGeneralApiAction<T>> = delegatedAction {
-    val result = client.media.uploadMedia<Media>(media).execute()
+    val result = client.media.uploadMedia<InternalMedia>(media).execute()
     updateProfileBackgroundImage(deserializer, result.mediaId, tile, includeEntities, skipStatus, *options)
 }
 

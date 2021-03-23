@@ -54,7 +54,7 @@ private const val segmentMaxSize = 5 * 1024 * 1024
  * @receiver [Media] endpoint instance.
  * @return [delegatedAction] for [jp.pois.oxacillin.models.Media] model.
  */
-public fun <T: jp.pois.oxacillin.models.Media> Media.uploadMedia(
+public fun <T: jp.pois.oxacillin.extensions.Media> Media.uploadMedia(
     deserializer: DeserializationStrategy<T>,
     media: MediaComponent
 ): ApiAction<T> = delegatedAction {
@@ -87,4 +87,4 @@ public fun <T: jp.pois.oxacillin.models.Media> Media.uploadMedia(
     ).execute().result
 }
 
-public inline fun <reified T: jp.pois.oxacillin.models.Media> Media.uploadMedia(media: MediaComponent): ApiAction<T> = uploadMedia(deserializer(), media)
+public inline fun <reified T: jp.pois.oxacillin.extensions.Media> Media.uploadMedia(media: MediaComponent): ApiAction<T> = uploadMedia(deserializer(), media)

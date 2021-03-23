@@ -36,7 +36,7 @@ import jp.pois.oxacillin.endpoints.media
 import jp.pois.oxacillin.endpoints.media.MediaComponent
 import jp.pois.oxacillin.endpoints.media.uploadStatus
 import jp.pois.oxacillin.endpoints.statuses.create
-import jp.pois.oxacillin.extensions.Media
+import jp.pois.oxacillin.extensions.InternalMedia
 import jp.pois.oxacillin.util.deserializer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
@@ -58,7 +58,7 @@ public fun <T> Statuses.createWithMedia(
     vararg options: Option
 ): ApiAction<JsonGeneralResponse<T>> = delegatedAction {
     val results = media.map {
-        client.media.uploadMedia<Media>(it).execute().awaitProcessing(client)
+        client.media.uploadMedia<InternalMedia>(it).execute().awaitProcessing(client)
     }
     
     create(deserializer, status, mediaIds = results.map { it.mediaId }, options = options).execute()
@@ -74,12 +74,12 @@ private val mediaProcessTimeout = 60.seconds
 private val defaultCheckAfter = 5.seconds
 
 /**
- * Awaits until media processing is done, and returns [Media] response.
+ * Awaits until media processing is done, and returns [InternalMedia] response.
  * This operation is suspendable.
  *
  * @param timeout Timeout value.
  */
-private suspend fun Media.awaitProcessing(client: ApiClient, timeout: Duration? = null): Media {
+private suspend fun InternalMedia.awaitProcessing(client: ApiClient, timeout: Duration? = null): InternalMedia {
     if (processingInfo == null) {
         return this
     }
@@ -91,14 +91,14 @@ private suspend fun Media.awaitProcessing(client: ApiClient, timeout: Duration? 
         while (true) {
             delay(result.processingInfo?.checkAfterSecs?.seconds ?: defaultCheckAfter)
 
-            val response = client.media.uploadStatus<Media>(mediaId, mediaKey).execute()
+            val response = client.media.uploadStatus<InternalMedia>(mediaId, mediaKey).execute()
             result = response.result
 
-            if (result.processingInfo?.error != null && result.processingInfo?.state == Media.ProcessingInfo.State.Failed) {
+            if (result.processingInfo?.error != null && result.processingInfo?.state == InternalMedia.ProcessingInfo.State.Failed) {
                 throw PenicillinTwitterMediaProcessingFailedError(result.processingInfo?.error!!, response.request, response.response)
             }
 
-            if (result.processingInfo == null || result.processingInfo?.state == Media.ProcessingInfo.State.Succeeded) {
+            if (result.processingInfo == null || result.processingInfo?.state == InternalMedia.ProcessingInfo.State.Succeeded) {
                 break
             }
         }
