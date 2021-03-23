@@ -52,12 +52,12 @@ private const val segmentMaxSize = 5 * 1024 * 1024
  * [Twitter API reference](https://developer.twitter.com/en/docs/media/upload-media/api-reference/post-media-upload)
  *
  * @receiver [Media] endpoint instance.
- * @return [DelegatedAction] for [jp.pois.oxacillin.models.Media] model.
+ * @return [delegatedAction] for [jp.pois.oxacillin.models.Media] model.
  */
 public fun <T: jp.pois.oxacillin.models.Media> Media.uploadMedia(
     deserializer: DeserializationStrategy<T>,
     media: MediaComponent
-): ApiAction<T> = DelegatedAction {
+): ApiAction<T> = delegatedAction {
     val init = uploadInit(
         deserializer,
         totalBytes = media.data.size,

@@ -141,7 +141,7 @@ private fun Lists.hasMember(
     userId: Long? = null,
     screenName: String? = null,
     vararg options: Option
-): ApiAction<Boolean> = DelegatedAction {
+): ApiAction<Boolean> = delegatedAction {
     runCatching {
         member(emptyModelDeserializer, listId, slug, ownerScreenName, ownerId, userId, screenName, includeEntities = false, skipStatus = true, options = options).execute()
         true

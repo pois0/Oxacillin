@@ -49,7 +49,7 @@ import kotlinx.serialization.DeserializationStrategy
  * @return New [ApiAction] for new list response.
  */
 @OptIn(InternalCoroutinesApi::class)
-public fun <T: TwitterList> Lists.clone(deserializer: DeserializationStrategy<T>, sourceId: Long): ApiAction<JsonGeneralResponse<T>> = DelegatedAction {
+public fun <T: TwitterList> Lists.clone(deserializer: DeserializationStrategy<T>, sourceId: Long): ApiAction<JsonGeneralResponse<T>> = delegatedAction {
     val sourceList = show<TwitterListImpl>(sourceId).execute()
     val sourceMembers = members<CursorUsers, User>(sourceId).untilLast("count" to 5000).map { it.id }
     val newList = create<TwitterListImpl>(sourceList.result.name, mode = sourceList.result.mode, description = sourceList.result.description).execute().result

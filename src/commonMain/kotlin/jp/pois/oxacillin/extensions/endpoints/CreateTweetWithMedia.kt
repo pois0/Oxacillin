@@ -56,7 +56,7 @@ public fun <T> Statuses.createWithMedia(
     status: String,
     media: List<MediaComponent>,
     vararg options: Option
-): ApiAction<JsonGeneralResponse<T>> = DelegatedAction {
+): ApiAction<JsonGeneralResponse<T>> = delegatedAction {
     val results = media.map {
         client.media.uploadMedia<Media>(it).execute().awaitProcessing(client)
     }

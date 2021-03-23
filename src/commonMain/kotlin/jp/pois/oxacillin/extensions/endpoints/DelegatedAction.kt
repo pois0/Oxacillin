@@ -1,6 +1,7 @@
 package jp.pois.oxacillin.extensions.endpoints
 
 import jp.pois.oxacillin.core.request.action.ApiAction
+import jp.pois.oxacillin.core.request.action.DelegatedAction
 import jp.pois.oxacillin.endpoints.Endpoint
 
 /**
@@ -10,7 +11,6 @@ import jp.pois.oxacillin.endpoints.Endpoint
  *
  * @return New [ApiAction] with passed block.
  */
-@Suppress("FunctionName")
-public fun <R> Endpoint.DelegatedAction(block: suspend () -> R): ApiAction<R> {
-    return jp.pois.oxacillin.core.request.action.DelegatedAction(client, block)
+public fun <R> Endpoint.delegatedAction(block: suspend () -> R): ApiAction<R> {
+    return DelegatedAction(client, block)
 }

@@ -46,7 +46,7 @@ import kotlinx.serialization.DeserializationStrategy
  * @param skipStatus Optional. When set to either true, t or 1 statuses will not be included in the returned user object.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Account] endpoint instance.
- * @return [JsonGeneralApiAction] for [User] model.
+ * @return [JsonGeneralApiAction] for [T] model.
  */
 public fun <T> Account.updateProfileBackgroundImage(
     deserializer: DeserializationStrategy<T>,
@@ -55,7 +55,7 @@ public fun <T> Account.updateProfileBackgroundImage(
     includeEntities: Boolean? = null,
     skipStatus: Boolean? = null,
     vararg options: Option
-): ApiAction<JsonGeneralApiAction<T>> = DelegatedAction {
+): ApiAction<JsonGeneralApiAction<T>> = delegatedAction {
     val result = client.media.uploadMedia<Media>(media).execute()
     updateProfileBackgroundImage(deserializer, result.mediaId, tile, includeEntities, skipStatus, *options)
 }

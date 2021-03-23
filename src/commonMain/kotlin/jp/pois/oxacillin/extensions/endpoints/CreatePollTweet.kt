@@ -59,7 +59,7 @@ public fun <T> Statuses.createPollTweet(
     choices: List<String>,
     minutes: Int = 1440,
     vararg options: Option
-): ApiAction<T> = DelegatedAction {
+): ApiAction<T> = delegatedAction {
     val cardData = buildJsonObject {
         choices.forEachIndexed { i, choice ->
             put("twitter:string:choice${i + 1}_label", choice)
