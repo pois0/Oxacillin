@@ -1,2 +1,3 @@
 rootProject.name = "oxacillin"
-include("core")
+include(":core")
+include(":extensions")

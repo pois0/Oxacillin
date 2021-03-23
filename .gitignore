@@ -2,4 +2,4 @@
 .gradle/
 build/
 
-src/jvmTest/kotlin/Main.kt
+core/src/jvmTest/kotlin/Main.kt
