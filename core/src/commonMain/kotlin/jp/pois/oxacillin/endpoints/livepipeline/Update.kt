@@ -34,6 +34,7 @@ import jp.pois.oxacillin.core.request.json
 import jp.pois.oxacillin.core.session.post
 import jp.pois.oxacillin.endpoints.LivePipeline
 import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.utils.deserializer
 import kotlinx.serialization.DeserializationStrategy
 
 /**
@@ -56,3 +57,8 @@ public fun <T> LivePipeline.update(
         *options
     )
 }.json(deserializer)
+
+public inline fun <reified T> LivePipeline.update(
+    ids: List<Long>,
+    vararg options: Option
+): JsonGeneralApiAction<T> = update(deserializer(), ids, *options)

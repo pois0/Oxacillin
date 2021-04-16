@@ -38,7 +38,7 @@ import jp.pois.oxacillin.core.session.ApiClientDsl
  * @receiver Current [ApiClient] instance.
  */
 @ApiClientDsl
-public val ApiClient.directMessageEvent: DirectMessageEvents
+public val ApiClient.directMessageEvents: DirectMessageEvents
     get() = DirectMessageEvents(this)
 
 /**
@@ -46,6 +46,6 @@ public val ApiClient.directMessageEvent: DirectMessageEvents
  *
  * @constructor Creates new [DirectMessageEvents] endpoint instance.
  * @param client Current [ApiClient] instance.
- * @see ApiClient.directMessageEvent
+ * @see ApiClient.directMessageEvents
  */
 public inline class DirectMessageEvents(override val client: ApiClient): Endpoint

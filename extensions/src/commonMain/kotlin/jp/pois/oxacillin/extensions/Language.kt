@@ -37,20 +37,20 @@ import kotlinx.serialization.encoding.Encoder
 /**
  * Represents parsed "lang" object.
  */
-@Serializable(with = jp.pois.oxacillin.extensions.Language.LanguageSerializer::class)
-public inline class Language(
+@Serializable(with = Language.LanguageSerializer::class)
+public class Language(
     /**
      * Original "lang" string value.
      */
     public val value: String
 ) {
-    public object LanguageSerializer: KSerializer<jp.pois.oxacillin.extensions.Language> {
+    public object LanguageSerializer: KSerializer<Language> {
         override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("language", PrimitiveKind.STRING)
 
-        override fun deserialize(decoder: Decoder): jp.pois.oxacillin.extensions.Language =
-            jp.pois.oxacillin.extensions.Language(decoder.decodeString())
+        override fun deserialize(decoder: Decoder): Language =
+            Language(decoder.decodeString())
 
-        override fun serialize(encoder: Encoder, value: jp.pois.oxacillin.extensions.Language) {
+        override fun serialize(encoder: Encoder, value: Language) {
             encoder.encodeString(value.value)
         }
     }

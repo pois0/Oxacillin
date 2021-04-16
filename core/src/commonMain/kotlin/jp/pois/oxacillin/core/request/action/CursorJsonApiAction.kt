@@ -33,6 +33,7 @@ import jp.pois.oxacillin.core.session.ApiClient
 import jp.pois.oxacillin.extensions.models.untilLast
 import jp.pois.oxacillin.models.CursorModel
 import io.ktor.client.statement.request
+import jp.pois.oxacillin.utils.myJson
 import kotlinx.coroutines.flow.AbstractFlow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll
@@ -59,7 +60,7 @@ public class CursorJsonApiAction<M: CursorModel<T>, T: Any>(
 
         if (content != null) {
             runCatching {
-                Json.decodeFromString(deserializer, content)
+                myJson.decodeFromString(deserializer, content)
             }.onSuccess {
                 return CursorJsonObjectResponse(client, it, request, response, content.orEmpty(), this)
             }.onFailure {

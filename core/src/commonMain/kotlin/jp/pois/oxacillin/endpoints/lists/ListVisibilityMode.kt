@@ -27,6 +27,7 @@
 package jp.pois.oxacillin.endpoints.lists
 
 import jp.pois.oxacillin.core.request.EnumRequestParameter
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -37,15 +38,18 @@ public enum class ListVisibilityMode(override val value: String): EnumRequestPar
     /**
      * Default value.
      */
+    @SerialName("default")
     Default("public"),
 
     /**
      * Public list.
      */
+    @SerialName("public")
     Public("public"),
 
     /**
      * Private list.
      */
+    @SerialName("private")
     Private("private")
 }

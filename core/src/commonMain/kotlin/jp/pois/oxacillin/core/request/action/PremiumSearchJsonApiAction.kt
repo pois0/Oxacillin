@@ -32,6 +32,7 @@ import jp.pois.oxacillin.core.session.ApiClient
 import jp.pois.oxacillin.endpoints.PremiumSearchEnvironment
 
 import io.ktor.client.statement.request
+import jp.pois.oxacillin.utils.myJson
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.Json
 
@@ -60,7 +61,7 @@ public class PremiumSearchJsonApiAction<T>(
 
         if (content != null) {
             runCatching {
-                Json.decodeFromString(deserializer, content)
+                myJson.decodeFromString(deserializer, content)
             }.onSuccess {
                 return PremiumSearchJsonObjectResponse(client, it, request, response, content.orEmpty(), this, environment)
             }.onFailure {

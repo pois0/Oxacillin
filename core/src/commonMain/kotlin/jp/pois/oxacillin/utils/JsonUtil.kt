@@ -12,6 +12,10 @@ internal inline fun JsonElement.getOrNull(index: Int) = castOrNull<JsonArray>()?
 
 internal inline fun JsonElement.getOrNull(key: String) = castOrNull<JsonObject>()?.get(key)
 
+internal val myJson = Json {
+    ignoreUnknownKeys = true
+}
+
 @Suppress("unused")
 @PublishedApi
 internal inline fun <reified T> deserializer(): DeserializationStrategy<T> = Json.serializersModule.serializer()

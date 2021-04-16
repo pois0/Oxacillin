@@ -33,6 +33,7 @@ import jp.pois.oxacillin.utils.putAll
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import io.ktor.util.*
+import jp.pois.oxacillin.utils.myJson
 import kotlinx.serialization.json.*
 
 /**
@@ -95,7 +96,7 @@ public fun ApiRequestBuilder.jsonBody(vararg pairs: Pair<String, Any?>, mode: Em
             if (value != null) {
                 when (value) {
                     is JsonElement -> put(key, value)
-                    else -> put(key, Json.encodeToJsonElement(value))
+                    else -> put(key, myJson.encodeToJsonElement(value))
                 }
             }
         }

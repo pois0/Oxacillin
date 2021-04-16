@@ -32,6 +32,7 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.utils.io.*
+import jp.pois.oxacillin.utils.myJson
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -50,19 +51,6 @@ public abstract class StreamApiAction<L: StreamListener, out H: StreamHandler<L>
      * The [ApiRequest].
      */
     public val request: ApiRequest
-//    private val statusDeserializer: DeserializationStrategy<STATUS>,
-//    private val dmDeserializer: DeserializationStrategy<DM>,
-//    private val friendsDeserializer: DeserializationStrategy<FRIENDS>,
-//    private val deleteDeserializer: DeserializationStrategy<DELETE>,
-//    private val scrubGeoDeserializer: DeserializationStrategy<SCRUB_GEO>,
-//    private val statusWithheldDeserializer: DeserializationStrategy<STATUS_WITHHELD>,
-//    private val userWithheldDeserializer: DeserializationStrategy<USER_WITHHELD>,
-//    private val statusEventDeserializer: DeserializationStrategy<ESTATUS>,
-//    private val listEventDeserializer: DeserializationStrategy<ELIST>,
-//    private val userEventDeserializer: DeserializationStrategy<EUSER>,
-//    private val warningDeserializer: DeserializationStrategy<WARNING>,
-//    private val limitDeserializer: DeserializationStrategy<LIMIT>,
-//    private val disconnectDeserializer: DeserializationStrategy<DISCONNECT>
 ) {
     protected abstract fun getHandler(listener: L): H
 
@@ -92,7 +80,7 @@ public abstract class StreamApiAction<L: StreamListener, out H: StreamHandler<L>
 
                 when {
                     content.startsWith('{') -> {
-                        handler.handle(Json.decodeFromString(content))
+                        handler.handle(myJson.decodeFromString(content))
                     }
                     content.isBlank() -> {
                         listener.onHeartbeat()

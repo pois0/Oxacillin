@@ -26,6 +26,7 @@ package jp.pois.oxacillin.core.streaming.handler
 
 import jp.pois.oxacillin.core.session.ApiClient
 import jp.pois.oxacillin.core.streaming.listener.LivePipelineListener
+import jp.pois.oxacillin.utils.myJson
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -37,7 +38,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
  */
 public class LivePipelineHandler(override val client: ApiClient, override val listener: LivePipelineListener): StreamHandler<LivePipelineListener> {
     override suspend fun handle(json: JsonObject) {
-        val pipeline = Json.decodeFromJsonElement<LivePipeline>(json)
+        val pipeline = myJson.decodeFromJsonElement<LivePipeline>(json)
         val topic = pipeline.topic
         val id = topic.split("/").lastOrNull()?.toLongOrNull() ?: return listener.onUnhandledJson(json)
 

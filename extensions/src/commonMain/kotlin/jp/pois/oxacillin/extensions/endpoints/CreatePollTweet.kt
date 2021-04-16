@@ -33,11 +33,11 @@ import jp.pois.oxacillin.endpoints.cards
 import jp.pois.oxacillin.endpoints.cards.create
 import jp.pois.oxacillin.endpoints.statuses.create
 import jp.pois.oxacillin.extensions.utils.deserializer
+import jp.pois.oxacillin.extensions.utils.myJson
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
@@ -69,7 +69,7 @@ public fun <T> Statuses.createPollTweet(
         put("twitter:long:duration_minutes", minutes)
     }
 
-    val card = client.cards.create<Card>(cardData = Json.encodeToString(cardData)).execute()
+    val card = client.cards.create<Card>(cardData = myJson.encodeToString(cardData)).execute()
     
     create(deserializer, status, cardUri = card.result.cardUri, options = options).execute().result
 }

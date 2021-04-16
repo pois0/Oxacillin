@@ -28,8 +28,6 @@ package jp.pois.oxacillin.core.request
 
 import jp.pois.oxacillin.core.request.action.*
 import jp.pois.oxacillin.core.session.ApiClient
-import jp.pois.oxacillin.core.streaming.handler.StreamHandler
-import jp.pois.oxacillin.core.streaming.listener.StreamListener
 import jp.pois.oxacillin.endpoints.PremiumSearchEnvironment
 import jp.pois.oxacillin.models.CursorModel
 import kotlinx.serialization.DeserializationStrategy

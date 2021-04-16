@@ -5,7 +5,7 @@ import jp.pois.oxacillin.extensions.models.UrlEntityModel
 public interface Status {
     public val cardUri: String?
 
-    public val user: jp.pois.oxacillin.extensions.CommonUser
+    public val user: jp.pois.oxacillin.extensions.User
 
     public val entities: jp.pois.oxacillin.extensions.Status.StatusEntity
 

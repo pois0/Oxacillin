@@ -37,20 +37,20 @@ import kotlinx.serialization.encoding.Encoder
 /**
  * Represents "created_at" date format.
  */
-@Serializable(with = jp.pois.oxacillin.extensions.CreatedAt.CreatedAtSerializer::class)
-public inline class CreatedAt(
+@Serializable(with = CreatedAt.CreatedAtSerializer::class)
+public data class CreatedAt(
     /**
      * Original "created_at" string.
      */
     public val value: String
 ) {
-    public object CreatedAtSerializer: KSerializer<jp.pois.oxacillin.extensions.CreatedAt> {
+    public object CreatedAtSerializer: KSerializer<CreatedAt> {
         override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("CreatedAt", PrimitiveKind.STRING)
 
-        override fun deserialize(decoder: Decoder): jp.pois.oxacillin.extensions.CreatedAt =
-            jp.pois.oxacillin.extensions.CreatedAt(decoder.decodeString())
+        override fun deserialize(decoder: Decoder): CreatedAt =
+            CreatedAt(decoder.decodeString())
 
-        override fun serialize(encoder: Encoder, value: jp.pois.oxacillin.extensions.CreatedAt) {
+        override fun serialize(encoder: Encoder, value: CreatedAt) {
             encoder.encodeString(value.value)
         }
     }

@@ -26,6 +26,7 @@ package jp.pois.oxacillin.core.streaming.handler
 
 import jp.pois.oxacillin.core.session.ApiClient
 import jp.pois.oxacillin.core.streaming.listener.FilterStreamListener
+import jp.pois.oxacillin.utils.myJson
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -44,13 +45,13 @@ public class FilterStreamHandler<STATUS, DELETE, WARNING>(
     override suspend fun handle(json: JsonObject) {
         when {
             "text" in json -> {
-                listener.onStatus(Json.decodeFromJsonElement(statusDeserializer, json))
+                listener.onStatus(myJson.decodeFromJsonElement(statusDeserializer, json))
             }
             "delete" in json -> {
-                listener.onDelete(Json.decodeFromJsonElement(deleteDeserializer, json))
+                listener.onDelete(myJson.decodeFromJsonElement(deleteDeserializer, json))
             }
             "warning" in json -> {
-                listener.onWarning(Json.decodeFromJsonElement(warningDeserializer, json))
+                listener.onWarning(myJson.decodeFromJsonElement(warningDeserializer, json))
             }
             else -> {
                 listener.onUnhandledJson(json)

@@ -4,29 +4,29 @@ public interface Card {
     public val bindingValues: jp.pois.oxacillin.extensions.Card.BindingValues
 
     public interface BindingValues {
-        public val choice1Label: jp.pois.oxacillin.extensions.Card.BindingValues.StringValue?
-        public val choice2Label: jp.pois.oxacillin.extensions.Card.BindingValues.StringValue?
-        public val choice3Label: jp.pois.oxacillin.extensions.Card.BindingValues.StringValue?
-        public val choice4Label: jp.pois.oxacillin.extensions.Card.BindingValues.StringValue?
+        public val choice1Label: StringValue?
+        public val choice2Label: StringValue?
+        public val choice3Label: StringValue?
+        public val choice4Label: StringValue?
 
-        public val choice1Count: jp.pois.oxacillin.extensions.Card.BindingValues.StringValue?
-        public val choice2Count: jp.pois.oxacillin.extensions.Card.BindingValues.StringValue?
-        public val choice3Count: jp.pois.oxacillin.extensions.Card.BindingValues.StringValue?
-        public val choice4Count: jp.pois.oxacillin.extensions.Card.BindingValues.StringValue?
+        public val choice1Count: StringValue?
+        public val choice2Count: StringValue?
+        public val choice3Count: StringValue?
+        public val choice4Count: StringValue?
 
-        public val countsAreFinal: jp.pois.oxacillin.extensions.Card.BindingValues.BooleanValue?
-        public val endDatetimeUtc: jp.pois.oxacillin.extensions.Card.BindingValues.StringValue?
-        public val lastUpdatedDatetimeUtc: jp.pois.oxacillin.extensions.Card.BindingValues.StringValue?
-        public val durationMinutes: jp.pois.oxacillin.extensions.Card.BindingValues.StringValue?
+        public val countsAreFinal: BooleanValue?
+        public val endDatetimeUtc: StringValue?
+        public val lastUpdatedDatetimeUtc: StringValue?
+        public val durationMinutes: StringValue?
 
         public interface StringValue {
             public val type: String
-            public val stringValue: String
+            public val value: String
         }
 
         public interface BooleanValue {
             public val type: String
-            public val booleanValue: Boolean
+            public val value: Boolean
         }
     }
 }

@@ -50,6 +50,7 @@ object Libraries {
 
 plugins {
     kotlin("multiplatform") version "1.4.30"
+    kotlin("plugin.serialization") version "1.4.30"
 
     `maven-publish`
     signing

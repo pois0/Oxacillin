@@ -31,6 +31,7 @@ import jp.pois.oxacillin.core.response.JsonGeneralResponse
 import jp.pois.oxacillin.core.session.ApiClient
 
 import io.ktor.client.statement.request
+import jp.pois.oxacillin.utils.myJson
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.Json
 
@@ -54,7 +55,7 @@ public class JsonGeneralApiAction<T>(
 
         if (content != null) {
             runCatching {
-                Json.decodeFromString(deserializer, content)
+                myJson.decodeFromString(deserializer, content)
             }.onSuccess {
                 return JsonGeneralResponse(client, it, request, response, content.orEmpty(), this)
             }.onFailure {

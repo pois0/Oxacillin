@@ -26,8 +26,6 @@
 
 package jp.pois.oxacillin.extensions.models
 
-import jp.pois.oxacillin.extensions.IndexedEntityModel
-
 /**
  * Returns the first index of the indices.
  */

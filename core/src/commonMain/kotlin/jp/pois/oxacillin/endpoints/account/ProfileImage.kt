@@ -66,6 +66,7 @@ public fun <T> Account.updateProfileImage(
         append("image", "blob", mediaType.contentType) {
             writeFully(file)
         }
+
         append(
             "include_entities" to includeEntities,
             "skip_status" to skipStatus,

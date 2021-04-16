@@ -7,5 +7,5 @@ public interface IndexedEntityModel {
     /**
      * The entity indices. Its size must be 2.
      */
-    public val indices: List<Int>
+    public val indices: IntArray
 }

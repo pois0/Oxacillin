@@ -26,18 +26,18 @@
 
 package jp.pois.oxacillin.extensions.models
 
-import jp.pois.oxacillin.extensions.CommonUser
+import jp.pois.oxacillin.extensions.User
 
 
 /**
  * Returns profile image url with specified size.
  */
-public fun jp.pois.oxacillin.extensions.CommonUser.profileImageUrlWithVariantSize(size: ProfileImageSize): String = profileImageUrlWithVariantSize(profileImageUrl, size)
+public fun User.profileImageUrlWithVariantSize(size: ProfileImageSize): String = profileImageUrlWithVariantSize(profileImageUrl, size)
 
 /**
  * Returns profile image url (HTTPS) with specified size.
  */
-public fun jp.pois.oxacillin.extensions.CommonUser.profileImageUrlHttpsWithVariantSize(size: ProfileImageSize): String = profileImageUrlWithVariantSize(profileImageUrlHttps, size)
+public fun User.profileImageUrlHttpsWithVariantSize(size: ProfileImageSize): String = profileImageUrlWithVariantSize(profileImageUrlHttps, size)
 
 private fun profileImageUrlWithVariantSize(url: String, size: ProfileImageSize): String {
     return when (size) {
@@ -56,7 +56,7 @@ private fun profileImageUrlWithVariantSize(url: String, size: ProfileImageSize):
 /**
  * Returns profile banner url with specified size.
  */
-public fun jp.pois.oxacillin.extensions.CommonUser.profileBannerUrlWithVariantSize(size: ProfileBannerSize): String? {
+public fun User.profileBannerUrlWithVariantSize(size: ProfileBannerSize): String? {
     return profileBannerUrl?.let { "$profileBannerUrl/${size.suffix}" }
 }
 

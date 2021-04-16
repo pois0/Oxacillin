@@ -26,6 +26,7 @@ package jp.pois.oxacillin.core.streaming.handler
 
 import jp.pois.oxacillin.core.session.ApiClient
 import jp.pois.oxacillin.core.streaming.listener.UserStreamListener
+import jp.pois.oxacillin.utils.myJson
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -54,16 +55,16 @@ public class UserStreamHandler<STATUS, DM, FRIENDS, DELETE, SCRUB_GEO, STATUS_WI
     override suspend fun handle(json: JsonObject) {
         when {
             "text" in json -> {
-                listener.onStatus(Json.decodeFromJsonElement(statusDeserializer, json))
+                listener.onStatus(myJson.decodeFromJsonElement(statusDeserializer, json))
             }
             "direct_message" in json -> {
-                listener.onDirectMessage(Json.decodeFromJsonElement(dmDeserializer, json))
+                listener.onDirectMessage(myJson.decodeFromJsonElement(dmDeserializer, json))
             }
             "event" in json -> {
                 val event = UserStreamEvent.byKey(json["event"]!!.toString())
                 when (event?.type) {
                     UserStreamEventType.Status -> {
-                        val statusEvent = Json.decodeFromJsonElement(statusEventDeserializer, json)
+                        val statusEvent = myJson.decodeFromJsonElement(statusEventDeserializer, json)
 
                         when (event) {
                             UserStreamEvent.Favorite -> listener.onFavorite(statusEvent)
@@ -78,7 +79,7 @@ public class UserStreamHandler<STATUS, DM, FRIENDS, DELETE, SCRUB_GEO, STATUS_WI
                         listener.onAnyEvent(statusEvent)
                     }
                     UserStreamEventType.List -> {
-                        val listEvent = Json.decodeFromJsonElement(listEventDeserializer, json)
+                        val listEvent = myJson.decodeFromJsonElement(listEventDeserializer, json)
 
                         when (event) {
                             UserStreamEvent.ListCreated -> listener.onListCreated(listEvent)
@@ -95,7 +96,7 @@ public class UserStreamHandler<STATUS, DM, FRIENDS, DELETE, SCRUB_GEO, STATUS_WI
                         listener.onAnyEvent(listEvent)
                     }
                     UserStreamEventType.User -> {
-                        val userEvent = Json.decodeFromJsonElement(userEventDeserializer, json)
+                        val userEvent = myJson.decodeFromJsonElement(userEventDeserializer, json)
 
                         when (event) {
                             UserStreamEvent.Follow -> listener.onFollow(userEvent)
@@ -117,28 +118,28 @@ public class UserStreamHandler<STATUS, DM, FRIENDS, DELETE, SCRUB_GEO, STATUS_WI
                 }
             }
             "friends" in json -> {
-                listener.onFriends(Json.decodeFromJsonElement(friendsDeserializer, json))
+                listener.onFriends(myJson.decodeFromJsonElement(friendsDeserializer, json["friends"]!!))
             }
             "delete" in json -> {
-                listener.onDelete(Json.decodeFromJsonElement(deleteDeserializer, json))
+                listener.onDelete(myJson.decodeFromJsonElement(deleteDeserializer, json["delete"]!!))
             }
             "scrub_geo" in json -> {
-                listener.onScrubGeo(Json.decodeFromJsonElement(scrubGeoDeserializer, json))
+                listener.onScrubGeo(myJson.decodeFromJsonElement(scrubGeoDeserializer, json["scrub_geo"]!!))
             }
             "status_withheld" in json -> {
-                listener.onStatusWithheld(Json.decodeFromJsonElement(statusWithheldDeserializer, json))
+                listener.onStatusWithheld(myJson.decodeFromJsonElement(statusWithheldDeserializer, json["status_withheld"]!!))
             }
             "user_withheld" in json -> {
-                listener.onUserWithheld(Json.decodeFromJsonElement(userWithheldDeserializer, json))
+                listener.onUserWithheld(myJson.decodeFromJsonElement(userWithheldDeserializer, json["user_withheld"]!!))
             }
             "disconnect" in json -> {
-                listener.onDisconnectMessage(Json.decodeFromJsonElement(disconnectDeserializer, json))
+                listener.onDisconnectMessage(myJson.decodeFromJsonElement(disconnectDeserializer, json["disconnect"]!!))
             }
             "warning" in json -> {
-                listener.onWarning(Json.decodeFromJsonElement(warningDeserializer, json))
+                listener.onWarning(myJson.decodeFromJsonElement(warningDeserializer, json["warning"]!!))
             }
             "limit" in json -> {
-                listener.onLimit(Json.decodeFromJsonElement(limitDeserializer, json))
+                listener.onLimit(myJson.decodeFromJsonElement(limitDeserializer, json["limit"]!!))
             }
             else -> {
                 listener.onUnhandledJson(json)

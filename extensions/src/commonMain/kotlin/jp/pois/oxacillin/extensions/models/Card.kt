@@ -32,43 +32,43 @@ import jp.pois.oxacillin.extensions.Status
 /**
  * If true, this status has card entity.
  */
-public val jp.pois.oxacillin.extensions.Status.hasCard: Boolean
+public val Status.hasCard: Boolean
     get() = cardUri != null
 
 /**
  * A map of choices. Map size N must be 2 <= N <= 4.
  */
-public val jp.pois.oxacillin.extensions.Card.choices: LinkedHashMap<String, Int>
+public val Card.choices: LinkedHashMap<String, Int>
     get() = linkedMapOf<String, Int>().also { 
-        it.putIfNotNull(bindingValues.choice1Label?.stringValue, bindingValues.choice1Count?.stringValue?.toIntOrNull())
-        it.putIfNotNull(bindingValues.choice2Label?.stringValue, bindingValues.choice2Count?.stringValue?.toIntOrNull())
-        it.putIfNotNull(bindingValues.choice3Label?.stringValue, bindingValues.choice3Count?.stringValue?.toIntOrNull())
-        it.putIfNotNull(bindingValues.choice4Label?.stringValue, bindingValues.choice4Count?.stringValue?.toIntOrNull())
+        it.putIfNotNull(bindingValues.choice1Label?.value, bindingValues.choice1Count?.value?.toIntOrNull())
+        it.putIfNotNull(bindingValues.choice2Label?.value, bindingValues.choice2Count?.value?.toIntOrNull())
+        it.putIfNotNull(bindingValues.choice3Label?.value, bindingValues.choice3Count?.value?.toIntOrNull())
+        it.putIfNotNull(bindingValues.choice4Label?.value, bindingValues.choice4Count?.value?.toIntOrNull())
     }
 
 /**
  * If true, this card is final result.
  */
-public val jp.pois.oxacillin.extensions.Card.isFinalResult: Boolean
-    get() = bindingValues.countsAreFinal?.booleanValue == true
+public val Card.isFinalResult: Boolean
+    get() = bindingValues.countsAreFinal?.value == true
 
 /**
  * Card end at date.
  */
-public val jp.pois.oxacillin.extensions.Card.endAt: String?
-    get() = bindingValues.endDatetimeUtc?.stringValue
+public val Card.endAt: String?
+    get() = bindingValues.endDatetimeUtc?.value
 
 /**
  * Card last update at date.
  */
-public val jp.pois.oxacillin.extensions.Card.lastUpdateAt: String?
-    get() = bindingValues.lastUpdatedDatetimeUtc?.stringValue
+public val Card.lastUpdateAt: String?
+    get() = bindingValues.lastUpdatedDatetimeUtc?.value
 
 /**
  * Card duration in minutes.
  */
-public val jp.pois.oxacillin.extensions.Card.minutes: Int?
-    get() = bindingValues.durationMinutes?.stringValue?.toIntOrNull()
+public val Card.minutes: Int?
+    get() = bindingValues.durationMinutes?.value?.toIntOrNull()
 
 private fun <K, V> MutableMap<K, V>.putIfNotNull(key: K?, value: V?) {
     if (key != null && value != null) {

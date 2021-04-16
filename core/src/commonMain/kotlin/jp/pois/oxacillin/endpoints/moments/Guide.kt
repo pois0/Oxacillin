@@ -33,6 +33,7 @@ import jp.pois.oxacillin.core.request.parameters
 import jp.pois.oxacillin.core.session.get
 import jp.pois.oxacillin.endpoints.Moments
 import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.utils.deserializer
 import kotlinx.serialization.DeserializationStrategy
 
 /**
@@ -77,3 +78,7 @@ public fun <T> Moments.guide(
         *options
     )
 }.json(deserializer)
+
+public inline fun <reified T> Moments.guide(
+    vararg options: Option
+): JsonGeneralApiAction<T> = guide(deserializer(), *options)
