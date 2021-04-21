@@ -32,7 +32,7 @@ import jp.pois.oxacillin.extensions.Status
  * Returns full-body status text.
  * Supports both tweet modes (Extend and Compat).
  */
-public val jp.pois.oxacillin.extensions.Status.text: String
+public val Status.text: String
     get () = if (retweetedStatus != null) {
         if (retweetedStatus?.extendedTweet != null) {
             "RT @${retweetedStatus!!.user.screenName}: ${retweetedStatus!!.text}"
@@ -46,7 +46,7 @@ public val jp.pois.oxacillin.extensions.Status.text: String
 /**
  * Returns full-body status text which shortened urls in are each expanded.
  */
-public val jp.pois.oxacillin.extensions.Status.expandedText: String
+public val Status.expandedText: String
     get() {
         val entities = entities.let { it.media + it.urls }
             .sortedBy { it.firstIndex }
@@ -66,7 +66,7 @@ public val jp.pois.oxacillin.extensions.Status.expandedText: String
  * Returns full-body status text which shortened urls in are each expanded.
  */
 @Deprecated("This function often throws IndexOutOfBoundsException because of incorrect indices of tweet entities.")
-public val jp.pois.oxacillin.extensions.Status.expandedTextWithIndices: String
+public val Status.expandedTextWithIndices: String
     get() {
         val entities = entities.let { it.media + it.urls }
             .sortedBy { it.firstIndex }

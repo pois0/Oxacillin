@@ -29,7 +29,6 @@ package jp.pois.oxacillin.endpoints.stream
 
 import jp.pois.oxacillin.core.request.ApiRequest
 import jp.pois.oxacillin.core.request.EndpointHost
-import jp.pois.oxacillin.core.request.action.ApiAction
 import jp.pois.oxacillin.core.request.action.StreamApiAction
 import jp.pois.oxacillin.core.request.parameters
 import jp.pois.oxacillin.core.session.ApiClient

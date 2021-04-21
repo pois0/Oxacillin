@@ -26,7 +26,7 @@
 
 package jp.pois.oxacillin.defaults.endpoints.help
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Help
 import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.help
@@ -40,8 +40,8 @@ import jp.pois.oxacillin.endpoints.help.languages
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [Help] endpoint instance.
- * @return [JsonGeneralApiAction] for [Language] model.
+ * @return [JsonArrayApiAction] for [jp.pois.oxacillin.defaults.models.Help.Language] model.
  */
 public inline fun Help.languages(
     vararg options: Option
-): JsonGeneralApiAction<jp.pois.oxacillin.defaults.models.Help.Language> = client.help.languages(*options)
+): JsonArrayApiAction<jp.pois.oxacillin.defaults.models.Help.Language> = client.help.languages(*options)

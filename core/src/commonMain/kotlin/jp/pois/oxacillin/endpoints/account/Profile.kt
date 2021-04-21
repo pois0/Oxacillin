@@ -33,7 +33,6 @@ import jp.pois.oxacillin.core.session.post
 import jp.pois.oxacillin.endpoints.Account
 import jp.pois.oxacillin.endpoints.Option
 import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 
 /**

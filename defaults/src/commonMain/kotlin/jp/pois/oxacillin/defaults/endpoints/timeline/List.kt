@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.timeline
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Timeline
 import jp.pois.oxacillin.defaults.models.Status
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.common.TweetMode
 import jp.pois.oxacillin.endpoints.timeline
 import jp.pois.oxacillin.endpoints.timeline.listTimeline
@@ -50,7 +50,7 @@ import jp.pois.oxacillin.endpoints.timeline.listTimelineByOwnerScreenName
  * @param includeRTs When set to either true, t or 1, the list timeline will contain native retweets (if they exist) in addition to the standard stream of tweets. The output format of retweeted tweets is identical to the representation you see in home_timeline.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Timeline] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  * @see listTimelineByOwnerScreenName
  * @see listTimelineByOwnerId
  */
@@ -65,7 +65,7 @@ public inline fun Timeline.listTimeline(
     includeMyRetweet: Boolean? = null,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<List<Status>> = client.timeline.listTimeline(listId, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
+): JsonArrayApiAction<List<Status>> = client.timeline.listTimeline(listId, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
 
 /**
  * Returns a timeline of tweets authored by members of the specified list. Retweets are included by default. Use the include_rts=false parameter to omit retweets.
@@ -82,7 +82,7 @@ public inline fun Timeline.listTimeline(
  * @param includeRTs When set to either true, t or 1, the list timeline will contain native retweets (if they exist) in addition to the standard stream of tweets. The output format of retweeted tweets is identical to the representation you see in home_timeline.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Timeline] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  * @see listTimeline
  * @see listTimelineByOwnerId
  */
@@ -98,7 +98,7 @@ public inline fun Timeline.listTimelineByOwnerScreenName(
     includeMyRetweet: Boolean? = null,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<List<Status>> = client.timeline.listTimelineByOwnerScreenName(slug, ownerScreenName, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
+): JsonArrayApiAction<List<Status>> = client.timeline.listTimelineByOwnerScreenName(slug, ownerScreenName, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
 
 /**
  * Returns a timeline of tweets authored by members of the specified list. Retweets are included by default. Use the include_rts=false parameter to omit retweets.
@@ -115,7 +115,7 @@ public inline fun Timeline.listTimelineByOwnerScreenName(
  * @param includeRTs When set to either true, t or 1, the list timeline will contain native retweets (if they exist) in addition to the standard stream of tweets. The output format of retweeted tweets is identical to the representation you see in home_timeline.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Timeline] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  * @see listTimeline
  * @see listTimelineByOwnerScreenName
  */
@@ -131,4 +131,4 @@ public inline fun Timeline.listTimelineByOwnerId(
     includeMyRetweet: Boolean? = null,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<List<Status>> = client.timeline.listTimelineByOwnerId(slug, ownerId, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)
+): JsonArrayApiAction<List<Status>> = client.timeline.listTimelineByOwnerId(slug, ownerId, sinceId, maxId, count, includeEntities, includeRTs, tweetMode, includeMyRetweet, includeCardUri, *options)

@@ -32,5 +32,5 @@ import jp.pois.oxacillin.extensions.PremiumSearchModel
 /**
  * Whether current search result has next.
  */
-public val PremiumSearchJsonObjectResponse<jp.pois.oxacillin.extensions.PremiumSearchModel>.hasNext: Boolean
+public val PremiumSearchJsonObjectResponse<PremiumSearchModel>.hasNext: Boolean
     get() = result.next != null

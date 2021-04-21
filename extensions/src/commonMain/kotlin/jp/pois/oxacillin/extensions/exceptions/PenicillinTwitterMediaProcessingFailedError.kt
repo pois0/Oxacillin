@@ -24,9 +24,9 @@
 
 package jp.pois.oxacillin.extensions.exceptions
 
-import jp.pois.oxacillin.core.exceptions.PenicillinException
 import io.ktor.client.request.HttpRequest
 import io.ktor.client.statement.HttpResponse
+import jp.pois.oxacillin.core.exceptions.PenicillinException
 import jp.pois.oxacillin.core.i18n.LocalizedString
 import jp.pois.oxacillin.extensions.MediaError
 
@@ -41,7 +41,7 @@ public class PenicillinTwitterMediaProcessingFailedError(
     /**
      * Returned [Media.ProcessingInfo.Error].
      */
-    public val error: jp.pois.oxacillin.extensions.MediaError,
+    public val error: MediaError,
 
     /**
      * Executed [HttpRequest].

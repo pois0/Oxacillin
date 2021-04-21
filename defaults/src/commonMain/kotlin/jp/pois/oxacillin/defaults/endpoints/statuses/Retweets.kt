@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.statuses
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Statuses
 import jp.pois.oxacillin.defaults.models.Status
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.common.TweetMode
 import jp.pois.oxacillin.endpoints.statuses
 import jp.pois.oxacillin.endpoints.statuses.retweets
@@ -44,7 +44,7 @@ import jp.pois.oxacillin.endpoints.statuses.retweets
  * @param trimUser When set to either true , t or 1 , each tweet returned in a timeline will include a user object including only the status authors numerical ID. Omit this parameter to receive the complete user object.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Statuses] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  */
 public inline fun Statuses.retweets(
     id: Long,
@@ -52,4 +52,4 @@ public inline fun Statuses.retweets(
     trimUser: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonGeneralApiAction<Status> = client.statuses.retweets(id, count, trimUser, tweetMode, *options)
+): JsonArrayApiAction<Status> = client.statuses.retweets(id, count, trimUser, tweetMode, *options)

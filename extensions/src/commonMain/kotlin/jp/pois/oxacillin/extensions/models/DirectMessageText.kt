@@ -32,7 +32,7 @@ import jp.pois.oxacillin.extensions.MessageData
 /**
  * Returns the direct message text whose shortened urls are each expanded.
  */
-public val jp.pois.oxacillin.extensions.MessageData.expandedText: String
+public val MessageData.expandedText: String
     get() {
         var gap = 0
         return entities.urls

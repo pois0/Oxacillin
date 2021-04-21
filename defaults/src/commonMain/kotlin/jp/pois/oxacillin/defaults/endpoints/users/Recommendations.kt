@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.users
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Users
 import jp.pois.oxacillin.defaults.models.Recommendation
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.users
 import jp.pois.oxacillin.endpoints.users.recommendationsByScreenName
 import jp.pois.oxacillin.endpoints.users.recommendationsByUserId
@@ -39,21 +39,21 @@ import jp.pois.oxacillin.endpoints.users.recommendationsByUserId
  * 
  * @param options Optional. Custom parameters of this request.
  * @receiver [Users] endpoint instance.
- * @return [JsonGeneralApiAction] for [Recommendation] model.
+ * @return [JsonArrayApiAction] for [Recommendation] model.
  */
 public inline fun Users.recommendationsByScreenName(
     screenName: String,
     vararg options: Option
-): JsonGeneralApiAction<Recommendation> = client.users.recommendationsByScreenName(screenName, *options)
+): JsonArrayApiAction<Recommendation> = client.users.recommendationsByScreenName(screenName, *options)
 
 /**
  * Undocumented endpoint.
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [Users] endpoint instance.
- * @return [JsonGeneralApiAction] for [Recommendation] model.
+ * @return [JsonArrayApiAction] for [Recommendation] model.
  */
 public inline fun Users.recommendationsByUserId(
     userId: Long,
     vararg options: Option
-): JsonGeneralApiAction<Recommendation> = client.users.recommendationsByUserId(userId, *options)
+): JsonArrayApiAction<Recommendation> = client.users.recommendationsByUserId(userId, *options)

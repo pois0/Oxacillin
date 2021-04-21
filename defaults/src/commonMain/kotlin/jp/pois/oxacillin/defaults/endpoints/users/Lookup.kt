@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.users
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Users
 import jp.pois.oxacillin.defaults.models.User
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.common.TweetMode
 import jp.pois.oxacillin.endpoints.users
 import jp.pois.oxacillin.endpoints.users.lookupByIds
@@ -52,14 +52,14 @@ import jp.pois.oxacillin.endpoints.users.lookupByScreenNames
  * @param includeEntities The entities node that may appear within embedded statuses will not be included when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Users] endpoint instance.
- * @return [JsonGeneralApiAction] for [User] model.
+ * @return [JsonArrayApiAction] for [User] model.
  */
 public inline fun Users.lookupByScreenNames(
     screenNames: List<String>,
     includeEntities: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonGeneralApiAction<User> = client.users.lookupByScreenNames(screenNames, includeEntities, tweetMode, *options)
+): JsonArrayApiAction<User> = client.users.lookupByScreenNames(screenNames, includeEntities, tweetMode, *options)
 
 /**
  * Returns fully-hydrated user objects for up to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
@@ -78,11 +78,11 @@ public inline fun Users.lookupByScreenNames(
  * @param includeEntities The entities node that may appear within embedded statuses will not be included when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Users] endpoint instance.
- * @return [JsonGeneralApiAction] for [User] model.
+ * @return [JsonArrayApiAction] for [User] model.
  */
 public inline fun Users.lookupByIds(
     userIds: List<Long>,
     includeEntities: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonGeneralApiAction<User> = client.users.lookupByIds(userIds, includeEntities, tweetMode, *options)
+): JsonArrayApiAction<User> = client.users.lookupByIds(userIds, includeEntities, tweetMode, *options)

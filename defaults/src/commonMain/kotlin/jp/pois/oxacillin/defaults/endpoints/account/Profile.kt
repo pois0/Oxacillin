@@ -30,8 +30,6 @@ import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
 import jp.pois.oxacillin.defaults.endpoints.Account
 import jp.pois.oxacillin.defaults.models.User
 import jp.pois.oxacillin.endpoints.Option
-import jp.pois.oxacillin.defaults.endpoints.account
-import jp.pois.oxacillin.defaults.endpoints.account.updateProfile
 import jp.pois.oxacillin.endpoints.account
 import jp.pois.oxacillin.endpoints.account.updateProfile
 

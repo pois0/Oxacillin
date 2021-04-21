@@ -30,8 +30,8 @@ import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
 import jp.pois.oxacillin.defaults.endpoints.Account
 import jp.pois.oxacillin.defaults.models.User
 import jp.pois.oxacillin.endpoints.Option
-import jp.pois.oxacillin.defaults.endpoints.account
 import jp.pois.oxacillin.endpoints.account
+import jp.pois.oxacillin.endpoints.account.updateProfileBackgroundImage
 
 /**
  * Updates the authenticating user's profile background image. This method can also be used to enable or disable the profile background image.

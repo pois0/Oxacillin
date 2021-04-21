@@ -1,8 +1,8 @@
 package jp.pois.oxacillin.extensions.models
 
 import jp.pois.oxacillin.endpoints.lists.ListVisibilityMode
-import jp.pois.oxacillin.models.CursorModel
 import jp.pois.oxacillin.extensions.TwitterList
+import jp.pois.oxacillin.models.CursorModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,7 +12,7 @@ internal class TwitterListImpl(
     override val name: String,
     override val mode: ListVisibilityMode,
     override val description: String
-): jp.pois.oxacillin.extensions.TwitterList
+): TwitterList
 
 @Serializable
 internal class User(val id: Long)

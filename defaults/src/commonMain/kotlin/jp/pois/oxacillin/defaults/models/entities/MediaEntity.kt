@@ -2,7 +2,6 @@ package jp.pois.oxacillin.defaults.models.entities
 
 import jp.pois.oxacillin.defaults.models.FaceCoordinate
 import jp.pois.oxacillin.defaults.models.Photo
-import jp.pois.oxacillin.extensions.IndexedEntityModel
 import jp.pois.oxacillin.extensions.models.UrlEntityModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

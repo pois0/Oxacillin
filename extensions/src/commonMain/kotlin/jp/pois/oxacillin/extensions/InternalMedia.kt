@@ -5,15 +5,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal class InternalMedia(
-    @SerialName("processing_info") val processingInfo: jp.pois.oxacillin.extensions.InternalMedia.ProcessingInfo?,
+    @SerialName("processing_info") val processingInfo: ProcessingInfo?,
     @SerialName("media_id") override val mediaId: Long,
     @SerialName("media_key") override val mediaKey: String?
-): jp.pois.oxacillin.extensions.Media {
+): Media {
     @Serializable
     internal class ProcessingInfo(
         @SerialName("check_after_secs") val checkAfterSecs: Int?,
-        val state: jp.pois.oxacillin.extensions.InternalMedia.ProcessingInfo.State,
-        val error: jp.pois.oxacillin.extensions.MediaError
+        val state: State,
+        val error: MediaError
     ) {
         @Serializable
         internal enum class State {

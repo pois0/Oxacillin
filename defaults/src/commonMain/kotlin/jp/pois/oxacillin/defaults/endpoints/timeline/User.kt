@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.timeline
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Timeline
 import jp.pois.oxacillin.defaults.models.Status
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.common.TweetMode
 import jp.pois.oxacillin.endpoints.timeline
 import jp.pois.oxacillin.endpoints.timeline.userTimeline
@@ -57,7 +57,7 @@ import jp.pois.oxacillin.endpoints.timeline.userTimelineByUserId
  * @param tweetMode Not documented yet.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Timeline] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  */
 public inline fun Timeline.userTimeline(
     sinceId: Long? = null,
@@ -71,7 +71,7 @@ public inline fun Timeline.userTimeline(
     tweetMode: TweetMode = TweetMode.Default,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<List<Status>> = client.timeline.userTimeline(sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
+): JsonArrayApiAction<Status> = client.timeline.userTimeline(sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
 
 /**
  * Returns a collection of the most recent [Tweets](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object) posted by the [user](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) indicated by the screen_name or user_id parameters.
@@ -95,7 +95,7 @@ public inline fun Timeline.userTimeline(
  * @param tweetMode Not documented yet.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Timeline] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  */
 public inline fun Timeline.userTimelineByUserId(
     userId: Long,
@@ -110,7 +110,7 @@ public inline fun Timeline.userTimelineByUserId(
     tweetMode: TweetMode = TweetMode.Default,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<List<Status>> = client.timeline.userTimelineByUserId(userId, sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
+): JsonArrayApiAction<Status> = client.timeline.userTimelineByUserId(userId, sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
 
 /**
  * Returns a collection of the most recent [Tweets](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object) posted by the [user](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) indicated by the screen_name or user_id parameters.
@@ -134,7 +134,7 @@ public inline fun Timeline.userTimelineByUserId(
  * @param tweetMode Not documented yet.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Timeline] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  */
 public inline fun Timeline.userTimelineByScreenName(
     screenName: String,
@@ -149,4 +149,4 @@ public inline fun Timeline.userTimelineByScreenName(
     tweetMode: TweetMode = TweetMode.Default,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<List<Status>> = client.timeline.userTimelineByScreenName(screenName, sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)
+): JsonArrayApiAction<Status> = client.timeline.userTimelineByScreenName(screenName, sinceId, count, maxId, trimUser, excludeReplies, includeRTs, includeEntities, includeMyRetweet, tweetMode, includeCardUri, *options)

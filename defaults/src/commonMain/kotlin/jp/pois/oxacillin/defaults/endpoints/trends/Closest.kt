@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.trends
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Trends
 import jp.pois.oxacillin.defaults.models.TrendArea
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.trends
 import jp.pois.oxacillin.endpoints.trends.closestAreas
 
@@ -44,10 +44,10 @@ import jp.pois.oxacillin.endpoints.trends.closestAreas
  * @param longitude If provided with a latitude parameter the available trend locations will be sorted by distance, nearest to furthest, to the co-ordinate pair. The valid ranges for longitude is -180.0 to +180.0 (West is negative, East is positive) inclusive.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Trends] endpoint instance.
- * @return [JsonGeneralApiAction] for [TrendArea] model.
+ * @return [JsonArrayApiAction] for [TrendArea] model.
  */
 public inline fun Trends.closestAreas(
     latitude: Double,
     longitude: Double,
     vararg options: Option
-): JsonGeneralApiAction<TrendArea> = client.trends.closestAreas(latitude, longitude, *options)
+): JsonArrayApiAction<TrendArea> = client.trends.closestAreas(latitude, longitude, *options)

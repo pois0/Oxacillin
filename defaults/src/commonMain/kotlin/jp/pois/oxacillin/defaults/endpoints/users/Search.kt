@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.users
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Users
 import jp.pois.oxacillin.defaults.models.User
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.users
 import jp.pois.oxacillin.endpoints.users.search
 
@@ -45,7 +45,7 @@ import jp.pois.oxacillin.endpoints.users.search
  * @param includeEntities The entities node will not be included in embedded Tweet objects when set to false .
  * @param options Optional. Custom parameters of this request.
  * @receiver [Users] endpoint instance.
- * @return [JsonGeneralApiAction] for [User] model.
+ * @return [JsonArrayApiAction] for [User] model.
  */
 public inline fun Users.search(
     query: String,
@@ -53,4 +53,4 @@ public inline fun Users.search(
     count: Int? = null,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<User> = client.users.search(query, page, count, includeEntities, *options)
+): JsonArrayApiAction<User> = client.users.search(query, page, count, includeEntities, *options)

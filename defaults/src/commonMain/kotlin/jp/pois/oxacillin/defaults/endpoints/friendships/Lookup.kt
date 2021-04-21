@@ -26,7 +26,7 @@
 
 package jp.pois.oxacillin.defaults.endpoints.friendships
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Friendships
 import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.friendships
@@ -41,12 +41,12 @@ import jp.pois.oxacillin.endpoints.friendships.lookupByUserIds
  * @param screenNames A list of screen names, up to 100 are allowed in a single request.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonGeneralApiAction] for [Lookup] model.
+ * @return [JsonArrayApiAction] for [jp.pois.oxacillin.defaults.models.Friendships.Lookup] model.
  */
 public inline fun Friendships.lookupByScreenNames(
     screenNames: List<String>,
     vararg options: Option
-): JsonGeneralApiAction<jp.pois.oxacillin.defaults.models.Friendships.Lookup> = client.friendships.lookupByScreenNames(screenNames, *options)
+): JsonArrayApiAction<jp.pois.oxacillin.defaults.models.Friendships.Lookup> = client.friendships.lookupByScreenNames(screenNames, *options)
 
     /**
  * Returns the relationships of the authenticating user to the comma-separated list of up to 100 screen_names or user_ids provided. Values for connections can be: following, following_requested, followed_by, none, blocking, muting.
@@ -56,9 +56,9 @@ public inline fun Friendships.lookupByScreenNames(
  * @param userIds A list of user IDs, up to 100 are allowed in a single request.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Friendships] endpoint instance.
- * @return [JsonGeneralApiAction] for [Lookup] model.
+ * @return [JsonArrayApiAction] for [jp.pois.oxacillin.defaults.models.Friendships.Lookup] model.
  */
 public inline fun Friendships.lookupByUserIds(
     userIds: List<Long>,
     vararg options: Option
-): JsonGeneralApiAction<jp.pois.oxacillin.defaults.models.Friendships.Lookup> = client.friendships.lookupByUserIds(userIds, *options)
+): JsonArrayApiAction<jp.pois.oxacillin.defaults.models.Friendships.Lookup> = client.friendships.lookupByUserIds(userIds, *options)

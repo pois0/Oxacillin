@@ -37,7 +37,7 @@ import kotlinx.serialization.encoding.Encoder
 /**
  * Represents <a> tag in "source".
  */
-@Serializable(with = jp.pois.oxacillin.extensions.Via.Serializer::class)
+@Serializable(with = Via.Serializer::class)
 public class Via(
     /**
      * Source application url.
@@ -59,14 +59,14 @@ public class Via(
         val attributePattern = "^(.+?)=\"(.+?)\"$".toRegex()
     }
 
-    public object Serializer: KSerializer<jp.pois.oxacillin.extensions.Via> {
+    public object Serializer: KSerializer<Via> {
         override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("via", PrimitiveKind.STRING)
 
-        override fun deserialize(decoder: Decoder): jp.pois.oxacillin.extensions.Via {
-            val matches = jp.pois.oxacillin.extensions.Via.Companion.tagPattern.matchEntire(decoder.decodeString())
+        override fun deserialize(decoder: Decoder): Via {
+            val matches = tagPattern.matchEntire(decoder.decodeString())
 
             val tagAttributes = matches?.groupValues?.getOrNull(1)?.split(" ")?.map {
-                val (k, v) = jp.pois.oxacillin.extensions.Via.Companion.attributePattern.matchEntire(it)!!.destructured
+                val (k, v) = attributePattern.matchEntire(it)!!.destructured
                 k to v
             }?.toMap()
             val tagValue = matches?.groupValues?.getOrNull(2)
@@ -76,10 +76,10 @@ public class Via(
                 "Invalid source html passed."
             }
 
-            return jp.pois.oxacillin.extensions.Via(href, tagValue, tagAttributes)
+            return Via(href, tagValue, tagAttributes)
         }
 
-        override fun serialize(encoder: Encoder, value: jp.pois.oxacillin.extensions.Via) {
+        override fun serialize(encoder: Encoder, value: Via) {
             val attributes = value.attributes.entries.joinToString(separator = " ") { (k, v) -> "$k=\"$v\"" }
             encoder.encodeString("<a $attributes>${value.name}</a>")
         }

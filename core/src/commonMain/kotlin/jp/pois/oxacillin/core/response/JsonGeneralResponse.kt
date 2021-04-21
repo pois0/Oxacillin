@@ -26,7 +26,6 @@ package jp.pois.oxacillin.core.response
 
 import io.ktor.client.request.HttpRequest
 import io.ktor.client.statement.HttpResponse
-import jp.pois.oxacillin.core.request.action.ApiAction
 import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
 import jp.pois.oxacillin.core.session.ApiClient
 

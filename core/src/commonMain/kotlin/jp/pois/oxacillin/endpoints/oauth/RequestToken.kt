@@ -33,6 +33,7 @@ import jp.pois.oxacillin.core.request.text
 import jp.pois.oxacillin.core.session.post
 import jp.pois.oxacillin.endpoints.OAuth
 import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.utils.parseUrlQuery
 
 /**
  * Represents "/oauth/request_token" response.
@@ -73,14 +74,12 @@ public suspend fun OAuth.requestToken(
     vararg options: Option
 ): RequestTokenResponse {
     val response = requestTokenInternal(callbackUrl, xAuthAccessType, *options).execute()
-    
-    val result = response.content.split("&").map { parameter ->
-        parameter.split("=", limit = 2).let { it.first() to it.last() }
-    }.toMap()
+
+    val result = parseUrlQuery(response.content, 3)
 
     val requestToken = result["oauth_token"] ?: throw IllegalStateException()
     val requestTokenSecret = result["oauth_token_secret"] ?: throw IllegalStateException()
-    val callbackConfirmed = result["oauth_callback_confirmed"]?.toBoolean() ?: throw IllegalStateException()
+    val callbackConfirmed = result["oauth_callback_confirmed"].toBoolean()
     
     return RequestTokenResponse(requestToken, requestTokenSecret, callbackConfirmed)
 }

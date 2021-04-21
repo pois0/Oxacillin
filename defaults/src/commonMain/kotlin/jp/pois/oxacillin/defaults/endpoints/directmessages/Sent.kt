@@ -26,19 +26,20 @@
 
 package jp.pois.oxacillin.defaults.endpoints.directmessages
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.DirectMessages
-import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.defaults.endpoints.directMessageDeprecatedMessage
 import jp.pois.oxacillin.defaults.models.DirectMessage
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.directMessages
+import jp.pois.oxacillin.endpoints.directmessages.sentMessages
 
 /**
  * Abolished endpoint.
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [DirectMessages] endpoint instance.
- * @return [JsonGeneralApiAction] for [DirectMessage] model.
+ * @return [JsonArrayApiAction] for [DirectMessage] model.
  */
 @Suppress("DEPRECATION")
 @Deprecated(directMessageDeprecatedMessage, replaceWith = ReplaceWith("directMessageEvent.list", "jp.pois.oxacillin.endpoints.directMessageEvent", "jp.pois.oxacillin.defaults.endpoints.directmessages.events.list"))
@@ -49,4 +50,4 @@ public inline fun DirectMessages.sentMessages(
     page: Int? = null,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<DirectMessage> = client.directMessages.sentMessages(sinceId, maxId, count, page, includeEntities, *options)
+): JsonArrayApiAction<DirectMessage> = client.directMessages.sentMessages(sinceId, maxId, count, page, includeEntities, *options)

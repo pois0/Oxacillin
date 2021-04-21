@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.statuses
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Statuses
 import jp.pois.oxacillin.defaults.models.Status
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.common.TweetMode
 import jp.pois.oxacillin.endpoints.statuses
 import jp.pois.oxacillin.endpoints.statuses.retweetsOfMe
@@ -47,7 +47,7 @@ import jp.pois.oxacillin.endpoints.statuses.retweetsOfMe
  * @param includeUserEntities The user entities node will not be included when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Statuses] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  */
 public inline fun Statuses.retweetsOfMe(
     count: Int? = null,
@@ -58,4 +58,11 @@ public inline fun Statuses.retweetsOfMe(
     includeUserEntities: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonGeneralApiAction<Status> = client.statuses.retweetsOfMe(count, sinceId, maxId, trimUser, includeEntities, includeUserEntities, tweetMode, *options)
+): JsonArrayApiAction<Status> = client.statuses.retweetsOfMe(count, sinceId, maxId, trimUser, includeEntities, includeUserEntities, tweetMode, *options)
+
+/**
+ * Shorthand property to [Statuses.retweetsOfMe].
+ * @see Statuses.retweetsOfMe
+ */
+public val Statuses.retweetsOfMe: JsonArrayApiAction<Status>
+    get() = retweetsOfMe()

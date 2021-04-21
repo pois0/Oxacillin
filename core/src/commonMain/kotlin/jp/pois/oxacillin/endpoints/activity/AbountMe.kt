@@ -41,7 +41,7 @@ import kotlinx.serialization.DeserializationStrategy
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [Activity] endpoint instance.
- * @return [JsonArrayApiAction] for [ActivityEvent] model.
+ * @return [JsonGeneralApiAction] for [T] model.
  */
 public fun <T> Activity.aboutMe(
     deserializer: DeserializationStrategy<T>,

@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.timeline
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Timeline
 import jp.pois.oxacillin.defaults.models.Status
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.common.TweetMode
 import jp.pois.oxacillin.endpoints.timeline
 import jp.pois.oxacillin.endpoints.timeline.homeTimeline
@@ -52,7 +52,7 @@ import jp.pois.oxacillin.endpoints.timeline.homeTimeline
  * @param tweetMode Not documented yet.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Timeline] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  */
 public inline fun Timeline.homeTimeline(
     count: Int? = null,
@@ -66,4 +66,11 @@ public inline fun Timeline.homeTimeline(
     tweetMode: TweetMode = TweetMode.Default,
     includeCardUri: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<List<Status>> = client.timeline.homeTimeline(count, sinceId, maxId, trimUser, excludeReplies, includeEntities, includeRTs, includeMyRetweet, tweetMode, includeCardUri, *options)
+): JsonArrayApiAction<Status> = client.timeline.homeTimeline(count, sinceId, maxId, trimUser, excludeReplies, includeEntities, includeRTs, includeMyRetweet, tweetMode, includeCardUri, *options)
+
+/**
+ * Shorthand property to [Timeline.homeTimeline].
+ * @see Timeline.homeTimeline
+ */
+public val Timeline.homeTimeline: JsonArrayApiAction<Status>
+    get() = homeTimeline()

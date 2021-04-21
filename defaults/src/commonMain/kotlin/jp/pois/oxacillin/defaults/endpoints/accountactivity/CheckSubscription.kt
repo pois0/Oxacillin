@@ -29,8 +29,6 @@ package jp.pois.oxacillin.defaults.endpoints.accountactivity
 import jp.pois.oxacillin.core.request.action.EmptyApiAction
 import jp.pois.oxacillin.defaults.endpoints.AccountActivity
 import jp.pois.oxacillin.endpoints.Option
-import jp.pois.oxacillin.defaults.endpoints.accountActivity
-import jp.pois.oxacillin.defaults.endpoints.accountactivity.checkSubscription
 import jp.pois.oxacillin.endpoints.accountActivity
 import jp.pois.oxacillin.endpoints.accountactivity.checkSubscription
 

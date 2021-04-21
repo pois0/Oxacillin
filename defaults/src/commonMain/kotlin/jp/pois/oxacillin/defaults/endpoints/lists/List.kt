@@ -26,7 +26,7 @@
 
 package jp.pois.oxacillin.defaults.endpoints.lists
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Lists
 import jp.pois.oxacillin.defaults.models.TwitterList
 import jp.pois.oxacillin.endpoints.Option
@@ -42,12 +42,12 @@ import jp.pois.oxacillin.endpoints.lists.list
  * @param reverse Set this to true if you would like owned lists to be returned first. See description above for information on how this parameter works.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonGeneralApiAction] for [TwitterList] model.
+ * @return [JsonArrayApiAction] for [TwitterList] model.
  */
 public inline fun Lists.list(
     reverse: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = client.lists.list(reverse, *options)
+): JsonArrayApiAction<TwitterList> = client.lists.list(reverse, *options)
 
     /**
  * Returns all lists the authenticating or specified user subscribes to, including their own. The user is specified using the user_id or screen_name parameters. If no user is given, the authenticating user is used.
@@ -59,13 +59,13 @@ public inline fun Lists.list(
  * @param reverse Set this to true if you would like owned lists to be returned first. See description above for information on how this parameter works.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonGeneralApiAction] for [TwitterList] model.
+ * @return [JsonArrayApiAction] for [TwitterList] model.
  */
 public inline fun Lists.list(
     userId: Long,
     reverse: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = client.lists.list(userId, reverse, *options)
+): JsonArrayApiAction<TwitterList> = client.lists.list(userId, reverse, *options)
 
     /**
  * Returns all lists the authenticating or specified user subscribes to, including their own. The user is specified using the user_id or screen_name parameters. If no user is given, the authenticating user is used.
@@ -77,10 +77,10 @@ public inline fun Lists.list(
  * @param reverse Set this to true if you would like owned lists to be returned first. See description above for information on how this parameter works.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Lists] endpoint instance.
- * @return [JsonGeneralApiAction] for [TwitterList] model.
+ * @return [JsonArrayApiAction] for [TwitterList] model.
  */
 public inline fun Lists.list(
     screenName: String,
     reverse: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<TwitterList> = client.lists.list(screenName, reverse, *options)
+): JsonArrayApiAction<TwitterList> = client.lists.list(screenName, reverse, *options)

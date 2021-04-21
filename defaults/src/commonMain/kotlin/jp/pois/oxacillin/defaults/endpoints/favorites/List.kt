@@ -26,7 +26,7 @@
 
 package jp.pois.oxacillin.defaults.endpoints.favorites
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Favorites
 import jp.pois.oxacillin.defaults.models.Status
 import jp.pois.oxacillin.endpoints.Option
@@ -47,7 +47,7 @@ import jp.pois.oxacillin.endpoints.favorites.listByUserId
  * @param includeEntities The entities node will be omitted when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Favorites] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  */
 public inline fun Favorites.list(
     count: Int? = null,
@@ -55,7 +55,7 @@ public inline fun Favorites.list(
     maxId: Long? = null,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<Status> = client.favorites.list(count, sinceId, maxId, includeEntities, *options)
+): JsonArrayApiAction<Status> = client.favorites.list(count, sinceId, maxId, includeEntities, *options)
 
     /**
  * Note: favorites are now known as likes.
@@ -70,7 +70,7 @@ public inline fun Favorites.list(
  * @param includeEntities The entities node will be omitted when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Favorites] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  */
 public inline fun Favorites.listByUserId(
     userId: Long,
@@ -79,7 +79,7 @@ public inline fun Favorites.listByUserId(
     maxId: Long? = null,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<Status> = client.favorites.listByUserId(userId, count, sinceId, maxId, includeEntities, *options)
+): JsonArrayApiAction<Status> = client.favorites.listByUserId(userId, count, sinceId, maxId, includeEntities, *options)
 
     /**
  * Note: favorites are now known as likes.
@@ -94,7 +94,7 @@ public inline fun Favorites.listByUserId(
  * @param includeEntities The entities node will be omitted when set to false.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Favorites] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  */
 public inline fun Favorites.listByScreenName(
     screenName: String,
@@ -103,4 +103,4 @@ public inline fun Favorites.listByScreenName(
     maxId: Long? = null,
     includeEntities: Boolean? = null,
     vararg options: Option
-): JsonGeneralApiAction<Status> = client.favorites.listByScreenName(screenName, count, sinceId, maxId, includeEntities, *options)
+): JsonArrayApiAction<Status> = client.favorites.listByScreenName(screenName, count, sinceId, maxId, includeEntities, *options)

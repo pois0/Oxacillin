@@ -1,7 +1,7 @@
 package jp.pois.oxacillin.extensions
 
 public interface Card {
-    public val bindingValues: jp.pois.oxacillin.extensions.Card.BindingValues
+    public val bindingValues: BindingValues
 
     public interface BindingValues {
         public val choice1Label: StringValue?

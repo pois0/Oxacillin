@@ -26,7 +26,7 @@
 
 package jp.pois.oxacillin.defaults.endpoints.activity
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Activity
 import jp.pois.oxacillin.defaults.models.ActivityEvent
 import jp.pois.oxacillin.endpoints.Option
@@ -38,9 +38,16 @@ import jp.pois.oxacillin.endpoints.activity.aboutMe
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [Activity] endpoint instance.
- * @return [JsonGeneralApiAction] for [ActivityEvent] model.
+ * @return [JsonArrayApiAction] for [ActivityEvent] model.
  */
 public inline fun Activity.aboutMe(
     count: Int? = null,
     vararg options: Option
-): JsonGeneralApiAction<ActivityEvent> = client.activity.aboutMe(count, *options)
+): JsonArrayApiAction<ActivityEvent> = client.activity.aboutMe(count, *options)
+
+/**
+ * Shorthand property to [Activity.aboutMe].
+ * @see Activity.aboutMe
+ */
+public val Activity.aboutMe: JsonArrayApiAction<ActivityEvent>
+    get() = aboutMe()

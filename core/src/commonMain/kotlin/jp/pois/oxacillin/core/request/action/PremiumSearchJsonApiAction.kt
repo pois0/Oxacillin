@@ -24,17 +24,15 @@
 
 package jp.pois.oxacillin.core.request.action
 
+import io.ktor.client.statement.request
 import jp.pois.oxacillin.core.exceptions.PenicillinException
 import jp.pois.oxacillin.core.i18n.LocalizedString
 import jp.pois.oxacillin.core.request.ApiRequest
 import jp.pois.oxacillin.core.response.PremiumSearchJsonObjectResponse
 import jp.pois.oxacillin.core.session.ApiClient
 import jp.pois.oxacillin.endpoints.PremiumSearchEnvironment
-
-import io.ktor.client.statement.request
 import jp.pois.oxacillin.utils.myJson
 import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.json.Json
 
 /**
  * The [ApiAction] that provides parsed json array with json model. This class supports premium search api operations.

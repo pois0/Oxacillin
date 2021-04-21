@@ -58,7 +58,7 @@ public fun <T> Statuses.createWithMedia(
     vararg options: Option
 ): ApiAction<JsonGeneralResponse<T>> = delegatedAction {
     val results = media.map {
-        client.media.uploadMedia<jp.pois.oxacillin.extensions.InternalMedia>(it).execute().awaitProcessing(client)
+        client.media.uploadMedia<InternalMedia>(it).execute().awaitProcessing(client)
     }
     
     create(deserializer, status, mediaIds = results.map { it.mediaId }, options = options).execute()
@@ -79,7 +79,7 @@ private val defaultCheckAfter = 5.seconds
  *
  * @param timeout Timeout value.
  */
-private suspend fun jp.pois.oxacillin.extensions.InternalMedia.awaitProcessing(client: ApiClient, timeout: Duration? = null): jp.pois.oxacillin.extensions.InternalMedia {
+private suspend fun InternalMedia.awaitProcessing(client: ApiClient, timeout: Duration? = null): InternalMedia {
     if (processingInfo == null) {
         return this
     }
@@ -91,14 +91,14 @@ private suspend fun jp.pois.oxacillin.extensions.InternalMedia.awaitProcessing(c
         while (true) {
             delay(result.processingInfo?.checkAfterSecs?.seconds ?: defaultCheckAfter)
 
-            val response = client.media.uploadStatus<jp.pois.oxacillin.extensions.InternalMedia>(mediaId, mediaKey).execute()
+            val response = client.media.uploadStatus<InternalMedia>(mediaId, mediaKey).execute()
             result = response.result
 
-            if (result.processingInfo?.error != null && result.processingInfo?.state == jp.pois.oxacillin.extensions.InternalMedia.ProcessingInfo.State.Failed) {
+            if (result.processingInfo?.error != null && result.processingInfo?.state == InternalMedia.ProcessingInfo.State.Failed) {
                 throw PenicillinTwitterMediaProcessingFailedError(result.processingInfo?.error!!, response.request, response.response)
             }
 
-            if (result.processingInfo == null || result.processingInfo?.state == jp.pois.oxacillin.extensions.InternalMedia.ProcessingInfo.State.Succeeded) {
+            if (result.processingInfo == null || result.processingInfo?.state == InternalMedia.ProcessingInfo.State.Succeeded) {
                 break
             }
         }

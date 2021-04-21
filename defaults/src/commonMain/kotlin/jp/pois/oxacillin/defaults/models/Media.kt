@@ -51,4 +51,21 @@ public data class Media(
     )
 
     override fun hashCode(): Int = mediaId.hashCode()
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+
+        other as jp.pois.oxacillin.defaults.models.Media
+
+        if (expiresAfterSecs != other.expiresAfterSecs) return false
+        if (mediaId != other.mediaId) return false
+        if (mediaIdString != other.mediaIdString) return false
+        if (mediaKey != other.mediaKey) return false
+        if (processingInfo != other.processingInfo) return false
+        if (size != other.size) return false
+        if (image != other.image) return false
+        if (video != other.video) return false
+
+        return true
+    }
 }

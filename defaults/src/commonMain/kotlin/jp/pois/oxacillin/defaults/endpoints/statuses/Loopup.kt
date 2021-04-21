@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.statuses
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Statuses
 import jp.pois.oxacillin.defaults.models.Status
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.common.TweetMode
 import jp.pois.oxacillin.endpoints.statuses
 import jp.pois.oxacillin.endpoints.statuses.lookup
@@ -56,7 +56,7 @@ import jp.pois.oxacillin.endpoints.statuses.lookup
  * @param includeCardUri When set to either true , t or 1 , each Tweet returned will include a card_uri attribute when there is an ads card attached to the Tweet and when that card was attached using the card_uri value.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Statuses] endpoint instance.
- * @return [JsonGeneralApiAction] for [Status] model.
+ * @return [JsonArrayApiAction] for [Status] model.
  */
 public inline fun Statuses.lookup(
     ids: List<Long>,
@@ -67,4 +67,4 @@ public inline fun Statuses.lookup(
     includeCardUri: Boolean? = null,
     tweetMode: TweetMode = TweetMode.Default,
     vararg options: Option
-): JsonGeneralApiAction<List<Status>> = client.statuses.lookup(ids, includeEntities, trimUser, map, includeExtAltText, includeCardUri, tweetMode, *options)
+): JsonArrayApiAction<Status> = client.statuses.lookup(ids, includeEntities, trimUser, map, includeExtAltText, includeCardUri, tweetMode, *options)

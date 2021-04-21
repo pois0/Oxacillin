@@ -24,18 +24,18 @@
 
 package jp.pois.oxacillin.core.request.action
 
+import io.ktor.client.call.receive
+import io.ktor.client.request.request
+import io.ktor.client.statement.HttpStatement
+import io.ktor.client.statement.request
+import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.readUTF8Line
 import jp.pois.oxacillin.core.request.ApiRequest
 import jp.pois.oxacillin.core.session.ApiClient
-import jp.pois.oxacillin.core.streaming.handler.*
-import jp.pois.oxacillin.core.streaming.listener.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.utils.io.*
+import jp.pois.oxacillin.core.streaming.handler.StreamHandler
+import jp.pois.oxacillin.core.streaming.listener.StreamListener
 import jp.pois.oxacillin.utils.myJson
-import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 /**
  * The [ApiAction] that provides stream-able response.

@@ -51,15 +51,15 @@ public inline class StatusID(
      */
     @Suppress("MemberVisibilityCanBePrivate")
     public val epochTimeMillis: Long
-        get() = (value shr 22) + jp.pois.oxacillin.extensions.StatusID.Companion.magicNumber
+        get() = (value shr 22) + magicNumber
 
-    public object Serializer: KSerializer<jp.pois.oxacillin.extensions.StatusID> {
+    public object Serializer: KSerializer<StatusID> {
         override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("statusId", PrimitiveKind.LONG)
 
-        override fun deserialize(decoder: Decoder): jp.pois.oxacillin.extensions.StatusID =
-            jp.pois.oxacillin.extensions.StatusID(decoder.decodeLong())
+        override fun deserialize(decoder: Decoder): StatusID =
+            StatusID(decoder.decodeLong())
 
-        override fun serialize(encoder: Encoder, value: jp.pois.oxacillin.extensions.StatusID) {
+        override fun serialize(encoder: Encoder, value: StatusID) {
             encoder.encodeLong(value.value)
         }
 

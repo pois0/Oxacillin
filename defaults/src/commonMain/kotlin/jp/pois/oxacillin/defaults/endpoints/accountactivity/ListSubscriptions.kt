@@ -30,8 +30,6 @@ import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
 import jp.pois.oxacillin.defaults.endpoints.AccountActivity
 import jp.pois.oxacillin.defaults.models.Subscription
 import jp.pois.oxacillin.endpoints.Option
-import jp.pois.oxacillin.defaults.endpoints.accountActivity
-import jp.pois.oxacillin.defaults.endpoints.accountactivity.listSubscriptions
 import jp.pois.oxacillin.endpoints.accountActivity
 import jp.pois.oxacillin.endpoints.accountactivity.listSubscriptions
 

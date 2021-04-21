@@ -45,6 +45,6 @@ public val DefaultEndpoint.savedSearches: SavedSearches
  *
  * @constructor Creates new [SavedSearches] endpoint instance.
  * @param client Current [ApiClient] instance.
- * @see ApiClient.savedSearches
+ * @see DefaultEndpoint.savedSearches
  */
 public inline class SavedSearches(override val client: ApiClient): Endpoint

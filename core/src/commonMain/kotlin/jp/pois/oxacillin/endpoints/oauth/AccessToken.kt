@@ -36,6 +36,7 @@ import jp.pois.oxacillin.core.session.post
 import jp.pois.oxacillin.endpoints.OAuth
 import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.oauth
+import jp.pois.oxacillin.utils.parseUrlQuery
 import jp.pois.oxacillin.utils.use
 
 /**
@@ -90,9 +91,7 @@ public suspend fun OAuth.accessToken(
         it.oauth.accessTokenInternal(verifier, *options).execute()
     }
     
-    val result = response.content.split("&").map { parameter ->
-        parameter.split("=", limit = 2).let { it.first() to it.last() }
-    }.toMap()
+    val result = parseUrlQuery(response.content, 4)
     
     val accessToken = result["oauth_token"] ?: throw IllegalStateException()
     val accessTokenSecret = result["oauth_token_secret"] ?: throw IllegalStateException()

@@ -28,10 +28,11 @@ package jp.pois.oxacillin.defaults.endpoints.directmessages
 
 import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
 import jp.pois.oxacillin.defaults.endpoints.DirectMessages
-import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.defaults.endpoints.directMessageDeprecatedMessage
 import jp.pois.oxacillin.defaults.models.DirectMessage
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.directMessages
+import jp.pois.oxacillin.endpoints.directmessages.delete
 
 /**
  * Abolished endpoint.

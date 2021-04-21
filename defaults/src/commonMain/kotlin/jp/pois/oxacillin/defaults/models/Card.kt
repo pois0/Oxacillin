@@ -1,6 +1,5 @@
 package jp.pois.oxacillin.defaults.models
 
-import jp.pois.oxacillin.extensions.Card
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

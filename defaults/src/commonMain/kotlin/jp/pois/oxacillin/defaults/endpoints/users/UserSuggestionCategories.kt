@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.users
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Users
 import jp.pois.oxacillin.defaults.models.UserSuggestionCategory
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.users
 import jp.pois.oxacillin.endpoints.users.userSuggestionCategories
 
@@ -41,9 +41,16 @@ import jp.pois.oxacillin.endpoints.users.userSuggestionCategories
  * @param lang Restricts the suggested categories to the requested language. The language must be specified by the appropriate two letter ISO 639-1 representation. Currently supported languages are provided by the [GET help/languages](https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-suggestions) API request. Unsupported language codes will receive English (en) results. If you use lang in this request, ensure you also include it when requesting the [GET users/suggestions/:slug](https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-suggestions) list.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Users] endpoint instance.
- * @return [JsonGeneralApiAction] for [UserSuggestionCategory] model.
+ * @return [JsonArrayApiAction] for [UserSuggestionCategory] model.
  */
 public inline fun Users.userSuggestionCategories(
     lang: String? = null,
     vararg options: Option
-): JsonGeneralApiAction<UserSuggestionCategory> = client.users.userSuggestionCategories(lang, *options)
+): JsonArrayApiAction<UserSuggestionCategory> = client.users.userSuggestionCategories(lang, *options)
+
+/**
+ * Shorthand property to [Users.userSuggestionCategories].
+ * @see Users.userSuggestionCategories
+ */
+public val Users.userSuggestionCategories: JsonArrayApiAction<UserSuggestionCategory>
+    get() = userSuggestionCategories()

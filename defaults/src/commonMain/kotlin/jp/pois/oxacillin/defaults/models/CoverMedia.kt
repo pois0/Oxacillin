@@ -5,7 +5,6 @@ package jp.pois.oxacillin.defaults.models
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.jsonObject
 
 @Serializable
 public data class CoverMedia(

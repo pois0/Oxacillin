@@ -26,7 +26,7 @@
 
 package jp.pois.oxacillin.defaults.endpoints.accountactivity
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.AccountActivity
 import jp.pois.oxacillin.defaults.models.Webhook
 import jp.pois.oxacillin.endpoints.Option
@@ -43,11 +43,11 @@ import jp.pois.oxacillin.endpoints.accountactivity.listWebhooksByEnvName
  *
  * @param options Optional. Custom parameters of this request.
  * @receiver [AccountActivity] endpoint instance.
- * @return [JsonGeneralApiAction] for [Webhook.List] model.
+ * @return [JsonArrayApiAction] for [Webhook.List] model.
  */
 public inline fun AccountActivity.listWebhooks(
     vararg options: Option
-): JsonGeneralApiAction<Webhook.List> = client.accountActivity.listWebhooks(*options)
+): JsonArrayApiAction<Webhook.List> = client.accountActivity.listWebhooks(*options)
 
 /**
  * Returns all environments, webhook URLs and their statuses for the authenticating app. Currently, only one webhook URL can be registered to each environment.
@@ -59,9 +59,9 @@ public inline fun AccountActivity.listWebhooks(
  * @param envName Environment name.
  * @param options Optional. Custom parameters of this request.
  * @receiver [AccountActivity] endpoint instance.
- * @return [JsonGeneralApiAction] for [Webhook.List] model.
+ * @return [JsonArrayApiAction] for [Webhook.List] model.
  */
 public inline fun AccountActivity.listWebhooksByEnvName(
     envName: String,
     vararg options: Option
-): JsonGeneralApiAction<Webhook.Model> = client.accountActivity.listWebhooksByEnvName(envName, *options)
+): JsonArrayApiAction<Webhook.Model> = client.accountActivity.listWebhooksByEnvName(envName, *options)

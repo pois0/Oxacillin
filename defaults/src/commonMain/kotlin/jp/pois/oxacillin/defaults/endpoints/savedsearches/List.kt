@@ -26,6 +26,7 @@
 
 package jp.pois.oxacillin.defaults.endpoints.savedsearches
 
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
 import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.defaults.endpoints.SavedSearches
@@ -44,5 +45,11 @@ import jp.pois.oxacillin.endpoints.savedsearches.list
  */
 public inline fun SavedSearches.list(
     vararg options: Option
-): JsonGeneralApiAction<SavedSearch> = client.savedSearches.list(*options)
+): JsonArrayApiAction<SavedSearch> = client.savedSearches.list(*options)
 
+/**
+ * Shorthand property to [SavedSearches.list].
+ * @see SavedSearches.list
+ */
+public val SavedSearches.list: JsonArrayApiAction<SavedSearch>
+    get() = list()

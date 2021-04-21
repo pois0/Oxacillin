@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.trends
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Trends
 import jp.pois.oxacillin.defaults.models.TrendPlace
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.trends
 import jp.pois.oxacillin.endpoints.trends.TrendExclude
 import jp.pois.oxacillin.endpoints.trends.place
@@ -46,10 +46,10 @@ import jp.pois.oxacillin.endpoints.trends.place
  * @param exclude Setting this equal to hashtags will remove all hashtags from the trends list.
  * @param options Optional. Custom parameters of this request.
  * @receiver [Trends] endpoint instance.
- * @return [JsonGeneralApiAction] for [TrendPlace] model.
+ * @return [JsonArrayApiAction] for [TrendPlace] model.
  */
 public inline fun Trends.place(
     id: Long,
     exclude: TrendExclude = TrendExclude.Default,
     vararg options: Option
-): JsonGeneralApiAction<TrendPlace> = client.trends.place(id, exclude, *options)
+): JsonArrayApiAction<TrendPlace> = client.trends.place(id, exclude, *options)

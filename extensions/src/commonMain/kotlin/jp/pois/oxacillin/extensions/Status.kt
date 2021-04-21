@@ -5,14 +5,14 @@ import jp.pois.oxacillin.extensions.models.UrlEntityModel
 public interface Status {
     public val cardUri: String?
 
-    public val user: jp.pois.oxacillin.extensions.User
+    public val user: User
 
-    public val entities: jp.pois.oxacillin.extensions.Status.StatusEntity
+    public val entities: StatusEntity
 
     public val textRaw: String?
     public val fullTextRaw: String?
-    public val retweetedStatus: jp.pois.oxacillin.extensions.Status?
-    public val extendedTweet: jp.pois.oxacillin.extensions.Status.ExtendedTweet?
+    public val retweetedStatus: Status?
+    public val extendedTweet: ExtendedTweet?
 
     public interface ExtendedTweet {
         public val fullText: String?

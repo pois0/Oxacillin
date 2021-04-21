@@ -2,15 +2,8 @@ package jp.pois.oxacillin.defaults.models
 
 import jp.pois.oxacillin.extensions.IndexedEntityModel
 import jp.pois.oxacillin.extensions.models.UrlEntityModel
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.descriptors.element
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.encoding.encodeStructure
 import kotlinx.serialization.json.JsonArray
 
 public class DirectMessageEvent private constructor() {
@@ -57,7 +50,25 @@ public class DirectMessageEvent private constructor() {
                         public data class Hashtag(
                             public override val indices: IntArray,
                             public val text: String
-                        ): IndexedEntityModel
+                        ): IndexedEntityModel {
+                            override fun equals(other: Any?): Boolean {
+                                if (this === other) return true
+                                if (other == null || this::class != other::class) return false
+
+                                other as Hashtag
+
+                                if (!indices.contentEquals(other.indices)) return false
+                                if (text != other.text) return false
+
+                                return true
+                            }
+
+                            override fun hashCode(): Int {
+                                var result = indices.contentHashCode()
+                                result = 31 * result + text.hashCode()
+                                return result
+                            }
+                        }
 
                         @Serializable
                         public data class Url(
@@ -65,7 +76,29 @@ public class DirectMessageEvent private constructor() {
                             @SerialName("expanded_url") public override val expandedUrl: String,
                             public override val indices: IntArray,
                             public override val url: String
-                        ): UrlEntityModel
+                        ): UrlEntityModel {
+                            override fun equals(other: Any?): Boolean {
+                                if (this === other) return true
+                                if (other == null || this::class != other::class) return false
+
+                                other as Url
+
+                                if (displayUrl != other.displayUrl) return false
+                                if (expandedUrl != other.expandedUrl) return false
+                                if (!indices.contentEquals(other.indices)) return false
+                                if (url != other.url) return false
+
+                                return true
+                            }
+
+                            override fun hashCode(): Int {
+                                var result = displayUrl.hashCode()
+                                result = 31 * result + expandedUrl.hashCode()
+                                result = 31 * result + indices.contentHashCode()
+                                result = 31 * result + url.hashCode()
+                                return result
+                            }
+                        }
                     }
                 }
             }

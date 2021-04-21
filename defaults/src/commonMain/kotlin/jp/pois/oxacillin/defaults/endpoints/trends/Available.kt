@@ -26,10 +26,10 @@
 
 package jp.pois.oxacillin.defaults.endpoints.trends
 
-import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
-import jp.pois.oxacillin.endpoints.Option
+import jp.pois.oxacillin.core.request.action.JsonArrayApiAction
 import jp.pois.oxacillin.defaults.endpoints.Trends
 import jp.pois.oxacillin.defaults.models.TrendArea
+import jp.pois.oxacillin.endpoints.Option
 import jp.pois.oxacillin.endpoints.trends
 import jp.pois.oxacillin.endpoints.trends.availableAreas
 
@@ -42,8 +42,8 @@ import jp.pois.oxacillin.endpoints.trends.availableAreas
  * 
  * @param options Optional. Custom parameters of this request.
  * @receiver [Trends] endpoint instance.
- * @return [JsonGeneralApiAction] for [TrendArea] model.
+ * @return [JsonArrayApiAction] for [TrendArea] model.
  */
 public inline fun Trends.availableAreas(
     vararg options: Option
-): JsonGeneralApiAction<TrendArea> = client.trends.availableAreas(*options)
+): JsonArrayApiAction<TrendArea> = client.trends.availableAreas(*options)

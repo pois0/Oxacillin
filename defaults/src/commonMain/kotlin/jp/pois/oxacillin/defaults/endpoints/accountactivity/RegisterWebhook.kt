@@ -30,8 +30,6 @@ import jp.pois.oxacillin.core.request.action.JsonGeneralApiAction
 import jp.pois.oxacillin.defaults.endpoints.AccountActivity
 import jp.pois.oxacillin.defaults.models.Webhook
 import jp.pois.oxacillin.endpoints.Option
-import jp.pois.oxacillin.defaults.endpoints.accountActivity
-import jp.pois.oxacillin.defaults.endpoints.accountactivity.registerWebhook
 import jp.pois.oxacillin.endpoints.accountActivity
 import jp.pois.oxacillin.endpoints.accountactivity.registerWebhook
 
