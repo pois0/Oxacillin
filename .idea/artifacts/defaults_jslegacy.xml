@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="defaults-jslegacy">
+    <output-path>$PROJECT_DIR$/defaults/build/libs</output-path>
+    <root id="archive" name="defaults-jslegacy.jar">
+      <element id="module-output" name="oxacillin.defaults.jsMain" />
+    </root>
+  </artifact>
+</component>

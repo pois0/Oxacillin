@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="penicillin-jslegacy">
+    <output-path>$PROJECT_DIR$/build/libs</output-path>
+    <root id="archive" name="penicillin-jslegacy.jar">
+      <element id="module-output" name="penicillin.jsMain" />
+    </root>
+  </artifact>
+</component>

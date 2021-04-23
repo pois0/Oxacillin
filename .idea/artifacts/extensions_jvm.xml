@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="extensions-jvm">
+    <output-path>$PROJECT_DIR$/extensions/build/libs</output-path>
+    <root id="archive" name="extensions-jvm.jar">
+      <element id="module-output" name="oxacillin.extensions.jvmMain" />
+    </root>
+  </artifact>
+</component>

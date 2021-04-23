@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="1.8">
+      <module name="oxacillin.commonMain" target="1.8" />
+      <module name="oxacillin.commonTest" target="1.8" />
+      <module name="oxacillin.jvmMain" target="1.8" />
+      <module name="oxacillin.jvmTest" target="1.8" />
+      <module name="penicillin.commonMain" target="1.8" />
+      <module name="penicillin.commonTest" target="1.8" />
+      <module name="penicillin.jvmMain" target="1.8" />
+      <module name="penicillin.jvmTest" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

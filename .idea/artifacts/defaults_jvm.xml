@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="defaults-jvm">
+    <output-path>$PROJECT_DIR$/defaults/build/libs</output-path>
+    <root id="archive" name="defaults-jvm.jar">
+      <element id="module-output" name="oxacillin.defaults.jvmMain" />
+    </root>
+  </artifact>
+</component>
