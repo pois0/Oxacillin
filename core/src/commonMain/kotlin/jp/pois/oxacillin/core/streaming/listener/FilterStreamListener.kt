@@ -2,6 +2,7 @@
  * The MIT License (MIT)
  *
  *     Copyright (c) 2017-2020 StarryBlueSky
+ *     Copyright (c) 2021 poispois
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +24,8 @@
  */
 
 package jp.pois.oxacillin.core.streaming.listener
+
+import jp.pois.oxacillin.core.streaming.handler.FilterStreamHandler
 
 /**
  * An event model interface for [FilterStreamHandler].

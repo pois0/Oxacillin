@@ -1,6 +1,7 @@
 object Versions {
-    const val Ktor = "1.5.2"
+    const val Ktor = "1.5.3"
     const val uuid = "0.2.3"
+    const val KotlinxSerialization = "1.1.0"
     const val KotlinxDatetime = "0.1.1"
 
     const val crypto_js = "4.0.0"
@@ -17,6 +18,7 @@ object Versions {
 object Libraries {
     const val KtorClientCore = "io.ktor:ktor-client-core:${Versions.Ktor}"
     const val uuid = "com.benasher44:uuid:${Versions.uuid}"
+    const val KotlinxSerializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.KotlinxSerialization}"
     const val KotlinxDatetime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.KotlinxDatetime}"
     const val KotlinLogging = "io.github.microutils:kotlin-logging:${Versions.KotlinLogging}"
 

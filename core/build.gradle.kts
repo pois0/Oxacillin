@@ -18,10 +18,12 @@ kotlin {
             dependencies {
                 api(Libraries.KtorClientCore)
                 api(Libraries.uuid)
+                api(Libraries.KotlinxSerializationJson)
                 api(Libraries.KotlinxDatetime)
                 api(Libraries.KotlinLogging)
             }
         }
+
         commonTest {
             dependencies {
                 implementation(kotlin("test-common"))
@@ -33,7 +35,6 @@ kotlin {
 
         named("jvmTest") {
             dependencies {
-                implementation(kotlin("reflect"))
                 implementation(kotlin("test"))
 
                 implementation(Libraries.KtorClientApache)

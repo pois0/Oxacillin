@@ -2,6 +2,7 @@
  * The MIT License (MIT)
  *
  *     Copyright (c) 2017-2020 StarryBlueSky
+ *     Copyright (c) 2021 poispois
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,4 +48,3 @@ public inline fun LivePipeline.event(
     ids: List<Long>,
     vararg options: Option
 ): StreamApiAction<LivePipelineListener, LivePipelineHandler> = client.livePipeline.event(ids, *options)
-

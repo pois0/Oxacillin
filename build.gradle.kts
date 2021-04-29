@@ -42,11 +42,6 @@ buildscript {
     }
 }
 
-//plugins {
-//    kotlin("multiplatform") version "1.4.32" apply false
-//    kotlin("plugin.serialization") version "1.4.32" apply false
-//}
-
 subprojects {
     group = "jp.pois"
 

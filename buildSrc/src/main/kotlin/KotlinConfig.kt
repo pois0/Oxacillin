@@ -1,8 +1,5 @@
-
 import org.gradle.api.JavaVersion
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-
-
 
 fun KotlinMultiplatformExtension.commonConfig() {
     explicitApi()

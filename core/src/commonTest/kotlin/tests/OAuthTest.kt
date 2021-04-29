@@ -2,6 +2,7 @@
  * The MIT License (MIT)
  *
  *     Copyright (c) 2017-2020 StarryBlueSky
+ *     Copyright (c) 2021 poispois
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +26,6 @@
 package tests
 
 import jp.pois.oxacillin.core.auth.OAuthUtil
-import io.ktor.client.HttpClient
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.request.get
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -39,17 +34,5 @@ class OAuthTest {
         val result = OAuthUtil.signature("A", "B")
 
         assertEquals(result, "O6I323rTZhS8%2BWqOzLVYS7AmZhQ%3D")
-    }
-
-    @Test fun test() {
-        val client = HttpClient {
-            install(JsonFeature) {
-                serializer = KotlinxSerializer()
-            }
-        }
-
-        GlobalScope.launch {
-            client.get<String>("")
-        }
     }
 }

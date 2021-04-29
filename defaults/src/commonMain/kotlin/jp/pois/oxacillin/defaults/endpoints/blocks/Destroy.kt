@@ -2,6 +2,7 @@
  * The MIT License (MIT)
  *
  *     Copyright (c) 2017-2020 StarryBlueSky
+ *     Copyright (c) 2021 poispois
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -73,4 +74,3 @@ public inline fun Blocks.destroyByUserId(
     skipStatus: Boolean? = null,
     vararg options: Option
 ): JsonGeneralApiAction<User> = client.blocks.destroyByUserId(userId, includeEntities, skipStatus, *options)
-

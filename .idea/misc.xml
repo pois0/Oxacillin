@@ -22,6 +22,7 @@
   <component name="SuppressABINotification">
     <option name="modulesWithSuppressedNotConfigured">
       <set>
+        <option value="oxacillin.buildSrc" />
         <option value="oxacillin.core" />
       </set>
     </option>

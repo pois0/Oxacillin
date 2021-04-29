@@ -4,8 +4,13 @@ include(":extensions")
 include(":defaults")
 
 pluginManagement {
-    plugins {
-        kotlin("multiplatform") version "1.4.32"
-        kotlin("plugin.serialization") version "1.4.32"
+    resolutionStrategy {
+        eachPlugin {
+            when(requested.id.id) {
+                "org.jetbrains.kotlin.multiplatform", "org.jetbrains.kotlin.plugin.serialization" -> {
+                    useVersion("1.4.32")
+                }
+            }
+        }
     }
 }

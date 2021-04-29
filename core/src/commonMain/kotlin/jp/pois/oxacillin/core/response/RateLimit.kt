@@ -2,6 +2,7 @@
  * The MIT License (MIT)
  *
  *     Copyright (c) 2017-2020 StarryBlueSky
+ *     Copyright (c) 2021 poispois
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +27,10 @@
 
 package jp.pois.oxacillin.core.response
 
+import io.ktor.client.statement.HttpResponse
+import io.ktor.util.date.GMTDate
 import jp.pois.oxacillin.core.exceptions.PenicillinException
 import jp.pois.oxacillin.utils.runBlockingAlt
-import io.ktor.client.statement.*
-import io.ktor.util.date.*
 import kotlinx.coroutines.delay
 import kotlin.time.Duration
 import kotlin.time.milliseconds
