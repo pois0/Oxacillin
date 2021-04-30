@@ -1,39 +1,3 @@
-object Publications {
-    const val GroupId = "blue.starry"
-    const val OSSRHProfileGroupId = "blue.starry.jsonkt"
-    const val Description = "Full-featured Twitter API wrapper for Kotlin"
-    const val GitHubUsername = "StarryBlueSky"
-    const val GitHubRepository = "Oxacillin"
-
-    const val LicenseName = "The MIT Licence"
-    const val LicenseUrl = "https://opensource.org/licenses/MIT"
-
-    const val DeveloperId = "StarryBlueSky"
-    const val DeveloperName = "The Starry Blue Sky"
-    const val DeveloperEmail = "letter@starry.blue"
-    const val DeveloperOrganization = "The Starry Blue Sky"
-    const val DeveloperOrganizationUrl = "https://github.com/StarryBlueSky"
-
-    const val MavenCentralStagingRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-    const val MavenCentralSnapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-    const val GitHubPackagesRepositoryUrl = "https://maven.pkg.github.com/$GitHubUsername/$GitHubRepository"
-}
-
-object Env {
-    const val Version = "VERSION"
-
-    const val OSSRHProfileId = "OSSRH_PROFILE_ID"
-    const val OSSRHUsername = "OSSRH_USERNAME"
-    const val OSSRHPassword = "OSSRH_PASSWORD"
-
-    const val GitHubUsername = "GITHUB_USERNAME"
-    const val GitHubPassword = "GITHUB_PASSWORD"
-
-    const val SigningKeyId = "SIGNING_KEYID"
-    const val SigningKey = "SIGNING_KEY"
-    const val SigningPassword = "SIGNING_PASSWORD"
-}
-
 buildscript {
     repositories {
         mavenCentral()
@@ -57,26 +21,6 @@ subprojects {
 ///*
 // * Tests
 // */
-//
-//ktlint {
-//    verbose.set(true)
-//    outputToConsole.set(true)
-//    reporters {
-//        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
-//    }
-//    ignoreFailures.set(true)
-//}
-//
-//buildtimetracker {
-//    reporters {
-//        register("summary") {
-//            options["ordered"] = "true"
-//            options["barstyle"] = "ascii"
-//            options["shortenTaskNames"] = "false"
-//        }
-//    }
-//}
-//
 //tasks.withType<Test> {
 //    useJUnitPlatform()
 //

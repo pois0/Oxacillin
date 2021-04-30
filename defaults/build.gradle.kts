@@ -7,7 +7,7 @@ plugins {
     `maven-publish`
     signing
 
-    id("org.jetbrains.dokka") version "1.4.20"
+    id("org.jetbrains.dokka")
 }
 
 
@@ -20,4 +20,12 @@ kotlin {
             api(project(":extensions"))
         }
     }
+}
+
+tasks {
+    addKdocTask(dokkaHtml)
+}
+
+publishing {
+    setRepository(this@Build_gradle::uri, tasks, rootProject.name, project.name)
 }

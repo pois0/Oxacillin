@@ -7,7 +7,7 @@ plugins {
     `maven-publish`
     signing
 
-    id("org.jetbrains.dokka") version "1.4.20"
+    id("org.jetbrains.dokka")
 }
 
 kotlin {
@@ -71,3 +71,92 @@ kotlin {
         }
     }
 }
+
+/*
+ * Publishing
+ */
+
+tasks {
+    addKdocTask(dokkaHtml)
+}
+
+publishing {
+    setRepository(this@Build_gradle::uri, tasks, rootProject.name, project.name)
+}
+
+signing {
+    commonConfig(gradle, publishing)
+}
+
+//publishing {
+//    repositories {
+//        maven {
+//            name = "Sonatype"
+//            url = uri(
+//                if (System.getenv(Env.Version).orEmpty().endsWith("-SNAPSHOT")) {
+//                    Publications.MavenCentralSnapshotRepositoryUrl
+//                } else {
+//                    Publications.MavenCentralStagingRepositoryUrl
+//                }
+//            )
+//
+//            credentials {
+//                username = System.getenv(Env.OSSRHUsername)
+//                password = System.getenv(Env.OSSRHPassword)
+//            }
+//        }
+//
+//        maven {
+//            name = "GitHubPackages"
+//            url = uri(Publications.GitHubPackagesRepositoryUrl)
+//
+//            credentials {
+//                username = System.getenv(Env.GitHubUsername)
+//                password = System.getenv(Env.GitHubPassword)
+//            }
+//        }
+//    }
+//
+//    publications.withType<MavenPublication> {
+//        groupId = Publications.GroupId
+//        artifactId = when (name) {
+//            "kotlinMultiplatform" -> {
+//                rootProject.name
+//            }
+//            else -> {
+//                "${rootProject.name}-$name"
+//            }
+//        }
+//        version = System.getenv(Env.Version)
+//
+//        pom {
+//            name.set(artifactId)
+//            description.set(Publications.Description)
+//            url.set("https://github.com/${Publications.GitHubUsername}/${Publications.GitHubRepository}")
+//
+//            licenses {
+//                license {
+//                    name.set(Publications.LicenseName)
+//                    url.set(Publications.LicenseUrl)
+//                }
+//            }
+//
+//            developers {
+//                developer {
+//                    id.set(Publications.DeveloperId)
+//                    name.set(Publications.DeveloperName)
+//                    email.set(Publications.DeveloperEmail)
+//                    organization.set(Publications.DeveloperOrganization)
+//                    organizationUrl.set(Publications.DeveloperOrganizationUrl)
+//                }
+//            }
+//
+//            scm {
+//                url.set("https://github.com/${Publications.GitHubUsername}/${Publications.GitHubRepository}")
+//            }
+//        }
+//
+//        artifact(tasks["kdocJar"])
+//    }
+//}
+//
